@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - PHPAdmin Query Manager v1.0.0</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-code: #e2e8f0;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ── Hero Header ── */
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            padding: 56px 24px 48px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+        .hero .version-badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 4px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .hero .base-url-box {
+            display: inline-block;
+            margin-top: 20px;
+            background: rgba(0,0,0,0.25);
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Sticky Nav ── */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 14px 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .nav-tab:hover { color: var(--primary); }
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ── Container ── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+        }
+
+        /* ── Sections ── */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ── Method badges ── */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            vertical-align: middle;
+        }
+        .badge-get    { background: var(--success-bg); color: var(--success); }
+        .badge-post   { background: var(--primary-light); color: var(--primary); }
+        .badge-put    { background: var(--warning-bg); color: var(--warning); }
+        .badge-delete { background: var(--danger-bg); color: var(--danger); }
+
+        .endpoint-path {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.92rem;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .tag-public   { background: var(--success-bg); color: var(--success); }
+        .tag-protected{ background: var(--warning-bg); color: var(--warning); }
+        .tag-admin    { background: var(--danger-bg); color: var(--danger); }
+
+        .desc {
+            color: var(--text-light);
+            font-size: 0.92rem;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        /* ── Tables ── */
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+        }
+        .params-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: var(--bg);
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+        .params-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .params-table code {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.84rem;
+            color: var(--primary-dark);
+            background: var(--primary-light);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+        .required {
+            color: var(--danger);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .optional {
+            color: var(--text-light);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        /* ── Code blocks ── */
+        .code-panel {
+            margin-bottom: 12px;
+        }
+        .code-label {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            scrollbar-width: thin;
+        }
+        pre .key   { color: #7dd3fc; }
+        pre .str   { color: #86efac; }
+        pre .num   { color: #fbbf24; }
+        pre .bool  { color: #c084fc; }
+        pre .null  { color: #94a3b8; }
+        pre .comment { color: #64748b; font-style: italic; }
+
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 700px) {
+            .code-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Info / Warning boxes ── */
+        .callout {
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            border-left: 4px solid;
+        }
+        .callout-info    { background: var(--info-bg);    border-color: var(--info);    color: #0e7490; }
+        .callout-warning { background: var(--warning-bg); border-color: var(--warning); color: #92400e; }
+        .callout-danger  { background: var(--danger-bg);  border-color: var(--danger);  color: #991b1b; }
+        .callout-success { background: var(--success-bg); border-color: var(--success); color: #166534; }
+        .callout strong { display: block; margin-bottom: 4px; }
+
+        /* ── Divider ── */
+        hr.sep {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+
+        /* ── Section headings ── */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .section-desc {
+            color: var(--text-light);
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+
+        /* ── Misc ── */
+        .inline-code {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.84rem;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 2px 7px;
+            border-radius: 4px;
+        }
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        ul.field-list {
+            padding-left: 20px;
+            margin-bottom: 14px;
+            color: var(--text-light);
+            font-size: 0.88rem;
+        }
+        ul.field-list li { margin-bottom: 4px; }
+        ul.field-list code {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.82rem;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .error-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .error-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg);
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .error-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .error-code {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-weight: 700;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px 24px;
+            color: var(--text-light);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+    <h1>PHPAdmin - Query Manager</h1>
+    <p class="subtitle">Referencia completa de la API REST</p>
+    <span class="version-badge">v1.0.0</span>
+    <div style="margin-top:4px;">
+        <div class="base-url-box">Base URL: /phpadmin/api</div>
+    </div>
+</header>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav class="nav-bar">
+    <div class="nav-inner">
+        <div class="nav-tab active" data-tab="auth">Autenticaci&oacute;n</div>
+        <div class="nav-tab" data-tab="users">Usuarios</div>
+        <div class="nav-tab" data-tab="connections">Conexiones</div>
+        <div class="nav-tab" data-tab="browser">Explorador</div>
+        <div class="nav-tab" data-tab="query">Consultas</div>
+        <div class="nav-tab" data-tab="export">Exportaci&oacute;n</div>
+        <div class="nav-tab" data-tab="audit">Auditor&iacute;a</div>
+        <div class="nav-tab" data-tab="errors">Errores</div>
+        <div class="nav-tab" data-tab="multiquery">Multi-Query &amp; Cross-Join</div>
+        <div class="nav-tab" data-tab="schemacompare">Comparar Esquemas</div>
+    </div>
+</nav>
+
+<!-- ════════════════ CONTENT ════════════════ -->
+<div class="container">
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: AUTENTICACION                      -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-auth" class="section active">
+    <h2 class="section-title">Autenticaci&oacute;n</h2>
+    <p class="section-desc">Endpoints para iniciar sesi&oacute;n, obtener token CSRF y gestionar contrase&ntilde;as. La API utiliza autenticaci&oacute;n basada en sesiones PHP.</p>
+
+    <div class="callout callout-info">
+        <strong>Autenticaci&oacute;n basada en sesi&oacute;n</strong>
+        Todas las peticiones (excepto login, <span class="inline-code">/auth/me</span> y <span class="inline-code">/csrf-token</span>) requieren una sesi&oacute;n activa. Las peticiones que modifican datos (<span class="inline-code">POST</span>, <span class="inline-code">PUT</span>, <span class="inline-code">DELETE</span>) requieren adem&aacute;s la cabecera <span class="inline-code">X-CSRF-Token</span>.
+    </div>
+
+    <!-- GET /csrf-token -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/csrf-token</span>
+            <span class="tag tag-public">P&uacute;blico</span>
+        </h3>
+        <p class="desc">Obtiene un token CSRF v&aacute;lido para la sesi&oacute;n actual. Debe enviarse en la cabecera <span class="inline-code">X-CSRF-Token</span> en todas las peticiones mutantes.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"token"</span>: <span class="str">"a1b2c3d4e5f6..."</span>,
+    <span class="key">"drivers"</span>: [<span class="str">"mysql"</span>, <span class="str">"sqlite"</span>]
+  }
+}</pre>
+        </div>
+        <div class="callout callout-info">
+            <strong>Campo <code>drivers</code> (v1.1.0):</strong> Lista los motores de base de datos realmente funcionales en el servidor. <code>sqlsrv</code> solo aparece si el Microsoft ODBC Driver esta instalado. Que la extension <code>pdo_sqlsrv</code> este cargada en PHP no garantiza que el driver ODBC este presente.
+        </div>
+    </div>
+
+    <!-- POST /auth/login -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/auth/login</span>
+            <span class="tag tag-public">P&uacute;blico</span>
+        </h3>
+        <p class="desc">Inicia sesi&oacute;n con credenciales de usuario. Devuelve los datos del usuario autenticado y un token CSRF nuevo.</p>
+
+        <div class="callout callout-warning">
+            <strong>Cambio de contrase&ntilde;a obligatorio</strong>
+            Si <span class="inline-code">must_change_password</span> es <span class="inline-code">true</span>, el cliente debe llamar a <span class="inline-code">/auth/change-password</span> antes de acceder a cualquier otro endpoint.
+        </div>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>username</code></td><td>string <span class="required">requerido</span></td><td>Nombre de usuario</td></tr>
+                <tr><td><code>password</code></td><td>string <span class="required">requerido</span></td><td>Contrase&ntilde;a del usuario</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"username"</span>: <span class="str">"admin"</span>,
+  <span class="key">"password"</span>: <span class="str">"secret"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Inicio de sesi&oacute;n exitoso"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"user"</span>: {
+      <span class="key">"id"</span>: <span class="num">1</span>,
+      <span class="key">"username"</span>: <span class="str">"admin"</span>,
+      <span class="key">"role"</span>: <span class="str">"admin"</span>,
+      <span class="key">"full_name"</span>: <span class="str">"Administrador"</span>
+    },
+    <span class="key">"csrf_token"</span>: <span class="str">"a1b2c3d4e5f6..."</span>,
+    <span class="key">"must_change_password"</span>: <span class="bool">false</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- GET /auth/me -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/auth/me</span>
+            <span class="tag tag-public">P&uacute;blico</span>
+        </h3>
+        <p class="desc">Devuelve la informaci&oacute;n del usuario de la sesi&oacute;n actual. Retorna <span class="inline-code">null</span> o c&oacute;digo 401 si no hay sesi&oacute;n activa.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="num">1</span>,
+    <span class="key">"username"</span>: <span class="str">"admin"</span>,
+    <span class="key">"role"</span>: <span class="str">"admin"</span>,
+    <span class="key">"full_name"</span>: <span class="str">"Administrador"</span>,
+    <span class="key">"must_change_password"</span>: <span class="bool">false</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /auth/logout -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/auth/logout</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Cierra la sesi&oacute;n actual del usuario y destruye los datos de sesi&oacute;n.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Sesi&oacute;n cerrada"</span>
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /auth/change-password -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/auth/change-password</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Cambia la contrase&ntilde;a del usuario autenticado. La nueva contrase&ntilde;a debe tener al menos 4 caracteres.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>current_password</code></td><td>string <span class="required">requerido</span></td><td>Contrase&ntilde;a actual</td></tr>
+                <tr><td><code>new_password</code></td><td>string <span class="required">requerido</span></td><td>Nueva contrase&ntilde;a (m&iacute;nimo 4 caracteres)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"current_password"</span>: <span class="str">"old_pass"</span>,
+  <span class="key">"new_password"</span>: <span class="str">"new_secure_pass"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Contrase&ntilde;a actualizada"</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: USUARIOS                           -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-users" class="section">
+    <h2 class="section-title">Usuarios</h2>
+    <p class="section-desc">Gesti&oacute;n de usuarios del sistema. Todos los endpoints de esta secci&oacute;n requieren rol <strong>admin</strong>.</p>
+
+    <div class="callout callout-danger">
+        <strong>Solo administradores</strong>
+        Todos los endpoints de usuarios requieren que el usuario autenticado tenga el rol <span class="inline-code">admin</span>. Las peticiones desde cuentas con rol <span class="inline-code">user</span> recibir&aacute;n un error 403.
+    </div>
+
+    <!-- GET /users -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/users</span>
+            <span class="tag tag-admin">Admin</span>
+        </h3>
+        <p class="desc">Obtiene la lista completa de usuarios registrados en el sistema.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="num">1</span>,
+      <span class="key">"username"</span>: <span class="str">"admin"</span>,
+      <span class="key">"full_name"</span>: <span class="str">"Administrador"</span>,
+      <span class="key">"role"</span>: <span class="str">"admin"</span>,
+      <span class="key">"is_active"</span>: <span class="num">1</span>,
+      <span class="key">"last_login"</span>: <span class="str">"2026-03-27 10:30:00"</span>,
+      <span class="key">"created_at"</span>: <span class="str">"2026-01-15 08:00:00"</span>
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /users -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/users</span>
+            <span class="tag tag-admin">Admin</span>
+        </h3>
+        <p class="desc">Crea un nuevo usuario en el sistema.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>username</code></td><td>string <span class="required">requerido</span></td><td>Nombre de usuario &uacute;nico</td></tr>
+                <tr><td><code>password</code></td><td>string <span class="required">requerido</span></td><td>Contrase&ntilde;a inicial</td></tr>
+                <tr><td><code>full_name</code></td><td>string <span class="required">requerido</span></td><td>Nombre completo</td></tr>
+                <tr><td><code>role</code></td><td>string <span class="required">requerido</span></td><td><code>admin</code> o <code>user</code></td></tr>
+                <tr><td><code>is_active</code></td><td>integer <span class="optional">opcional</span></td><td><code>1</code> (activo) o <code>0</code> (inactivo). Por defecto: <code>1</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"username"</span>: <span class="str">"john"</span>,
+  <span class="key">"password"</span>: <span class="str">"pass1234"</span>,
+  <span class="key">"full_name"</span>: <span class="str">"John Doe"</span>,
+  <span class="key">"role"</span>: <span class="str">"user"</span>,
+  <span class="key">"is_active"</span>: <span class="num">1</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="num">2</span>
+  },
+  <span class="key">"message"</span>: <span class="str">"Usuario creado"</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- PUT /users/{id} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-put">PUT</span>
+            <span class="endpoint-path">/users/{id}</span>
+            <span class="tag tag-admin">Admin</span>
+        </h3>
+        <p class="desc">Actualiza los datos de un usuario existente. Solo se env&iacute;an los campos a modificar. Si el campo <span class="inline-code">password</span> est&aacute; vac&iacute;o o se omite, la contrase&ntilde;a no se modifica.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>full_name</code></td><td>string <span class="optional">opcional</span></td><td>Nuevo nombre completo</td></tr>
+                <tr><td><code>role</code></td><td>string <span class="optional">opcional</span></td><td><code>admin</code> o <code>user</code></td></tr>
+                <tr><td><code>password</code></td><td>string <span class="optional">opcional</span></td><td>Nueva contrase&ntilde;a (vac&iacute;o = sin cambio)</td></tr>
+                <tr><td><code>is_active</code></td><td>integer <span class="optional">opcional</span></td><td><code>1</code> o <code>0</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>PUT /phpadmin/api/users/2
+
+{
+  <span class="key">"full_name"</span>: <span class="str">"John Smith"</span>,
+  <span class="key">"role"</span>: <span class="str">"admin"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Usuario actualizado"</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE /users/{id} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-delete">DELETE</span>
+            <span class="endpoint-path">/users/{id}</span>
+            <span class="tag tag-admin">Admin</span>
+        </h3>
+        <p class="desc">Elimina un usuario del sistema. No es posible eliminar al &uacute;ltimo usuario con rol administrador.</p>
+
+        <div class="callout callout-warning">
+            <strong>Restricci&oacute;n</strong>
+            No se puede eliminar el &uacute;ltimo administrador del sistema. La API devolver&aacute; un error si se intenta.
+        </div>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Usuario eliminado"</span>
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: CONEXIONES                         -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-connections" class="section">
+    <h2 class="section-title">Conexiones</h2>
+    <p class="section-desc">Gesti&oacute;n de conexiones a bases de datos. Se soportan los drivers <span class="inline-code">mysql</span> y <span class="inline-code">sqlsrv</span> (SQL Server).</p>
+
+    <!-- GET /connections -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/connections</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve todas las conexiones configuradas. El campo <span class="inline-code">password_encrypted</span> nunca se incluye en la respuesta.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="num">1</span>,
+      <span class="key">"name"</span>: <span class="str">"MySQL Local"</span>,
+      <span class="key">"driver"</span>: <span class="str">"mysql"</span>,
+      <span class="key">"host"</span>: <span class="str">"localhost"</span>,
+      <span class="key">"port"</span>: <span class="num">3306</span>,
+      <span class="key">"database_name"</span>: <span class="str">"mydb"</span>,
+      <span class="key">"username"</span>: <span class="str">"root"</span>,
+      <span class="key">"charset"</span>: <span class="str">"utf8mb4"</span>,
+      <span class="key">"sp_name"</span>: <span class="str">"sp_ExecuteJsonQuery"</span>,
+      <span class="key">"options_json"</span>: <span class="null">null</span>,
+      <span class="key">"is_active"</span>: <span class="num">1</span>,
+      <span class="key">"created_at"</span>: <span class="str">"2026-01-10 09:00:00"</span>,
+      <span class="key">"updated_at"</span>: <span class="str">"2026-03-20 14:30:00"</span>
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /connections/{id} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/connections/{id}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve los detalles de una conexi&oacute;n espec&iacute;fica. Excluye el campo <span class="inline-code">password_encrypted</span>.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="num">1</span>,
+    <span class="key">"name"</span>: <span class="str">"MySQL Local"</span>,
+    <span class="key">"driver"</span>: <span class="str">"mysql"</span>,
+    <span class="comment">// ... mismos campos que el listado</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /connections -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/connections</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Crea una nueva conexi&oacute;n a base de datos. Si no se especifica el puerto, se asigna autom&aacute;ticamente seg&uacute;n el driver: <span class="inline-code">3306</span> para MySQL, <span class="inline-code">1433</span> para SQL Server.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>name</code></td><td>string <span class="required">requerido</span></td><td>Nombre descriptivo de la conexi&oacute;n</td></tr>
+                <tr><td><code>driver</code></td><td>string <span class="required">requerido</span></td><td><code>mysql</code> o <code>sqlsrv</code></td></tr>
+                <tr><td><code>host</code></td><td>string <span class="required">requerido</span></td><td>Host o IP del servidor</td></tr>
+                <tr><td><code>username</code></td><td>string <span class="required">requerido</span></td><td>Usuario de la base de datos</td></tr>
+                <tr><td><code>port</code></td><td>integer <span class="optional">opcional</span></td><td>Puerto (auto: 3306 / 1433)</td></tr>
+                <tr><td><code>database_name</code></td><td>string <span class="optional">opcional</span></td><td>Base de datos por defecto</td></tr>
+                <tr><td><code>password</code></td><td>string <span class="optional">opcional</span></td><td>Contrase&ntilde;a (se almacena cifrada)</td></tr>
+                <tr><td><code>charset</code></td><td>string <span class="optional">opcional</span></td><td>Codificaci&oacute;n de caracteres</td></tr>
+                <tr><td><code>sp_name</code></td><td>string <span class="optional">opcional</span></td><td>Nombre del stored procedure para ejecuci&oacute;n JSON</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"name"</span>: <span class="str">"Mi MySQL"</span>,
+  <span class="key">"driver"</span>: <span class="str">"mysql"</span>,
+  <span class="key">"host"</span>: <span class="str">"localhost"</span>,
+  <span class="key">"port"</span>: <span class="num">3306</span>,
+  <span class="key">"database_name"</span>: <span class="str">"mydb"</span>,
+  <span class="key">"username"</span>: <span class="str">"root"</span>,
+  <span class="key">"password"</span>: <span class="str">"secret"</span>,
+  <span class="key">"charset"</span>: <span class="str">"utf8mb4"</span>,
+  <span class="key">"sp_name"</span>: <span class="str">"sp_ExecuteJsonQuery"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="num">3</span>
+  },
+  <span class="key">"message"</span>: <span class="str">"Conexi&oacute;n creada"</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- PUT /connections/{id} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-put">PUT</span>
+            <span class="endpoint-path">/connections/{id}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Actualiza una conexi&oacute;n existente. Solo se env&iacute;an los campos a modificar. Si <span class="inline-code">password</span> est&aacute; vac&iacute;o, se conserva la contrase&ntilde;a actual.</p>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>PUT /phpadmin/api/connections/1
+
+{
+  <span class="key">"name"</span>: <span class="str">"MySQL Producci&oacute;n"</span>,
+  <span class="key">"host"</span>: <span class="str">"db.example.com"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Conexi&oacute;n actualizada"</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE /connections/{id} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-delete">DELETE</span>
+            <span class="endpoint-path">/connections/{id}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Elimina una conexi&oacute;n registrada.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Conexi&oacute;n eliminada"</span>
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /connections/{id}/test -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/connections/{id}/test</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Prueba la conectividad con la base de datos configurada en la conexi&oacute;n indicada.</p>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Respuesta exitosa</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"success"</span>: <span class="bool">true</span>,
+    <span class="key">"message"</span>: <span class="str">"Conexi&oacute;n exitosa"</span>
+  }
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta fallida</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"success"</span>: <span class="bool">false</span>,
+    <span class="key">"message"</span>: <span class="str">"Error: Connection refused"</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: EXPLORADOR                         -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-browser" class="section">
+    <h2 class="section-title">Explorador de Base de Datos</h2>
+    <p class="section-desc">Endpoints para explorar la estructura de las bases de datos: tablas, vistas, procedimientos, funciones y metadatos de columnas.</p>
+
+    <div class="callout callout-info">
+        <strong>Par&aacute;metro de URL</strong>
+        Todos los endpoints de esta secci&oacute;n reciben <span class="inline-code">{connId}</span> como par&aacute;metro de ruta, que corresponde al ID de la conexi&oacute;n a utilizar. La mayor&iacute;a requiere tambi&eacute;n el query parameter <span class="inline-code">db</span> para indicar la base de datos.
+    </div>
+
+    <!-- GET /browser/{connId}/databases -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/databases</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve la lista de bases de datos disponibles en el servidor de la conexi&oacute;n indicada.</p>
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    <span class="str">"information_schema"</span>,
+    <span class="str">"mydb"</span>,
+    <span class="str">"mysql"</span>,
+    <span class="str">"test"</span>
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/tables -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/tables?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve las tablas de la base de datos especificada.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>db</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    <span class="str">"customers"</span>,
+    <span class="str">"orders"</span>,
+    <span class="str">"products"</span>
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/views -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/views?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve las vistas definidas en la base de datos.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>db</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    <span class="str">"v_active_customers"</span>,
+    <span class="str">"v_monthly_sales"</span>
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/procedures -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/procedures?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve los procedimientos almacenados de la base de datos.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>db</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    <span class="str">"sp_ExecuteJsonQuery"</span>,
+    <span class="str">"sp_GetUserReport"</span>
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/functions -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/functions?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve las funciones definidas en la base de datos.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>db</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    <span class="str">"fn_calculate_tax"</span>,
+    <span class="str">"fn_format_date"</span>
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/columns/{table} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/columns/{table}?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve los metadatos de las columnas de una tabla espec&iacute;fica: nombre, tipo de dato, nulabilidad, clave, valor por defecto y atributos extra.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>{table}</code></td><td>string (ruta) <span class="required">requerido</span></td><td>Nombre de la tabla</td></tr>
+                <tr><td><code>db</code></td><td>string (query) <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"name"</span>: <span class="str">"id"</span>,
+      <span class="key">"type"</span>: <span class="str">"int(11)"</span>,
+      <span class="key">"nullable"</span>: <span class="str">"NO"</span>,
+      <span class="key">"key"</span>: <span class="str">"PRI"</span>,
+      <span class="key">"default"</span>: <span class="null">null</span>,
+      <span class="key">"extra"</span>: <span class="str">"auto_increment"</span>
+    },
+    {
+      <span class="key">"name"</span>: <span class="str">"username"</span>,
+      <span class="key">"type"</span>: <span class="str">"varchar(100)"</span>,
+      <span class="key">"nullable"</span>: <span class="str">"NO"</span>,
+      <span class="key">"key"</span>: <span class="str">"UNI"</span>,
+      <span class="key">"default"</span>: <span class="null">null</span>,
+      <span class="key">"extra"</span>: <span class="str">""</span>
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/routine-params/{routine} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/routine-params/{routine}?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve los par&aacute;metros de un procedimiento almacenado o funci&oacute;n, incluyendo nombre, tipo de dato y modo (IN, OUT, INOUT).</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>{routine}</code></td><td>string (ruta) <span class="required">requerido</span></td><td>Nombre de la rutina</td></tr>
+                <tr><td><code>db</code></td><td>string (query) <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"name"</span>: <span class="str">"p_query"</span>,
+      <span class="key">"data_type"</span>: <span class="str">"text"</span>,
+      <span class="key">"mode"</span>: <span class="str">"IN"</span>
+    },
+    {
+      <span class="key">"name"</span>: <span class="str">"p_result"</span>,
+      <span class="key">"data_type"</span>: <span class="str">"longtext"</span>,
+      <span class="key">"mode"</span>: <span class="str">"OUT"</span>
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /browser/{connId}/routine-definition/{routine} -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/browser/{connId}/routine-definition/{routine}?db={database}</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve el c&oacute;digo fuente (definici&oacute;n) de un procedimiento almacenado o funci&oacute;n.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>{routine}</code></td><td>string (ruta) <span class="required">requerido</span></td><td>Nombre de la rutina</td></tr>
+                <tr><td><code>db</code></td><td>string (query) <span class="required">requerido</span></td><td>Nombre de la base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: <span class="str">"CREATE PROCEDURE sp_ExecuteJsonQuery(...) BEGIN ... END"</span>
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: CONSULTAS                          -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-query" class="section">
+    <h2 class="section-title">Consultas</h2>
+    <p class="section-desc">Ejecuci&oacute;n de consultas SQL directas y mediante stored procedures con formato JSON.</p>
+
+    <!-- POST /query/execute -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/execute</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Ejecuta una consulta SQL directamente en la conexi&oacute;n especificada. Detecta autom&aacute;ticamente si es una consulta SELECT (devuelve filas) o una sentencia DML (devuelve filas afectadas).</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_id</code></td><td>integer <span class="required">requerido</span></td><td>ID de la conexi&oacute;n a utilizar</td></tr>
+                <tr><td><code>sql</code></td><td>string <span class="required">requerido</span></td><td>Sentencia SQL a ejecutar</td></tr>
+                <tr><td><code>database</code></td><td>string <span class="optional">opcional</span></td><td>Base de datos (sobrescribe la de la conexi&oacute;n)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connection_id"</span>: <span class="num">1</span>,
+  <span class="key">"sql"</span>: <span class="str">"SELECT * FROM users LIMIT 10"</span>,
+  <span class="key">"database"</span>: <span class="str">"mydb"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta SELECT</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"is_select"</span>: <span class="bool">true</span>,
+    <span class="key">"columns"</span>: [<span class="str">"id"</span>, <span class="str">"name"</span>],
+    <span class="key">"rows"</span>: [
+      {<span class="key">"id"</span>: <span class="num">1</span>, <span class="key">"name"</span>: <span class="str">"Ana"</span>},
+      {<span class="key">"id"</span>: <span class="num">2</span>, <span class="key">"name"</span>: <span class="str">"Luis"</span>}
+    ],
+    <span class="key">"row_count"</span>: <span class="num">10</span>,
+    <span class="key">"execution_time_ms"</span>: <span class="num">45</span>,
+    <span class="key">"message"</span>: <span class="str">"10 filas encontradas en 45ms"</span>
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="code-panel" style="margin-top:8px;">
+            <span class="code-label">Respuesta No-SELECT (INSERT, UPDATE, DELETE)</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"is_select"</span>: <span class="bool">false</span>,
+    <span class="key">"row_count"</span>: <span class="num">5</span>,
+    <span class="key">"execution_time_ms"</span>: <span class="num">12</span>,
+    <span class="key">"message"</span>: <span class="str">"5 filas afectadas en 12ms"</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /query/execute-json -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/execute-json</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Ejecuta una consulta SQL a trav&eacute;s de un stored procedure configurado en la conexi&oacute;n (campo <span class="inline-code">sp_name</span>). Permite el uso de par&aacute;metros parametrizados.</p>
+
+        <div class="callout callout-warning">
+            <strong>Requisito previo</strong>
+            La conexi&oacute;n utilizada debe tener configurado el campo <span class="inline-code">sp_name</span> con el nombre del stored procedure. De lo contrario, se devolver&aacute; un error.
+        </div>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_id</code></td><td>integer <span class="required">requerido</span></td><td>ID de la conexi&oacute;n</td></tr>
+                <tr><td><code>sql</code></td><td>string <span class="required">requerido</span></td><td>Consulta SQL con placeholders <code>?</code></td></tr>
+                <tr><td><code>database</code></td><td>string <span class="optional">opcional</span></td><td>Base de datos a usar</td></tr>
+                <tr><td><code>params</code></td><td>array <span class="optional">opcional</span></td><td>Array de par&aacute;metros para los placeholders</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connection_id"</span>: <span class="num">1</span>,
+  <span class="key">"sql"</span>: <span class="str">"SELECT * FROM users WHERE name = ?"</span>,
+  <span class="key">"database"</span>: <span class="str">"mydb"</span>,
+  <span class="key">"params"</span>: [<span class="str">"John"</span>]
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"is_select"</span>: <span class="bool">true</span>,
+    <span class="key">"sp_name"</span>: <span class="str">"sp_ExecuteJsonQuery"</span>,
+    <span class="key">"result"</span>: [
+      {<span class="key">"id"</span>: <span class="num">1</span>, <span class="key">"name"</span>: <span class="str">"John"</span>}
+    ],
+    <span class="key">"row_count"</span>: <span class="num">3</span>,
+    <span class="key">"execution_time_ms"</span>: <span class="num">67</span>,
+    <span class="key">"message"</span>: <span class="str">"Ejecutado via sp_ExecuteJsonQuery en 67ms"</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: EXPORTACION                        -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-export" class="section">
+    <h2 class="section-title">Exportaci&oacute;n</h2>
+    <p class="section-desc">Exporta resultados de consultas SQL en distintos formatos: CSV, Excel (XLSX) y JSON.</p>
+
+    <div class="callout callout-info">
+        <strong>Formato de petici&oacute;n com&uacute;n</strong>
+        Los tres endpoints de exportaci&oacute;n comparten el mismo cuerpo de petici&oacute;n. La respuesta var&iacute;a seg&uacute;n el formato solicitado.
+    </div>
+
+    <!-- Shared body -->
+    <div class="card">
+        <h3>Cuerpo de petici&oacute;n com&uacute;n</h3>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_id</code></td><td>integer <span class="required">requerido</span></td><td>ID de la conexi&oacute;n</td></tr>
+                <tr><td><code>sql</code></td><td>string <span class="required">requerido</span></td><td>Consulta SQL a ejecutar</td></tr>
+                <tr><td><code>database</code></td><td>string <span class="optional">opcional</span></td><td>Base de datos a usar</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Ejemplo de cuerpo</span>
+<pre>{
+  <span class="key">"connection_id"</span>: <span class="num">1</span>,
+  <span class="key">"sql"</span>: <span class="str">"SELECT * FROM users"</span>,
+  <span class="key">"database"</span>: <span class="str">"mydb"</span>
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /export/csv -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/export/csv</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Exporta los resultados de la consulta como archivo CSV. Utiliza codificaci&oacute;n UTF-8 con BOM y separador punto y coma (<span class="inline-code">;</span>).</p>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta</span>
+<pre><span class="comment">// Content-Type: text/csv; charset=UTF-8</span>
+<span class="comment">// Content-Disposition: attachment; filename="export_2026-03-27.csv"</span>
+<span class="comment">// Archivo binario CSV (descarga directa)</span></pre>
+        </div>
+    </div>
+
+    <!-- POST /export/excel -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/export/excel</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Exporta los resultados como archivo Excel (.xlsx).</p>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta</span>
+<pre><span class="comment">// Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</span>
+<span class="comment">// Content-Disposition: attachment; filename="export_2026-03-27.xlsx"</span>
+<span class="comment">// Archivo binario XLSX (descarga directa)</span></pre>
+        </div>
+    </div>
+
+    <!-- POST /export/json -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/export/json</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Exporta los resultados como archivo JSON con metadatos. El n&uacute;mero de filas est&aacute; limitado por la constante <span class="inline-code">JSON_RESULT_LIMIT</span> del servidor.</p>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta</span>
+<pre><span class="comment">// Content-Type: application/json</span>
+<span class="comment">// Content-Disposition: attachment; filename="export_2026-03-27.json"</span>
+
+{
+  <span class="key">"metadata"</span>: {
+    <span class="key">"query"</span>: <span class="str">"SELECT * FROM users"</span>,
+    <span class="key">"exported_at"</span>: <span class="str">"2026-03-27T10:30:00"</span>,
+    <span class="key">"row_count"</span>: <span class="num">50</span>
+  },
+  <span class="key">"rows"</span>: [
+    {<span class="key">"id"</span>: <span class="num">1</span>, <span class="key">"name"</span>: <span class="str">"Ana"</span>},
+    <span class="comment">// ...</span>
+  ]
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: AUDITORIA                          -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-audit" class="section">
+    <h2 class="section-title">Auditor&iacute;a</h2>
+    <p class="section-desc">Consulta y gesti&oacute;n del registro de auditor&iacute;a: historial de consultas ejecutadas, estad&iacute;sticas y favoritos.</p>
+
+    <!-- GET /audit -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/audit</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve el historial de consultas ejecutadas con paginaci&oacute;n y filtros opcionales.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>page</code></td><td>integer <span class="optional">opcional</span></td><td>N&uacute;mero de p&aacute;gina (por defecto: 1)</td></tr>
+                <tr><td><code>per_page</code></td><td>integer <span class="optional">opcional</span></td><td>Resultados por p&aacute;gina (por defecto: 20, m&aacute;x: 100)</td></tr>
+                <tr><td><code>connection_id</code></td><td>integer <span class="optional">opcional</span></td><td>Filtrar por ID de conexi&oacute;n</td></tr>
+                <tr><td><code>status</code></td><td>string <span class="optional">opcional</span></td><td>Filtrar por estado: <code>success</code> o <code>error</code></td></tr>
+                <tr><td><code>date_from</code></td><td>string <span class="optional">opcional</span></td><td>Fecha inicio (formato: <code>YYYY-MM-DD</code>)</td></tr>
+                <tr><td><code>date_to</code></td><td>string <span class="optional">opcional</span></td><td>Fecha fin (formato: <code>YYYY-MM-DD</code>)</td></tr>
+                <tr><td><code>search</code></td><td>string <span class="optional">opcional</span></td><td>B&uacute;squeda en texto de la consulta SQL</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Ejemplo de petici&oacute;n</span>
+<pre>GET /phpadmin/api/audit?page=1&per_page=20&status=success&search=SELECT</pre>
+        </div>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"logs"</span>: [
+      {
+        <span class="key">"id"</span>: <span class="num">142</span>,
+        <span class="key">"user_id"</span>: <span class="num">1</span>,
+        <span class="key">"connection_id"</span>: <span class="num">1</span>,
+        <span class="key">"sql_query"</span>: <span class="str">"SELECT * FROM users"</span>,
+        <span class="key">"database_name"</span>: <span class="str">"mydb"</span>,
+        <span class="key">"status"</span>: <span class="str">"success"</span>,
+        <span class="key">"execution_time_ms"</span>: <span class="num">45</span>,
+        <span class="key">"row_count"</span>: <span class="num">10</span>,
+        <span class="key">"is_favorite"</span>: <span class="num">0</span>,
+        <span class="key">"created_at"</span>: <span class="str">"2026-03-27 10:30:00"</span>
+      }
+    ],
+    <span class="key">"total"</span>: <span class="num">150</span>,
+    <span class="key">"page"</span>: <span class="num">1</span>,
+    <span class="key">"per_page"</span>: <span class="num">20</span>,
+    <span class="key">"total_pages"</span>: <span class="num">8</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /audit/stats -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/audit/stats</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve estad&iacute;sticas generales de las consultas ejecutadas: total, exitosas, con error y tiempo promedio de ejecuci&oacute;n.</p>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"total_queries"</span>: <span class="num">1250</span>,
+    <span class="key">"success_count"</span>: <span class="num">1180</span>,
+    <span class="key">"error_count"</span>: <span class="num">70</span>,
+    <span class="key">"avg_execution_time_ms"</span>: <span class="num">89.5</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+    <!-- GET /audit/favorites -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-get">GET</span>
+            <span class="endpoint-path">/audit/favorites</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Devuelve las entradas de auditor&iacute;a marcadas como favoritas, con filtros opcionales por conexi&oacute;n y base de datos.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Query Param</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_id</code></td><td>integer <span class="optional">opcional</span></td><td>Filtrar por ID de conexi&oacute;n</td></tr>
+                <tr><td><code>database</code></td><td>string <span class="optional">opcional</span></td><td>Filtrar por nombre de base de datos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-panel">
+            <span class="code-label">Ejemplo de petici&oacute;n</span>
+<pre>GET /phpadmin/api/audit/favorites?connection_id=1&database=mydb</pre>
+        </div>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="num">42</span>,
+      <span class="key">"sql_query"</span>: <span class="str">"SELECT * FROM orders WHERE status = 'pending'"</span>,
+      <span class="key">"database_name"</span>: <span class="str">"mydb"</span>,
+      <span class="key">"is_favorite"</span>: <span class="num">1</span>,
+      <span class="key">"created_at"</span>: <span class="str">"2026-03-25 14:20:00"</span>
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+
+    <!-- POST /audit/{id}/toggle-favorite -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/audit/{id}/toggle-favorite</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Alterna el estado de favorito de una entrada de auditor&iacute;a. Si estaba marcada, se desmarca, y viceversa.</p>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Favorito actualizado"</span>
+}</pre>
+        </div>
+    </div>
+
+    <!-- DELETE /audit -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-delete">DELETE</span>
+            <span class="endpoint-path">/audit</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Elimina todos los registros de auditor&iacute;a que <strong>no</strong> est&eacute;n marcados como favoritos. Las entradas favoritas se conservan.</p>
+
+        <div class="callout callout-warning">
+            <strong>Acci&oacute;n irreversible</strong>
+            Esta operaci&oacute;n elimina permanentemente todos los registros no favoritos. Las entradas marcadas como favoritas no se ven afectadas.
+        </div>
+
+        <div class="code-panel">
+            <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"message"</span>: <span class="str">"Registros de auditor&iacute;a eliminados"</span>
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: ERRORES                            -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-errors" class="section">
+    <h2 class="section-title">Respuestas de Error</h2>
+    <p class="section-desc">Todas las respuestas de error siguen un formato uniforme. A continuaci&oacute;n se detallan los c&oacute;digos HTTP utilizados y su significado.</p>
+
+    <!-- Error format -->
+    <div class="card">
+        <h3>Formato est&aacute;ndar de error</h3>
+        <p class="desc">Todas las respuestas de error devuelven un objeto JSON con la misma estructura:</p>
+
+        <div class="code-panel">
+            <span class="code-label">Estructura de error</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"Descripci&oacute;n del error"</span>,
+  <span class="key">"code"</span>: <span class="num">400</span>
+}</pre>
+        </div>
+    </div>
+
+    <!-- Error codes table -->
+    <div class="card">
+        <h3>C&oacute;digos de error HTTP</h3>
+
+        <table class="error-table">
+            <thead>
+                <tr>
+                    <th>C&oacute;digo</th>
+                    <th>Estado</th>
+                    <th>Descripci&oacute;n</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="error-code" style="color:var(--warning);">400</span></td>
+                    <td>Bad Request</td>
+                    <td>La petici&oacute;n contiene datos inv&aacute;lidos, faltan campos requeridos o el formato del cuerpo es incorrecto.</td>
+                </tr>
+                <tr>
+                    <td><span class="error-code" style="color:var(--danger);">401</span></td>
+                    <td>Unauthorized</td>
+                    <td>No hay sesi&oacute;n activa. El usuario debe iniciar sesi&oacute;n para acceder al recurso.</td>
+                </tr>
+                <tr>
+                    <td><span class="error-code" style="color:var(--danger);">403</span></td>
+                    <td>Forbidden</td>
+                    <td>Acceso denegado. Posibles causas: token CSRF inv&aacute;lido o ausente, rol insuficiente, o el usuario debe cambiar su contrase&ntilde;a.</td>
+                </tr>
+                <tr>
+                    <td><span class="error-code" style="color:var(--text-light);">404</span></td>
+                    <td>Not Found</td>
+                    <td>El recurso solicitado no existe (usuario, conexi&oacute;n, registro de auditor&iacute;a, etc.).</td>
+                </tr>
+                <tr>
+                    <td><span class="error-code" style="color:var(--warning);">422</span></td>
+                    <td>Unprocessable Entity</td>
+                    <td>Error de validaci&oacute;n. Los datos enviados no cumplen las reglas de negocio (ej.: contrase&ntilde;a demasiado corta).</td>
+                </tr>
+                <tr>
+                    <td><span class="error-code" style="color:var(--danger);">500</span></td>
+                    <td>Internal Server Error</td>
+                    <td>Error interno del servidor. Indica un fallo inesperado en la aplicaci&oacute;n.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Common error examples -->
+    <div class="card">
+        <h3>Ejemplos comunes de error</h3>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">401 - Sin autenticaci&oacute;n</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"No autenticado"</span>,
+  <span class="key">"code"</span>: <span class="num">401</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">403 - CSRF inv&aacute;lido</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"Token CSRF inv&aacute;lido"</span>,
+  <span class="key">"code"</span>: <span class="num">403</span>
+}</pre>
+            </div>
+        </div>
+
+        <div class="code-grid" style="margin-top:8px;">
+            <div class="code-panel">
+                <span class="code-label">403 - Cambio de contrase&ntilde;a requerido</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"Debe cambiar su contrase&ntilde;a"</span>,
+  <span class="key">"code"</span>: <span class="num">403</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">403 - Rol insuficiente</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"Acceso denegado"</span>,
+  <span class="key">"code"</span>: <span class="num">403</span>
+}</pre>
+            </div>
+        </div>
+
+        <div class="code-grid" style="margin-top:8px;">
+            <div class="code-panel">
+                <span class="code-label">404 - Recurso no encontrado</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"Conexi&oacute;n no encontrada"</span>,
+  <span class="key">"code"</span>: <span class="num">404</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">422 - Error de validaci&oacute;n</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"error"</span>: <span class="str">"La contrase&ntilde;a debe tener al menos 4 caracteres"</span>,
+  <span class="key">"code"</span>: <span class="num">422</span>
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSRF usage guide -->
+    <div class="card">
+        <h3>Uso del token CSRF</h3>
+        <p class="desc">Todas las peticiones que modifican datos (<span class="inline-code">POST</span>, <span class="inline-code">PUT</span>, <span class="inline-code">DELETE</span>) deben incluir la cabecera <span class="inline-code">X-CSRF-Token</span>. El token se puede obtener de dos formas:</p>
+
+        <ul class="field-list">
+            <li>Desde la respuesta del endpoint <code>GET /csrf-token</code></li>
+            <li>Desde el campo <code>csrf_token</code> en la respuesta de <code>POST /auth/login</code></li>
+        </ul>
+
+        <div class="code-panel">
+            <span class="code-label">Ejemplo de cabeceras</span>
+<pre><span class="comment">// Petici&oacute;n POST con CSRF Token</span>
+POST /phpadmin/api/connections HTTP/1.1
+Content-Type: application/json
+X-CSRF-Token: a1b2c3d4e5f6abcdef1234567890abcd
+Cookie: PHPSESSID=abc123...
+
+{
+  <span class="key">"name"</span>: <span class="str">"Nueva conexi&oacute;n"</span>,
+  <span class="key">"driver"</span>: <span class="str">"mysql"</span>,
+  <span class="key">"host"</span>: <span class="str">"localhost"</span>,
+  <span class="key">"username"</span>: <span class="str">"root"</span>
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: MULTI-QUERY & CROSS-JOIN          -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-multiquery" class="section">
+    <h2 class="section-title">Multi-Query &amp; Cross-Join</h2>
+    <p class="section-desc">Endpoints para ejecutar consultas en m&uacute;ltiples conexiones simult&aacute;neamente, realizar cruces (joins) entre fuentes de datos heterog&eacute;neas, operaciones de conjuntos y SQL virtual.</p>
+
+    <div class="callout callout-info">
+        <strong>Autenticaci&oacute;n requerida</strong>
+        Todos los endpoints de esta secci&oacute;n requieren sesi&oacute;n activa y la cabecera <span class="inline-code">X-CSRF-Token</span>.
+    </div>
+
+    <!-- POST /query/multi-execute -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/multi-execute</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Ejecuta la misma consulta SQL en m&uacute;ltiples conexiones de forma simult&aacute;nea. Permite especificar opcionalmente una base de datos distinta para cada conexi&oacute;n.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_ids</code></td><td>array&lt;int&gt; <span class="required">requerido</span></td><td>Lista de IDs de conexi&oacute;n donde ejecutar la consulta</td></tr>
+                <tr><td><code>sql</code></td><td>string <span class="required">requerido</span></td><td>Sentencia SQL a ejecutar en cada conexi&oacute;n</td></tr>
+                <tr><td><code>databases</code></td><td>object <span class="optional">opcional</span></td><td>Mapa de connection_id &rarr; nombre de base de datos (sobrescribe la BD por defecto de cada conexi&oacute;n)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connection_ids"</span>: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+  <span class="key">"sql"</span>: <span class="str">"SELECT COUNT(*) AS total FROM users"</span>,
+  <span class="key">"databases"</span>: {
+    <span class="key">"1"</span>: <span class="str">"db_production"</span>,
+    <span class="key">"2"</span>: <span class="str">"db_staging"</span>
+  }
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"results"</span>: [
+      {
+        <span class="key">"connection_id"</span>: <span class="num">1</span>,
+        <span class="key">"success"</span>: <span class="bool">true</span>,
+        <span class="key">"columns"</span>: [<span class="str">"total"</span>],
+        <span class="key">"rows"</span>: [{<span class="key">"total"</span>: <span class="num">1523</span>}],
+        <span class="key">"row_count"</span>: <span class="num">1</span>,
+        <span class="key">"execution_time_ms"</span>: <span class="num">12</span>
+      },
+      {
+        <span class="key">"connection_id"</span>: <span class="num">2</span>,
+        <span class="key">"success"</span>: <span class="bool">true</span>,
+        <span class="key">"columns"</span>: [<span class="str">"total"</span>],
+        <span class="key">"rows"</span>: [{<span class="key">"total"</span>: <span class="num">842</span>}],
+        <span class="key">"row_count"</span>: <span class="num">1</span>,
+        <span class="key">"execution_time_ms"</span>: <span class="num">9</span>
+      }
+    ],
+    <span class="key">"total_connections"</span>: <span class="num">3</span>,
+    <span class="key">"successful"</span>: <span class="num">2</span>,
+    <span class="key">"failed"</span>: <span class="num">1</span>,
+    <span class="key">"total_time_ms"</span>: <span class="num">35</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- POST /query/cross-join -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/cross-join</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Cruza (join) datos provenientes de N conexiones distintas. Cada fuente ejecuta su consulta en su conexi&oacute;n correspondiente y los resultados se combinan en memoria seg&uacute;n las reglas de join especificadas.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>sources</code></td><td>array <span class="required">requerido</span></td><td>Lista de fuentes, cada una con <code>alias</code> (string), <code>connection_id</code> (int), <code>sql</code> (string), <code>database</code> (string, opcional)</td></tr>
+                <tr><td><code>joins</code></td><td>array <span class="required">requerido</span></td><td>Definiciones de join: <code>left_alias</code>, <code>right_alias</code>, <code>type</code> (INNER, LEFT, RIGHT, FULL), <code>left_key</code>, <code>right_key</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"sources"</span>: [
+    {
+      <span class="key">"alias"</span>: <span class="str">"a"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">1</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT id, name FROM customers"</span>,
+      <span class="key">"database"</span>: <span class="str">"crm_db"</span>
+    },
+    {
+      <span class="key">"alias"</span>: <span class="str">"b"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">2</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT customer_id, total FROM orders"</span>,
+      <span class="key">"database"</span>: <span class="str">"sales_db"</span>
+    }
+  ],
+  <span class="key">"joins"</span>: [
+    {
+      <span class="key">"left_alias"</span>: <span class="str">"a"</span>,
+      <span class="key">"right_alias"</span>: <span class="str">"b"</span>,
+      <span class="key">"type"</span>: <span class="str">"INNER"</span>,
+      <span class="key">"left_key"</span>: <span class="str">"id"</span>,
+      <span class="key">"right_key"</span>: <span class="str">"customer_id"</span>
+    }
+  ]
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"columns"</span>: [<span class="str">"a.id"</span>, <span class="str">"a.name"</span>, <span class="str">"b.customer_id"</span>, <span class="str">"b.total"</span>],
+    <span class="key">"rows"</span>: [
+      {<span class="key">"a.id"</span>: <span class="num">1</span>, <span class="key">"a.name"</span>: <span class="str">"Acme"</span>, <span class="key">"b.customer_id"</span>: <span class="num">1</span>, <span class="key">"b.total"</span>: <span class="num">5200.50</span>}
+    ],
+    <span class="key">"row_count"</span>: <span class="num">1</span>,
+    <span class="key">"source_counts"</span>: {<span class="key">"a"</span>: <span class="num">50</span>, <span class="key">"b"</span>: <span class="num">120</span>},
+    <span class="key">"joins_applied"</span>: <span class="num">1</span>,
+    <span class="key">"execution_time_ms"</span>: <span class="num">87</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- POST /query/set-operation -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/set-operation</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Aplica operaciones de conjuntos (UNION, INTERSECT, EXCEPT) entre los resultados de m&uacute;ltiples fuentes de datos heterog&eacute;neas.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>sources</code></td><td>array <span class="required">requerido</span></td><td>Lista de fuentes, cada una con <code>alias</code> (string), <code>connection_id</code> (int), <code>sql</code> (string), <code>database</code> (string, opcional)</td></tr>
+                <tr><td><code>operation</code></td><td>string <span class="required">requerido</span></td><td>Operaci&oacute;n a aplicar: <code>UNION</code>, <code>UNION_ALL</code>, <code>INTERSECT</code> o <code>EXCEPT</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"sources"</span>: [
+    {
+      <span class="key">"alias"</span>: <span class="str">"prod"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">1</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT email FROM users"</span>,
+      <span class="key">"database"</span>: <span class="str">"db_prod"</span>
+    },
+    {
+      <span class="key">"alias"</span>: <span class="str">"staging"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">2</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT email FROM users"</span>,
+      <span class="key">"database"</span>: <span class="str">"db_staging"</span>
+    }
+  ],
+  <span class="key">"operation"</span>: <span class="str">"EXCEPT"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"columns"</span>: [<span class="str">"email"</span>],
+    <span class="key">"rows"</span>: [
+      {<span class="key">"email"</span>: <span class="str">"ana@example.com"</span>},
+      {<span class="key">"email"</span>: <span class="str">"luis@example.com"</span>}
+    ],
+    <span class="key">"row_count"</span>: <span class="num">2</span>,
+    <span class="key">"source_counts"</span>: {<span class="key">"prod"</span>: <span class="num">1500</span>, <span class="key">"staging"</span>: <span class="num">1480</span>},
+    <span class="key">"operation"</span>: <span class="str">"EXCEPT"</span>,
+    <span class="key">"execution_time_ms"</span>: <span class="num">62</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- POST /query/virtual-sql -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/query/virtual-sql</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Ejecuta una sentencia SQL libre sobre tablas virtuales definidas por las fuentes. Cada fuente se obtiene de su conexi&oacute;n real y se expone como una tabla virtual con el alias indicado, permitiendo escribir SQL est&aacute;ndar con JOINs, WHERE, GROUP BY, etc.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>sources</code></td><td>array <span class="required">requerido</span></td><td>Lista de fuentes virtuales, cada una con <code>alias</code> (string), <code>connection_id</code> (int), <code>sql</code> (string), <code>database</code> (string, opcional)</td></tr>
+                <tr><td><code>sql</code></td><td>string <span class="required">requerido</span></td><td>Sentencia SQL a ejecutar sobre las tablas virtuales (usar los alias como nombres de tabla)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"sources"</span>: [
+    {
+      <span class="key">"alias"</span>: <span class="str">"a"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">1</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT id, name, country FROM customers"</span>,
+      <span class="key">"database"</span>: <span class="str">"crm"</span>
+    },
+    {
+      <span class="key">"alias"</span>: <span class="str">"b"</span>,
+      <span class="key">"connection_id"</span>: <span class="num">2</span>,
+      <span class="key">"sql"</span>: <span class="str">"SELECT customer_id, SUM(total) AS revenue FROM orders GROUP BY customer_id"</span>,
+      <span class="key">"database"</span>: <span class="str">"billing"</span>
+    }
+  ],
+  <span class="key">"sql"</span>: <span class="str">"SELECT a.name, a.country, b.revenue FROM a JOIN b ON a.id = b.customer_id WHERE b.revenue &gt; 1000 ORDER BY b.revenue DESC"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"columns"</span>: [<span class="str">"name"</span>, <span class="str">"country"</span>, <span class="str">"revenue"</span>],
+    <span class="key">"rows"</span>: [
+      {<span class="key">"name"</span>: <span class="str">"Acme Corp"</span>, <span class="key">"country"</span>: <span class="str">"US"</span>, <span class="key">"revenue"</span>: <span class="num">15200.00</span>},
+      {<span class="key">"name"</span>: <span class="str">"Beta SA"</span>, <span class="key">"country"</span>: <span class="str">"ES"</span>, <span class="key">"revenue"</span>: <span class="num">8430.75</span>}
+    ],
+    <span class="key">"row_count"</span>: <span class="num">2</span>,
+    <span class="key">"source_counts"</span>: {<span class="key">"a"</span>: <span class="num">50</span>, <span class="key">"b"</span>: <span class="num">120</span>},
+    <span class="key">"execution_time_ms"</span>: <span class="num">134</span>,
+    <span class="key">"fetch_time_ms"</span>: <span class="num">95</span>,
+    <span class="key">"query_time_ms"</span>: <span class="num">39</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ──────────────────────────────────────── -->
+<!--  TAB: COMPARAR ESQUEMAS                  -->
+<!-- ──────────────────────────────────────── -->
+<div id="tab-schemacompare" class="section">
+    <h2 class="section-title">Comparar Esquemas</h2>
+    <p class="section-desc">Endpoints para comparar esquemas de bases de datos entre dos conexiones, generar scripts de migraci&oacute;n y ejecutarlos.</p>
+
+    <div class="callout callout-info">
+        <strong>Autenticaci&oacute;n requerida</strong>
+        Todos los endpoints de esta secci&oacute;n requieren sesi&oacute;n activa y la cabecera <span class="inline-code">X-CSRF-Token</span>.
+    </div>
+
+    <!-- POST /schema-compare/compare -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/schema-compare/compare</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Compara los esquemas de dos bases de datos (pueden estar en conexiones y drivers distintos). Devuelve las diferencias en tablas, vistas, procedimientos y funciones.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connA</code></td><td>integer <span class="required">requerido</span></td><td>ID de la primera conexi&oacute;n (origen A)</td></tr>
+                <tr><td><code>dbA</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos en la conexi&oacute;n A</td></tr>
+                <tr><td><code>connB</code></td><td>integer <span class="required">requerido</span></td><td>ID de la segunda conexi&oacute;n (origen B)</td></tr>
+                <tr><td><code>dbB</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos en la conexi&oacute;n B</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connA"</span>: <span class="num">1</span>,
+  <span class="key">"dbA"</span>: <span class="str">"production_db"</span>,
+  <span class="key">"connB"</span>: <span class="num">2</span>,
+  <span class="key">"dbB"</span>: <span class="str">"staging_db"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"diff"</span>: {
+      <span class="key">"tables"</span>: [
+        {<span class="key">"name"</span>: <span class="str">"orders"</span>, <span class="key">"status"</span>: <span class="str">"modified"</span>, <span class="key">"details"</span>: <span class="str">"Column 'discount' missing in B"</span>},
+        {<span class="key">"name"</span>: <span class="str">"audit_log"</span>, <span class="key">"status"</span>: <span class="str">"only_in_A"</span>}
+      ],
+      <span class="key">"views"</span>: [],
+      <span class="key">"procedures"</span>: [
+        {<span class="key">"name"</span>: <span class="str">"sp_recalculate"</span>, <span class="key">"status"</span>: <span class="str">"only_in_A"</span>}
+      ],
+      <span class="key">"functions"</span>: [],
+      <span class="key">"summary"</span>: {
+        <span class="key">"total_differences"</span>: <span class="num">3</span>,
+        <span class="key">"tables_diff"</span>: <span class="num">2</span>,
+        <span class="key">"views_diff"</span>: <span class="num">0</span>,
+        <span class="key">"procedures_diff"</span>: <span class="num">1</span>,
+        <span class="key">"functions_diff"</span>: <span class="num">0</span>
+      }
+    },
+    <span class="key">"driverA"</span>: <span class="str">"mysql"</span>,
+    <span class="key">"driverB"</span>: <span class="str">"pgsql"</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- POST /schema-compare/generate-script -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/schema-compare/generate-script</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Genera un script SQL de migraci&oacute;n para sincronizar el esquema de una base de datos con otra. La direcci&oacute;n indica si se genera el script para aplicar cambios de A hacia B o de B hacia A.</p>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connA</code></td><td>integer <span class="required">requerido</span></td><td>ID de la primera conexi&oacute;n (origen A)</td></tr>
+                <tr><td><code>dbA</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos en la conexi&oacute;n A</td></tr>
+                <tr><td><code>connB</code></td><td>integer <span class="required">requerido</span></td><td>ID de la segunda conexi&oacute;n (origen B)</td></tr>
+                <tr><td><code>dbB</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos en la conexi&oacute;n B</td></tr>
+                <tr><td><code>direction</code></td><td>string <span class="required">requerido</span></td><td>Direcci&oacute;n de la migraci&oacute;n: <code>AtoB</code> o <code>BtoA</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connA"</span>: <span class="num">1</span>,
+  <span class="key">"dbA"</span>: <span class="str">"production_db"</span>,
+  <span class="key">"connB"</span>: <span class="num">2</span>,
+  <span class="key">"dbB"</span>: <span class="str">"staging_db"</span>,
+  <span class="key">"direction"</span>: <span class="str">"AtoB"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"script"</span>: <span class="str">"ALTER TABLE orders ADD COLUMN discount DECIMAL(10,2);\nCREATE TABLE audit_log (...);\nCREATE PROCEDURE sp_recalculate ..."</span>,
+    <span class="key">"direction"</span>: <span class="str">"AtoB"</span>,
+    <span class="key">"driver"</span>: <span class="str">"mysql"</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- POST /schema-compare/execute-script -->
+    <div class="card">
+        <h3>
+            <span class="badge badge-post">POST</span>
+            <span class="endpoint-path">/schema-compare/execute-script</span>
+            <span class="tag tag-protected">Protegido</span>
+        </h3>
+        <p class="desc">Ejecuta un script de migraci&oacute;n SQL en la conexi&oacute;n y base de datos indicadas. Cada sentencia se ejecuta de forma individual y se reporta su resultado.</p>
+
+        <div class="callout callout-warning">
+            <strong>Operaci&oacute;n destructiva</strong>
+            Este endpoint puede modificar la estructura de la base de datos. Aseg&uacute;rese de revisar el script generado antes de ejecutarlo.
+        </div>
+
+        <table class="params-table">
+            <thead><tr><th>Par&aacute;metro</th><th>Tipo</th><th>Descripci&oacute;n</th></tr></thead>
+            <tbody>
+                <tr><td><code>connection_id</code></td><td>integer <span class="required">requerido</span></td><td>ID de la conexi&oacute;n donde ejecutar el script</td></tr>
+                <tr><td><code>database</code></td><td>string <span class="required">requerido</span></td><td>Nombre de la base de datos destino</td></tr>
+                <tr><td><code>script</code></td><td>string <span class="required">requerido</span></td><td>Script SQL a ejecutar (puede contener m&uacute;ltiples sentencias separadas por <code>;</code>)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-grid">
+            <div class="code-panel">
+                <span class="code-label">Petici&oacute;n</span>
+<pre>{
+  <span class="key">"connection_id"</span>: <span class="num">2</span>,
+  <span class="key">"database"</span>: <span class="str">"staging_db"</span>,
+  <span class="key">"script"</span>: <span class="str">"ALTER TABLE orders ADD COLUMN discount DECIMAL(10,2);\nCREATE TABLE audit_log (id INT PRIMARY KEY, action VARCHAR(255));"</span>
+}</pre>
+            </div>
+            <div class="code-panel">
+                <span class="code-label">Respuesta 200</span>
+<pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"results"</span>: [
+      {
+        <span class="key">"statement"</span>: <span class="num">1</span>,
+        <span class="key">"sql_snippet"</span>: <span class="str">"ALTER TABLE orders ADD COLUMN discount..."</span>,
+        <span class="key">"success"</span>: <span class="bool">true</span>,
+        <span class="key">"error"</span>: <span class="bool">null</span>,
+        <span class="key">"rows_affected"</span>: <span class="num">0</span>
+      },
+      {
+        <span class="key">"statement"</span>: <span class="num">2</span>,
+        <span class="key">"sql_snippet"</span>: <span class="str">"CREATE TABLE audit_log..."</span>,
+        <span class="key">"success"</span>: <span class="bool">true</span>,
+        <span class="key">"error"</span>: <span class="bool">null</span>,
+        <span class="key">"rows_affected"</span>: <span class="num">0</span>
+      }
+    ],
+    <span class="key">"total"</span>: <span class="num">2</span>,
+    <span class="key">"success_count"</span>: <span class="num">2</span>,
+    <span class="key">"error_count"</span>: <span class="num">0</span>
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /.container -->
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<div class="footer">
+    PHPAdmin - Query Manager v1.0.0 &mdash; Referencia de API &mdash; Generada el 27 de marzo de 2026
+</div>
+
+<!-- ════════════════ SCRIPT ════════════════ -->
+<script>
+(function() {
+    const tabs = document.querySelectorAll('.nav-tab');
+    const sections = document.querySelectorAll('.section');
+
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            const target = this.getAttribute('data-tab');
+
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+
+            sections.forEach(function(s) { s.classList.remove('active'); });
+            document.getElementById('tab-' + target).classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }.bind(tab));
+    });
+})();
+</script>
+
+</body>
+</html>

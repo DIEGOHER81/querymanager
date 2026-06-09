@@ -1,0 +1,30 @@
+﻿RewriteEngine On
+RewriteBase /phpadmin/
+
+# Protect sensitive directories
+RewriteRule ^data/ - [F,L]
+RewriteRule ^config/ - [F,L]
+RewriteRule ^sql/ - [F,L]
+RewriteRule ^docs/ - [F,L]
+
+# Block access to .sqlite files
+RewriteRule \.sqlite$ - [F,L]
+
+# Block access to hidden files (.env, .gitignore, etc.)
+RewriteRule (^\.|/\.) - [F,L]
+
+# Block maintenance / diagnostic scripts (deben eliminarse, nunca exponerse)
+RewriteRule ^(reset_admin|test_api|check_setup)\.php$ - [F,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# API routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]

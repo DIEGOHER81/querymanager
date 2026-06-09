@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Manager - Guia de Deploy y Seguridad</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-code: #e2e8f0;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+            --accent: #7c3aed;
+            --accent-bg: #ede9fe;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Header */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; position: relative; }
+        .hero p { font-size: 16px; opacity: 0.9; position: relative; max-width: 550px; margin: 0 auto; }
+        .hero .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .nav-tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .nav-tab .tab-icon { font-size: 18px; }
+
+        /* Content */
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 24px; }
+        .card h3 {
+            font-size: 17px;
+            margin: 24px 0 12px;
+            color: var(--primary-dark);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        /* Step cards */
+        .step-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .step-header:hover { background: var(--bg); }
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .step-number.done { background: var(--success); }
+        .step-title { font-weight: 600; font-size: 16px; flex: 1; }
+        .step-toggle {
+            color: var(--text-light);
+            transition: transform 0.3s;
+            font-size: 20px;
+        }
+        .step-header[aria-expanded="true"] .step-toggle { transform: rotate(180deg); }
+        .step-body {
+            padding: 0 24px 24px;
+            display: none;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        .step-body.open { display: block; }
+
+        /* Code blocks */
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0;
+            position: relative;
+        }
+        pre .comment { color: #64748b; }
+        pre .cmd { color: #7dd3fc; }
+        pre .flag { color: #a78bfa; }
+        pre .string { color: #86efac; }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-code);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .copy-btn.copied { background: var(--success); color: white; }
+
+        code {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .alert-warning { background: var(--warning-bg); color: #92400e; border-left: 4px solid var(--warning); }
+        .alert-danger { background: var(--danger-bg); color: #991b1b; border-left: 4px solid var(--danger); }
+        .alert-info { background: var(--info-bg); color: #155e75; border-left: 4px solid var(--info); }
+        .alert-success { background: var(--success-bg); color: #166534; border-left: 4px solid var(--success); }
+
+        /* Tables */
+        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th {
+            background: var(--bg);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 2px solid var(--border);
+        }
+        td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg); }
+        td code { font-size: 12px; }
+
+        /* Diagram */
+        .diagram {
+            background: var(--bg-code);
+            color: #7dd3fc;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 16px 0;
+            white-space: pre;
+        }
+
+        /* Lists */
+        ol, ul { padding-left: 24px; margin: 10px 0; }
+        li { margin-bottom: 8px; }
+        li strong { color: var(--text); }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-required { background: var(--danger-bg); color: var(--danger); }
+        .badge-optional { background: var(--primary-light); color: var(--primary); }
+        .badge-recommended { background: var(--success-bg); color: var(--success); }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+            margin: 16px 0;
+        }
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .checklist li:hover { background: var(--bg); }
+        .checklist li .check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 12px;
+            color: transparent;
+        }
+        .checklist li.checked .check-box {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        .checklist li .check-text { flex: 1; }
+
+        /* Security layer cards */
+        .security-layer {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .security-layer:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        }
+        .layer-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .layer-content { flex: 1; }
+        .layer-content strong { display: block; margin-bottom: 4px; font-size: 15px; }
+        .layer-content p { font-size: 14px; color: var(--text-light); margin: 0; }
+
+        /* File list */
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+        .file-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+        .file-list li:nth-child(odd) { background: var(--bg); }
+        .file-list .file-icon { font-size: 16px; flex-shrink: 0; }
+        .file-list .file-name { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 13px; }
+
+        /* Troubleshooting */
+        .trouble-item {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .trouble-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.15s;
+        }
+        .trouble-header:hover { background: var(--bg); }
+        .trouble-header .trouble-icon { font-size: 18px; }
+        .trouble-body {
+            display: none;
+            padding: 0 18px 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .trouble-body.open { display: block; }
+
+        /* Flow diagram */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin: 20px 0;
+        }
+        .flow-box {
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+            min-width: 200px;
+        }
+        .flow-box.action { background: var(--primary-light); color: var(--primary-dark); border: 2px solid var(--primary); }
+        .flow-box.check { background: var(--warning-bg); color: #92400e; border: 2px solid var(--warning); border-radius: 10px; transform: rotate(0deg); }
+        .flow-box.success-box { background: var(--success-bg); color: #166534; border: 2px solid var(--success); }
+        .flow-box.danger-box { background: var(--danger-bg); color: #991b1b; border: 2px solid var(--danger); }
+        .flow-arrow { color: var(--text-light); font-size: 20px; line-height: 1; }
+        .flow-branch {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        .flow-branch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .flow-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero { padding: 40px 16px 30px; }
+            .hero h1 { font-size: 24px; }
+            .nav-tab { padding: 12px 16px; font-size: 13px; }
+            .card { padding: 20px; }
+            .step-header { padding: 14px 18px; }
+            .step-body { padding: 0 18px 18px; }
+            .flow-branch { flex-direction: column; gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero Header -->
+<div class="hero">
+    <div class="hero-logo">QM</div>
+    <h1>Guia de Deploy y Seguridad</h1>
+    <p>Instrucciones completas para desplegar PHPAdmin - Query Manager en produccion de forma segura</p>
+    <div class="version">v1.1.0</div>
+</div>
+
+<!-- Navigation Tabs -->
+<div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" data-tab="requisitos">
+        <span class="tab-icon">&#9881;</span> Requisitos
+    </div>
+    <div class="nav-tab" data-tab="deploy">
+        <span class="tab-icon">&#128640;</span> Primer Deploy
+    </div>
+    <div class="nav-tab" data-tab="seguridad">
+        <span class="tab-icon">&#128274;</span> Seguridad
+    </div>
+    <div class="nav-tab" data-tab="avanzado">
+        <span class="tab-icon">&#128736;</span> Avanzado
+    </div>
+    <div class="nav-tab" data-tab="troubleshooting">
+        <span class="tab-icon">&#128295;</span> Problemas
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ============================================================ -->
+    <!-- TAB 1: REQUISITOS DEL SERVIDOR -->
+    <!-- ============================================================ -->
+    <div class="section active" id="requisitos">
+
+        <div class="card">
+            <h2><span class="icon">&#9881;</span> Requisitos del Servidor</h2>
+            <p>A continuacion se detallan los requisitos minimos y recomendados para ejecutar Query Manager en un servidor de produccion.</p>
+        </div>
+
+        <!-- PHP -->
+        <div class="card">
+            <h3>PHP 8.0 o superior <span class="badge badge-required">Requerido</span></h3>
+            <p>Query Manager requiere PHP 8.0+ por el uso de named arguments, match expressions y union types.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Extension</th>
+                            <th>Uso</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>pdo</code></td>
+                            <td>Abstraccion de acceso a bases de datos</td>
+                            <td><span class="badge badge-required">Requerido</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>pdo_sqlite</code></td>
+                            <td>Base de datos interna de la aplicacion</td>
+                            <td><span class="badge badge-required">Requerido</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>pdo_mysql</code></td>
+                            <td>Conexion a bases de datos MySQL / MariaDB</td>
+                            <td><span class="badge badge-optional">Segun uso</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>pdo_sqlsrv</code> o <code>pdo_dblib</code></td>
+                            <td>Conexion a bases de datos SQL Server</td>
+                            <td><span class="badge badge-optional">Segun uso</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>openssl</code></td>
+                            <td>Encriptacion de credenciales almacenadas</td>
+                            <td><span class="badge badge-required">Requerido</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>json</code></td>
+                            <td>API REST (request/response)</td>
+                            <td><span class="badge badge-required">Requerido</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>mbstring</code></td>
+                            <td>Manejo correcto de cadenas multibyte</td>
+                            <td><span class="badge badge-required">Requerido</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Apache -->
+        <div class="card">
+            <h3>Apache con mod_rewrite <span class="badge badge-required">Requerido</span></h3>
+            <p>El servidor Apache debe tener habilitado el modulo <code>mod_rewrite</code> y la directiva <code>AllowOverride All</code> para que los archivos <code>.htaccess</code> funcionen correctamente.</p>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>La mayoria de hostings compartidos ya tienen <code>mod_rewrite</code> habilitado por defecto. Si usas cPanel, esto generalmente ya esta configurado.</div>
+            </div>
+        </div>
+
+        <!-- Directorios -->
+        <div class="card">
+            <h3>Directorios con permisos de escritura <span class="badge badge-required">Requerido</span></h3>
+            <p>Los siguientes directorios deben tener permisos de escritura para el proceso de PHP:</p>
+            <ul>
+                <li><code>data/</code> &mdash; Almacena la base de datos SQLite (<code>app.sqlite</code>) y la contrasena inicial</li>
+                <li><code>config/</code> &mdash; Almacena la clave de encriptacion auto-generada (<code>.encryption_key</code>)</li>
+            </ul>
+        </div>
+
+        <!-- HTTPS -->
+        <div class="card">
+            <h3>HTTPS (SSL/TLS) <span class="badge badge-recommended">Recomendado</span></h3>
+            <p>Se recomienda encarecidamente usar HTTPS para proteger las credenciales en transito. La mayoria de hostings ofrecen certificados SSL gratuitos via Let's Encrypt.</p>
+
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#9888;</span>
+                <div>Sin HTTPS, las credenciales de login y las cookies de sesion viajan en texto plano. En la seccion de Configuracion Avanzada se explica como forzar HTTPS.</div>
+            </div>
+        </div>
+
+        <!-- Hosting compartido -->
+        <div class="card">
+            <h3>Compatibilidad con Hosting Compartido</h3>
+            <p>Query Manager esta disenado para funcionar en la mayoria de hostings compartidos. Puntos a verificar:</p>
+            <ul>
+                <li>Verificar la version de PHP en <strong>cPanel &rarr; Select PHP Version</strong> o <strong>PHP Info</strong></li>
+                <li>La extension <code>pdo_sqlite</code> esta disponible en casi todos los hostings</li>
+                <li>Para SQL Server (<code>pdo_sqlsrv</code>), algunos hostings Linux no lo ofrecen; considerar <code>pdo_dblib</code> como alternativa</li>
+                <li>El archivo <code>.htaccess</code> funciona sin configuracion adicional en la mayoria de hostings con cPanel</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <span class="alert-icon">&#10004;</span>
+                <div>Probado y compatible con: cPanel, Plesk, DirectAdmin, y la mayoria de hostings con Apache + PHP 8.0+.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 2: PRIMER DEPLOY -->
+    <!-- ============================================================ -->
+    <div class="section" id="deploy">
+
+        <div class="card">
+            <h2><span class="icon">&#128640;</span> Primer Deploy (Paso a Paso)</h2>
+            <p>Sigue estos pasos en orden para desplegar Query Manager en tu servidor por primera vez.</p>
+        </div>
+
+        <!-- Paso 1 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="true" onclick="toggleStep(this)">
+                <div class="step-number">1</div>
+                <span class="step-title">Preparar archivos</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body open">
+                <p>Clona o descarga el proyecto en tu equipo local. Antes de subir los archivos, es <strong>critico</strong> excluir ciertos archivos sensibles.</p>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>NO subir estos archivos al hosting:</strong><br>
+                        Contienen datos sensibles del entorno local que no deben existir en produccion.
+                    </div>
+                </div>
+
+                <ul class="file-list">
+                    <li>
+                        <span class="file-icon" style="color: var(--danger);">&#10006;</span>
+                        <span class="file-name">data/app.sqlite</span>
+                        <span>&mdash; Contiene contrasenas locales y logs de auditoria</span>
+                    </li>
+                    <li>
+                        <span class="file-icon" style="color: var(--danger);">&#10006;</span>
+                        <span class="file-name">config/.encryption_key</span>
+                        <span>&mdash; Clave de encriptacion del entorno local</span>
+                    </li>
+                    <li>
+                        <span class="file-icon" style="color: var(--danger);">&#10006;</span>
+                        <span class="file-name">data/.initial_password</span>
+                        <span>&mdash; Contrasena inicial (si existe)</span>
+                    </li>
+                    <li>
+                        <span class="file-icon" style="color: var(--danger);">&#10006;</span>
+                        <span class="file-name">*.bak, *.log</span>
+                        <span>&mdash; Archivos de respaldo y registros</span>
+                    </li>
+                </ul>
+
+                <div class="alert alert-success">
+                    <span class="alert-icon">&#10004;</span>
+                    <div>
+                        <strong>SI subir estos archivos (son seguros):</strong><br>
+                        Todos los archivos <code>.php</code>, <code>.js</code>, <code>.css</code>, <code>.html</code>, <code>.htaccess</code>, <code>manifest.json</code>, iconos y carpetas vacias <code>data/</code> y <code>config/</code>.
+                        <br><br>
+                        <strong>Archivos nuevos en v1.1.0:</strong><br>
+                        <code>api/Controllers/MultiQueryController.php</code>,
+                        <code>api/Controllers/SchemaCompareController.php</code>,
+                        <code>api/Services/CrossJoinService.php</code>,
+                        <code>api/Services/VirtualQueryEngine.php</code>,
+                        <code>api/Services/SchemaCompareService.php</code>,
+                        <code>assets/js/components/multi-query.js</code>,
+                        <code>assets/js/components/cross-join.js</code>,
+                        <code>assets/js/components/schema-compare.js</code>,
+                        <code>assets/js/components/sql-intellisense.js</code>,
+                        <code>assets/js/components/client-export.js</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">2</div>
+                <span class="step-title">Subir archivos al hosting</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Sube los archivos al servidor mediante <strong>FTP/SFTP</strong> (FileZilla, WinSCP) o el <strong>Administrador de Archivos de cPanel</strong>.</p>
+
+                <ul>
+                    <li>Sube a un subdirectorio, por ejemplo: <code>public_html/phpadmin/</code></li>
+                    <li>Asegurate de subir los archivos <code>.htaccess</code> (son archivos ocultos; activa la opcion de ver archivos ocultos en tu cliente FTP)</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>IMPORTANTE:</strong> Si la ruta de instalacion difiere de <code>/phpadmin/</code>, debes actualizar la directiva <code>RewriteBase</code> en el archivo <code>.htaccess</code> principal.
+                    </div>
+                </div>
+
+<pre><span class="comment"># Ejemplo: si instalas en public_html/mi-app/</span>
+<span class="cmd">RewriteBase</span> <span class="string">/mi-app/</span></pre>
+            </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">3</div>
+                <span class="step-title">Configurar permisos</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Establece los permisos correctos en los directorios y archivos. Puedes hacerlo via SSH o desde el Administrador de Archivos de cPanel.</p>
+
+<pre><span class="comment"># Directorios con escritura para PHP</span>
+<span class="cmd">chmod</span> <span class="flag">755</span> <span class="string">data/</span>
+<span class="cmd">chmod</span> <span class="flag">755</span> <span class="string">config/</span>
+
+<span class="comment"># Archivos .htaccess (solo lectura)</span>
+<span class="cmd">chmod</span> <span class="flag">644</span> <span class="string">.htaccess</span>
+<span class="cmd">chmod</span> <span class="flag">644</span> <span class="string">config/.htaccess</span>
+<span class="cmd">chmod</span> <span class="flag">644</span> <span class="string">data/.htaccess</span></pre>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>En cPanel, haz clic derecho sobre el directorio &rarr; <strong>Change Permissions</strong> y establece los valores indicados.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">4</div>
+                <span class="step-title">Configurar variable de entorno (Recomendado)</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>La clave de encriptacion se usa para cifrar/descifrar las contrasenas de conexion a bases de datos. Hay tres opciones para configurarla:</p>
+
+                <h3>Opcion A: Variable de entorno en cPanel <span class="badge badge-recommended">Recomendado</span></h3>
+                <p>En <strong>cPanel &rarr; Software &rarr; Select PHP Version &rarr; Options/Environment Variables</strong>, agregar:</p>
+<pre><span class="cmd">PHPADMIN_ENCRYPTION_KEY</span>=<span class="string">&lt;tu_clave_base64&gt;</span></pre>
+
+                <h3>Opcion B: En .htaccess <span class="badge badge-optional">No recomendado</span></h3>
+                <p>Agregar al <code>.htaccess</code> principal:</p>
+<pre><span class="cmd">SetEnv</span> <span class="flag">PHPADMIN_ENCRYPTION_KEY</span> <span class="string">&lt;tu_clave_base64&gt;</span></pre>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>Esta opcion es menos segura porque el <code>.htaccess</code> podria ser leido en ciertas configuraciones de servidor.</div>
+                </div>
+
+                <h3>Opcion C: Generacion automatica <span class="badge badge-optional">Aceptable</span></h3>
+                <p>Si no se configura ninguna variable, la aplicacion genera automaticamente un archivo <code>config/.encryption_key</code>. Esto es aceptable siempre que el directorio <code>config/</code> este correctamente protegido por <code>.htaccess</code>.</p>
+
+                <h3>Generar una clave</h3>
+                <p>Ejecuta este comando para generar una clave segura:</p>
+<pre><span class="cmd">php</span> <span class="flag">-r</span> <span class="string">"echo base64_encode(random_bytes(32));"</span></pre>
+            </div>
+        </div>
+
+        <!-- Paso 5 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">5</div>
+                <span class="step-title">Primer acceso</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Navega a tu instalacion:</p>
+<pre><span class="cmd">https://</span><span class="string">tudominio.com/phpadmin/</span></pre>
+
+                <p>La aplicacion ejecutara automaticamente la inicializacion:</p>
+                <ol>
+                    <li><strong>Crea</strong> <code>data/app.sqlite</code> con todas las tablas necesarias</li>
+                    <li><strong>Genera</strong> una contrasena aleatoria para el usuario <code>admin</code></li>
+                    <li><strong>Guarda</strong> la contrasena en el archivo <code>data/.initial_password</code></li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        <strong>Para obtener la contrasena:</strong> Accede al archivo <code>data/.initial_password</code> mediante FTP o el Administrador de Archivos de cPanel. Este archivo contiene la contrasena en texto plano.
+                    </div>
+                </div>
+
+                <p><strong>Proceso de login:</strong></p>
+                <ol>
+                    <li>Inicia sesion con usuario <code>admin</code> y la contrasena del archivo</li>
+                    <li>El sistema te obligara a cambiar la contrasena (dialogo SweetAlert2)</li>
+                    <li>Ingresa una nueva contrasena segura</li>
+                    <li>Ya puedes usar la aplicacion</li>
+                </ol>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>IMPORTANTE:</strong> Elimina el archivo <code>data/.initial_password</code> despues de leerlo. Este archivo contiene la contrasena en texto plano y no debe permanecer en el servidor.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 6 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">6</div>
+                <span class="step-title">Verificar seguridad</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Verifica que las protecciones de seguridad estan funcionando correctamente. Cada una de estas URLs <strong>debe devolver un error 403 Forbidden</strong>:</p>
+
+                <ul class="checklist" id="securityChecklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/data/app.sqlite</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/config/.encryption_key</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/sql/</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/docs/</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/.env</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">No se puede acceder a <code>https://dominio.com/phpadmin/.gitignore</code> (debe retornar 403)</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">La pagina de login carga correctamente</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">Despues de iniciar sesion, todos los modulos funcionan correctamente</span>
+                    </li>
+                </ul>
+
+                <div class="alert alert-success">
+                    <span class="alert-icon">&#10004;</span>
+                    <div>Si todos los puntos estan verificados, tu instalacion esta correctamente protegida.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- SECCION: Publicacion Paso a Paso en Hosting Compartido -->
+        <!-- ============================================================ -->
+        <div class="card" style="margin-top: 30px; border-left: 4px solid var(--accent);">
+            <h2><span class="icon">&#127760;</span> Publicacion Paso a Paso en Hosting Compartido</h2>
+            <p>Guia basada en experiencia real desplegando en hosting compartido (cPanel). Sigue estos pasos en orden.</p>
+        </div>
+
+        <!-- Deploy Paso 1 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">1</div>
+                <span class="step-title">Generar el paquete de deploy</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Ejecuta el script de deploy desde PowerShell en la raiz del proyecto:</p>
+<pre><span class="cmd">.\deploy.ps1</span> <span class="flag">-BasePath</span> <span class="string">"/"</span> <span class="flag">-Production</span> <span class="flag">-Zip</span></pre>
+                <p>Esto genera un directorio <code>deploy/</code> limpio y un archivo ZIP listo para subir. El script automaticamente:</p>
+                <ul>
+                    <li>Configura <code>RewriteBase</code> segun el <code>-BasePath</code> indicado</li>
+                    <li>Excluye archivos sensibles: <code>app.sqlite</code>, <code>.encryption_key</code>, <code>.gitignore</code>, <code>.initial_password</code></li>
+                    <li>Excluye archivos de desarrollo: <code>deploy.ps1</code>, <code>check_setup.php</code>, <code>docs/</code>, etc.</li>
+                    <li>Genera un paquete listo para produccion</li>
+                </ul>
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>Si la app estara en un subdirectorio, usa <code>-BasePath "/nombre-directorio/"</code>. Si estara en la raiz del dominio, usa <code>-BasePath "/"</code>.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 2 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">2</div>
+                <span class="step-title">Subir archivos al hosting</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Sube los archivos al servidor via <strong>FTP</strong> (FileZilla, WinSCP) o <strong>cPanel File Manager</strong>:</p>
+                <ul>
+                    <li>Sube <strong>TODO</strong> el contenido del directorio <code>deploy/</code> a la raiz del dominio/subdominio</li>
+                    <li>Verifica que <code>.htaccess</code> se subio correctamente (es un archivo oculto)</li>
+                    <li>En cPanel File Manager: activar <strong>"Mostrar archivos ocultos"</strong> en Configuracion</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 3 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">3</div>
+                <span class="step-title">Verificar permisos</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+<pre><span class="comment"># Directorios que necesitan escritura</span>
+<span class="cmd">chmod</span> <span class="flag">755</span> <span class="string">data/</span>     <span class="comment"># o 775 si 755 no funciona</span>
+<span class="cmd">chmod</span> <span class="flag">755</span> <span class="string">config/</span>   <span class="comment"># o 775 si 755 no funciona</span>
+
+<span class="comment"># Archivos: solo lectura</span>
+<span class="comment"># Archivos .php, .js, .css, .html, .htaccess = 644</span>
+<span class="comment"># Carpetas = 755</span></pre>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 4 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">4</div>
+                <span class="step-title">Verificar .htaccess y RewriteBase</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <ul>
+                    <li>Si la app esta en la raiz del dominio: <code>RewriteBase /</code></li>
+                    <li>Si esta en un subdirectorio: <code>RewriteBase /nombre-directorio/</code></li>
+                </ul>
+                <div class="alert alert-success">
+                    <span class="alert-icon">&#10004;</span>
+                    <div>
+                        <strong>Auto-deteccion en v1.1.0:</strong> El archivo <code>api-client.js</code> ahora auto-detecta la ruta base, no necesita configuracion manual. Igualmente, <code>api/index.php</code> auto-detecta el <code>basePath</code>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 5 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">5</div>
+                <span class="step-title">Primer acceso</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Abre la URL en el navegador. El sistema crea automaticamente:</p>
+                <ul>
+                    <li><code>data/app.sqlite</code> &mdash; Base de datos interna (usuarios, conexiones, auditoria)</li>
+                    <li><code>config/.encryption_key</code> &mdash; Clave de encriptacion para contrasenas de conexiones</li>
+                    <li><code>data/.initial_password</code> &mdash; Contrasena aleatoria del usuario <code>admin</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 6 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">6</div>
+                <span class="step-title">Obtener credenciales iniciales</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>El archivo <code>data/.initial_password</code> <strong>NO</strong> es accesible por web (protegido por <code>.htaccess</code>). Para leerlo:</p>
+                <ul>
+                    <li><strong>Opcion 1:</strong> Acceder via FTP y descargar el archivo</li>
+                    <li><strong>Opcion 2:</strong> En cPanel File Manager, activar <strong>"Mostrar archivos ocultos"</strong> y navegar a <code>data/.initial_password</code></li>
+                    <li><strong>Opcion 3:</strong> Subir <code>check_setup.php</code> (disponible en la raiz del proyecto) a la raiz del hosting y abrir en navegador</li>
+                </ul>
+                <div class="alert alert-danger">
+                    <span class="alert-icon">&#9888;</span>
+                    <div><strong>ELIMINAR</strong> <code>check_setup.php</code> inmediatamente despues de usarlo. Es una herramienta de diagnostico que no debe permanecer en produccion.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 7 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">7</div>
+                <span class="step-title">Login y cambio de contrasena</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <ol>
+                    <li>Ingresar con usuario: <code>admin</code> y la contrasena del archivo</li>
+                    <li>El sistema obliga a cambiar la contrasena en el primer login</li>
+                    <li>Ingresar una nueva contrasena segura</li>
+                </ol>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>Eliminar <code>data/.initial_password</code> despues del primer acceso exitoso.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deploy Paso 8 -->
+        <div class="step-card">
+            <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                <div class="step-number">8</div>
+                <span class="step-title">Verificar seguridad post-deploy</span>
+                <span class="step-toggle">&#9660;</span>
+            </div>
+            <div class="step-body">
+                <p>Verifica estas URLs en el navegador:</p>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text"><code>https://dominio.com/data/</code> devuelve <strong>403 Forbidden</strong></span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text"><code>https://dominio.com/config/</code> devuelve <strong>403 Forbidden</strong></span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">La consola del navegador (F12) no muestra errores 500</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="check-box">&#10004;</span>
+                        <span class="check-text">El login funciona correctamente</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- SECCION: Compatibilidad con Hosting Compartido -->
+        <!-- ============================================================ -->
+        <div class="card" style="margin-top: 30px; border-left: 4px solid var(--info);">
+            <h2><span class="icon">&#127959;</span> Compatibilidad con Hosting Compartido</h2>
+            <p>Consideraciones importantes al usar hosting compartido (cPanel, Plesk, etc.).</p>
+        </div>
+
+        <div class="card">
+            <h3>Bases de Datos Soportadas</h3>
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#9888;</span>
+                <div>
+                    <strong>Hosting compartido Linux solo soporta MySQL/MariaDB.</strong><br>
+                    SQL Server requiere un VPS o servidor dedicado con <strong>Microsoft ODBC Driver</strong> instalado.
+                </div>
+            </div>
+            <ul>
+                <li>La app detecta automaticamente los drivers disponibles <strong>en tiempo de ejecucion</strong> y muestra un error claro si <code>sqlsrv</code> no esta disponible</li>
+                <li>Si el hosting tiene <code>pdo_sqlsrv</code> en <code>php.ini</code> pero sin ODBC Driver instalado, la app suprime el warning automaticamente y excluye el driver de la lista disponible</li>
+                <li>El formulario de conexion muestra solo los drivers realmente funcionales; SQL Server aparece deshabilitado si no esta disponible</li>
+                <li>No se requiere configuracion manual: la deteccion y adaptacion es completamente automatica</li>
+            </ul>
+
+            <h3 style="margin-top: 20px;">Extensiones PHP Requeridas</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="background: var(--primary-light);">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid var(--border);">Extension</th>
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid var(--border);">Requerida</th>
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid var(--border);">Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><code>pdo_sqlite</code></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><strong style="color: var(--danger);">Si</strong></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);">Base de datos interna (usuarios, conexiones, auditoria)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><code>openssl</code></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><strong style="color: var(--danger);">Si</strong></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);">Encriptacion de contrasenas de conexiones</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><code>json</code></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><strong style="color: var(--danger);">Si</strong></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);">Comunicacion API (JSON)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><code>pdo_mysql</code></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><strong style="color: var(--warning);">Para MySQL</strong></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);">Conexion a servidores MySQL/MariaDB</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><code>pdo_sqlsrv</code> + ODBC Driver</td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);"><strong style="color: var(--info);">Opcional</strong></td>
+                        <td style="padding: 8px 12px; border: 1px solid var(--border);">Conexion a SQL Server (solo VPS/dedicado)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 3: SEGURIDAD IMPLEMENTADA -->
+    <!-- ============================================================ -->
+    <div class="section" id="seguridad">
+
+        <div class="card">
+            <h2><span class="icon">&#128274;</span> Seguridad Implementada</h2>
+            <p>Query Manager implementa multiples capas de seguridad para proteger la aplicacion y los datos. A continuacion se detalla cada mecanismo.</p>
+        </div>
+
+        <!-- Capas de proteccion -->
+        <div class="card">
+            <h3>Capas de Proteccion</h3>
+
+            <div class="security-layer">
+                <div class="layer-number">1</div>
+                <div class="layer-content">
+                    <strong>Autenticacion por sesion</strong>
+                    <p>Sesiones PHP con cookies configuradas: <code>HttpOnly</code> (no accesibles via JavaScript), <code>SameSite=Strict</code> (protege contra CSRF basico), <code>Secure</code> (solo via HTTPS).</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">2</div>
+                <div class="layer-content">
+                    <strong>Proteccion CSRF</strong>
+                    <p>Token unico por sesion, regenerado en cada inicio de sesion. Se valida automaticamente en todas las peticiones que modifican datos (POST, PUT, DELETE).</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">3</div>
+                <div class="layer-content">
+                    <strong>Encriptacion de contrasenas de conexion</strong>
+                    <p>Las contrasenas de las conexiones a bases de datos se almacenan encriptadas con <code>AES-256-CBC</code>. La clave se obtiene de una variable de entorno o de un archivo auto-generado protegido.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">4</div>
+                <div class="layer-content">
+                    <strong>Hashing de contrasenas de usuario</strong>
+                    <p>Las contrasenas de los usuarios de la aplicacion se almacenan con hash <code>bcrypt</code> (<code>PASSWORD_BCRYPT</code>). No se almacenan en texto plano.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">5</div>
+                <div class="layer-content">
+                    <strong>Cambio obligatorio de contrasena</strong>
+                    <p>En el primer inicio de sesion, el sistema obliga al usuario a cambiar su contrasena. Todas las rutas estan bloqueadas excepto <code>logout</code>, <code>change-password</code> y <code>me</code> hasta que se complete el cambio.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">6</div>
+                <div class="layer-content">
+                    <strong>Headers HTTP de seguridad</strong>
+                    <p>Se envian cabeceras de seguridad en cada respuesta para proteger contra ataques comunes.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">7</div>
+                <div class="layer-content">
+                    <strong>CORS restrictivo</strong>
+                    <p>Solo se permiten peticiones del mismo origen (same-origin). Las peticiones cross-origin son rechazadas.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">8</div>
+                <div class="layer-content">
+                    <strong>Proteccion de directorios</strong>
+                    <p>Reglas <code>.htaccess</code> con directivas <code>Deny from all</code> en los directorios <code>data/</code>, <code>config/</code>, <code>sql/</code>, <code>docs/</code>. Tambien se bloquean archivos <code>.sqlite</code> y archivos ocultos (<code>.*</code>).</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">9</div>
+                <div class="layer-content">
+                    <strong>DEBUG_MODE desactivado</strong>
+                    <p>En produccion, el modo de depuracion esta desactivado. No se exponen trazas de pila, rutas de archivos ni mensajes de error detallados en las respuestas de la API.</p>
+                </div>
+            </div>
+
+            <div class="security-layer">
+                <div class="layer-number">10</div>
+                <div class="layer-content">
+                    <strong>Roles de usuario</strong>
+                    <p>Sistema de roles <code>admin</code> vs <code>user</code>. Los endpoints exclusivos de administrador requieren verificacion de rol. Los usuarios regulares solo pueden acceder a las funcionalidades asignadas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Headers de seguridad detalle -->
+        <div class="card">
+            <h3>Headers HTTP de Seguridad (Detalle)</h3>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Valor</th>
+                            <th>Proteccion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>X-Content-Type-Options</code></td>
+                            <td><code>nosniff</code></td>
+                            <td>Evita MIME-type sniffing</td>
+                        </tr>
+                        <tr>
+                            <td><code>X-Frame-Options</code></td>
+                            <td><code>DENY</code></td>
+                            <td>Previene clickjacking (no se puede cargar en iframes)</td>
+                        </tr>
+                        <tr>
+                            <td><code>X-XSS-Protection</code></td>
+                            <td><code>1; mode=block</code></td>
+                            <td>Activa filtro XSS del navegador</td>
+                        </tr>
+                        <tr>
+                            <td><code>Referrer-Policy</code></td>
+                            <td><code>strict-origin-when-cross-origin</code></td>
+                            <td>Limita informacion del referrer en peticiones externas</td>
+                        </tr>
+                        <tr>
+                            <td><code>Content-Security-Policy</code></td>
+                            <td><code>script-src 'self' cdn.jsdelivr.net</code></td>
+                            <td>Restringe scripts solo a mismo origen y CDN autorizado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Diagrama de flujo de autenticacion -->
+        <div class="card">
+            <h3>Diagrama de Flujo de Autenticacion</h3>
+            <p>El siguiente diagrama muestra el flujo completo desde el login hasta el acceso a la aplicacion:</p>
+
+            <div class="flow-container">
+                <div class="flow-box action">Formulario de Login<br><small>(usuario + contrasena + token CSRF)</small></div>
+                <div class="flow-arrow">&#9660;</div>
+                <div class="flow-box check">Verificar Token CSRF</div>
+                <div class="flow-arrow">&#9660;</div>
+                <div class="flow-box check">Verificar credenciales (bcrypt)</div>
+                <div class="flow-arrow">&#9660;</div>
+                <div class="flow-box action">Crear sesion PHP<br><small>(regenerar session_id)</small></div>
+                <div class="flow-arrow">&#9660;</div>
+                <div class="flow-box check">Verificar must_change_password</div>
+                <div class="flow-arrow">&#9660;</div>
+
+                <div class="flow-branch">
+                    <div class="flow-branch-item">
+                        <div class="flow-label">SI (debe cambiar)</div>
+                        <div class="flow-arrow">&#9660;</div>
+                        <div class="flow-box danger-box">Forzar dialogo de<br>cambio de contrasena<br><small>(SweetAlert2)</small></div>
+                        <div class="flow-arrow">&#9660;</div>
+                        <div class="flow-box action">Guardar nueva contrasena<br><small>(bcrypt hash)</small></div>
+                    </div>
+                    <div class="flow-branch-item">
+                        <div class="flow-label">NO (contrasena OK)</div>
+                        <div class="flow-arrow">&#9660;</div>
+                        <div class="flow-box success-box">Acceso completo<br>a la aplicacion</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 4: CONFIGURACION AVANZADA -->
+    <!-- ============================================================ -->
+    <div class="section" id="avanzado">
+
+        <div class="card">
+            <h2><span class="icon">&#128736;</span> Configuracion Avanzada</h2>
+            <p>Opciones de configuracion para personalizar y optimizar la instalacion en entornos especificos.</p>
+        </div>
+
+        <!-- Constantes de app.php -->
+        <div class="card">
+            <h3>Constantes en app.php</h3>
+            <p>El archivo <code>config/app.php</code> contiene las constantes principales de configuracion:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constante</th>
+                            <th>Descripcion</th>
+                            <th>Valor por defecto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>APP_NAME</code></td>
+                            <td>Nombre de la aplicacion</td>
+                            <td><code>'PHPAdmin'</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>APP_VERSION</code></td>
+                            <td>Version actual</td>
+                            <td><code>'1.1.0'</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>DATA_DIR</code></td>
+                            <td>Directorio de datos</td>
+                            <td><code>__DIR__.'/../data'</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>CONFIG_DIR</code></td>
+                            <td>Directorio de configuracion</td>
+                            <td><code>__DIR__</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>SQLITE_DB</code></td>
+                            <td>Ruta a la base de datos SQLite</td>
+                            <td><code>DATA_DIR.'/app.sqlite'</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>ENCRYPTION_KEY_FILE</code></td>
+                            <td>Archivo de clave de encriptacion</td>
+                            <td><code>CONFIG_DIR.'/.encryption_key'</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>AUDIT_ENABLED</code></td>
+                            <td>Habilitar/deshabilitar registro de auditoria</td>
+                            <td><code>true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>JSON_RESULT_LIMIT</code></td>
+                            <td>Maximo de filas en modo JSON (Stored Procedure)</td>
+                            <td><code>10</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>DEFAULT_QUERY_TIMEOUT</code></td>
+                            <td>Timeout de PDO en segundos</td>
+                            <td><code>30</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>DEBUG_MODE</code></td>
+                            <td>Modo de depuracion</td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>ENCRYPTION_KEY_ENV</code></td>
+                            <td>Lee clave de encriptacion de variable de entorno</td>
+                            <td><code>getenv('PHPADMIN_ENCRYPTION_KEY')</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-danger">
+                <span class="alert-icon">&#9888;</span>
+                <div>
+                    <strong>NUNCA</strong> establezca <code>DEBUG_MODE</code> en <code>true</code> en produccion. Esto expone trazas de pila, rutas del servidor y otra informacion sensible en las respuestas de error.
+                </div>
+            </div>
+        </div>
+
+        <!-- Cambiar ruta base -->
+        <div class="card">
+            <h3>Cambiar la Ruta Base</h3>
+            <p>Si la aplicacion no se instala en <code>/phpadmin/</code>, es necesario actualizar la ruta base en tres archivos:</p>
+
+            <div class="step-card" style="margin-top: 16px;">
+                <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                    <div class="step-number">1</div>
+                    <span class="step-title">.htaccess principal</span>
+                    <span class="step-toggle">&#9660;</span>
+                </div>
+                <div class="step-body">
+                    <p>Cambiar la directiva <code>RewriteBase</code>:</p>
+<pre><span class="comment"># Antes:</span>
+<span class="cmd">RewriteBase</span> <span class="string">/phpadmin/</span>
+
+<span class="comment"># Despues (ejemplo: instalado en /mi-app/):</span>
+<span class="cmd">RewriteBase</span> <span class="string">/mi-app/</span></pre>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                    <div class="step-number">2</div>
+                    <span class="step-title">api/index.php</span>
+                    <span class="step-toggle">&#9660;</span>
+                </div>
+                <div class="step-body">
+                    <p>Actualizar la variable <code>$basePath</code>:</p>
+<pre><span class="comment">// Antes:</span>
+<span class="cmd">$basePath</span> = <span class="string">'/phpadmin/api'</span>;
+
+<span class="comment">// Despues:</span>
+<span class="cmd">$basePath</span> = <span class="string">'/mi-app/api'</span>;</pre>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-header" aria-expanded="false" onclick="toggleStep(this)">
+                    <div class="step-number">3</div>
+                    <span class="step-title">assets/js/api-client.js</span>
+                    <span class="step-toggle">&#9660;</span>
+                </div>
+                <div class="step-body">
+                    <p>Actualizar la propiedad <code>baseUrl</code>:</p>
+<pre><span class="comment">// Antes:</span>
+<span class="cmd">baseUrl</span> = <span class="string">'/phpadmin/api'</span>;
+
+<span class="comment">// Despues:</span>
+<span class="cmd">baseUrl</span> = <span class="string">'/mi-app/api'</span>;</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forzar HTTPS -->
+        <div class="card">
+            <h3>Forzar HTTPS</h3>
+            <p>Para redirigir automaticamente todo el trafico HTTP a HTTPS, agrega estas lineas al inicio del archivo <code>.htaccess</code> principal:</p>
+
+<pre><span class="comment"># Forzar HTTPS</span>
+<span class="cmd">RewriteCond</span> <span class="flag">%{HTTPS}</span> <span class="string">off</span>
+<span class="cmd">RewriteRule</span> <span class="flag">^</span> <span class="string">https://%{HTTP_HOST}%{REQUEST_URI}</span> [L,R=301]</pre>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>Asegurate de tener un certificado SSL valido antes de activar esta regla. La mayoria de hostings con cPanel ofrecen certificados gratuitos via <strong>Let's Encrypt</strong> o <strong>AutoSSL</strong>.</div>
+            </div>
+        </div>
+
+        <!-- Stored Procedures -->
+        <div class="card">
+            <h3>Stored Procedures (Modo de Ejecucion JSON)</h3>
+            <p>Para utilizar el modo de ejecucion JSON, es necesario instalar el Stored Procedure correspondiente en las bases de datos destino:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Motor</th>
+                            <th>Archivo SQL</th>
+                            <th>Instruccion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MySQL / MariaDB</strong></td>
+                            <td><code>sql/sp_mysql_json_query.sql</code></td>
+                            <td>Ejecutar el script en cada base de datos donde se usara el modo JSON</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SQL Server</strong></td>
+                            <td><code>sql/sp_sqlserver_json_query.sql</code></td>
+                            <td>Ejecutar el script en cada base de datos donde se usara el modo JSON</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Despues de instalar el SP, configura el nombre del procedimiento en la configuracion de cada conexion dentro de la aplicacion.</p>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>El limite de filas en modo JSON esta controlado por la constante <code>JSON_RESULT_LIMIT</code> (por defecto: 10 filas). Puedes modificar este valor en <code>config/app.php</code>.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 5: TROUBLESHOOTING -->
+    <!-- ============================================================ -->
+    <div class="section" id="troubleshooting">
+
+        <div class="card">
+            <h2><span class="icon">&#128295;</span> Solucion de Problemas</h2>
+            <p>Problemas comunes y sus soluciones. Haz clic en cada problema para ver la solucion.</p>
+        </div>
+
+        <!-- Problema 1 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>403 Forbidden en todas las paginas</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> El modulo <code>mod_rewrite</code> no esta habilitado o la directiva <code>AllowOverride</code> no esta configurada como <code>All</code>.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Verifica que <code>mod_rewrite</code> esta habilitado: en terminal, ejecuta <code>apache2ctl -M | grep rewrite</code></li>
+                    <li>En el archivo de configuracion de Apache (httpd.conf o virtual host), asegurate de que <code>AllowOverride All</code> esta configurado para el directorio</li>
+                    <li>En cPanel, esto generalmente ya esta habilitado. Contacta a tu proveedor si persiste</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 2 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>500 Internal Server Error</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Error en la configuracion de PHP o en el archivo <code>.htaccess</code>.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Verifica la version de PHP (se requiere 8.0+). En cPanel: <strong>Select PHP Version</strong></li>
+                    <li>Revisa el archivo de log de errores de Apache: <code>error_log</code> (generalmente en la raiz de <code>public_html</code> o en <code>/var/log/apache2/</code>)</li>
+                    <li>Verifica que el archivo <code>.htaccess</code> no tiene directivas no soportadas por tu hosting</li>
+                    <li>Asegurate de que las extensiones PHP requeridas estan habilitadas</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 3 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>No se puede conectar a MySQL / SQL Server</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> El hosting puede no permitir conexiones salientes a bases de datos externas, o el firewall bloquea la conexion.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Verifica que el hosting permite conexiones salientes al puerto del servidor de base de datos (3306 para MySQL, 1433 para SQL Server)</li>
+                    <li>Si la base de datos esta en otro servidor, verifica las reglas del firewall y whitelist la IP del hosting</li>
+                    <li>Verifica que la extension PDO correspondiente esta instalada (<code>pdo_mysql</code> o <code>pdo_sqlsrv</code> / <code>pdo_dblib</code>)</li>
+                    <li>Prueba la conexion desde PHP con un script simple para aislar el problema</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 4 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>CSRF token invalid / Token CSRF invalido</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> La sesion expiro o las cookies fueron eliminadas.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Limpia las cookies del navegador para el dominio</li>
+                    <li>Vuelve a iniciar sesion</li>
+                    <li>Si el problema persiste, verifica que la configuracion de sesiones de PHP es correcta (directorio de sesiones con permisos de escritura)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 5 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--info);">&#9679;</span>
+                <span>"Debe cambiar su contrasena" aparece al iniciar sesion</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Es el comportamiento normal en el primer inicio de sesion. El sistema obliga a cambiar la contrasena generada automaticamente.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Ingresa una nueva contrasena en el dialogo que aparece</li>
+                    <li>La contrasena debe ser segura (minimo 6 caracteres recomendado)</li>
+                    <li>Despues de cambiarla, podras acceder normalmente a la aplicacion</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 6 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>Contrasena de administrador perdida</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Se perdio la contrasena del usuario admin y no hay forma de recuperarla desde la interfaz.</p>
+                <p><strong>Solucion:</strong></p>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>Este proceso eliminara todos los datos de la aplicacion (usuarios, conexiones, consultas guardadas y logs de auditoria).</div>
+                </div>
+
+                <ol>
+                    <li>Accede al servidor via FTP o cPanel File Manager</li>
+                    <li>Elimina el archivo <code>data/app.sqlite</code></li>
+                    <li>Navega nuevamente a la URL de la aplicacion</li>
+                    <li>La aplicacion recreara la base de datos con un nuevo usuario admin y nueva contrasena aleatoria</li>
+                    <li>Lee la nueva contrasena del archivo <code>data/.initial_password</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Problema 7 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>PDO driver not found / Driver PDO no encontrado</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> La extension PDO necesaria no esta instalada o habilitada en PHP.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>En cPanel: ve a <strong>Select PHP Version</strong> y habilita la extension necesaria (<code>pdo_mysql</code>, <code>pdo_sqlite</code>, etc.)</li>
+                    <li>Si no tienes acceso a la configuracion de PHP, contacta al proveedor de hosting para solicitar la habilitacion de la extension</li>
+                    <li>Para SQL Server en Linux, puede ser necesario instalar el driver ODBC de Microsoft. Consulta la documentacion de Microsoft para instrucciones especificas</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 8 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>.htaccess no funciona / No se aplican las reglas</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Apache no esta configurado para leer archivos <code>.htaccess</code> en ese directorio.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Contacta a tu proveedor de hosting para verificar que <code>AllowOverride All</code> esta habilitado para tu directorio</li>
+                    <li>Si tienes acceso a la configuracion de Apache, agrega en el bloque <code>&lt;Directory&gt;</code> correspondiente:</li>
+                </ul>
+<pre><span class="cmd">&lt;Directory</span> <span class="string">"/ruta/a/public_html/phpadmin"</span><span class="cmd">&gt;</span>
+    <span class="cmd">AllowOverride</span> <span class="flag">All</span>
+<span class="cmd">&lt;/Directory&gt;</span></pre>
+                <ul>
+                    <li>Reinicia Apache despues de hacer cambios: <code>sudo systemctl restart apache2</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PROBLEMAS REALES DE DEPLOY EN HOSTING COMPARTIDO -->
+        <!-- ============================================================ -->
+
+        <div class="card" style="margin-top: 30px; border-left: 4px solid var(--accent);">
+            <h3><span class="icon">&#127760;</span> Problemas Reales de Deploy en Hosting Compartido</h3>
+            <p>Estos problemas fueron encontrados durante despliegues reales en hosting compartido.</p>
+        </div>
+
+        <!-- Problema 9 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>La app se queda en "Cargando..." / pantalla en blanco</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Error en la comunicacion con la API backend.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Abrir la consola del navegador (<strong>F12</strong>) y verificar si hay errores <strong>404</strong> o <strong>500</strong> en las peticiones a <code>/api/</code></li>
+                    <li>Si hay <strong>404</strong>: el <code>.htaccess</code> no esta funcionando. Verificar que <code>mod_rewrite</code> este activo y que <code>RewriteBase</code> sea correcto</li>
+                    <li>Si hay <strong>500</strong>: hay un error PHP. Abrir directamente <code>https://dominio.com/api/csrf-token</code> en el navegador para ver el mensaje de error</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 10 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>GET /phpadmin/api/csrf-token 404 (baseUrl incorrecto)</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> En versiones anteriores, el <code>baseUrl</code> del API client estaba hardcodeado con la ruta <code>/phpadmin/</code>.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>En <strong>v1.1.0</strong> el <code>baseUrl</code> se auto-detecta. Si persiste el error, limpiar la cache del navegador y el Service Worker</li>
+                    <li>En Chrome: <strong>F12 &rarr; Application &rarr; Service Workers &rarr; Unregister</strong></li>
+                    <li>Hacer hard refresh: <strong>Ctrl+Shift+R</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 11 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>SQLSTATE[HY000]: General error: 1 duplicate column name: must_change_password</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Se subio un archivo <code>app.sqlite</code> del entorno local que tiene un esquema incompatible con la version desplegada.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Eliminar <code>data/app.sqlite</code> del hosting (via FTP o cPanel File Manager)</li>
+                    <li>La base de datos se regenera automaticamente al siguiente acceso con el esquema correcto</li>
+                    <li>Se creara un nuevo usuario <code>admin</code> con contrasena aleatoria en <code>data/.initial_password</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 12 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>"This extension requires the Microsoft ODBC Driver for SQL Server"</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> El hosting tiene la extension <code>php_sqlsrv</code> habilitada en <code>php.ini</code> pero no tiene el Microsoft ODBC Driver instalado en el sistema operativo.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Hosting compartido <strong>no soporta SQL Server</strong>. Solo se puede usar MySQL/MariaDB</li>
+                    <li>La app <strong>v1.1.0</strong> suprime este warning automaticamente y valida los drivers antes de intentar conectar</li>
+                    <li>Si necesitas SQL Server, usa un <strong>VPS o servidor dedicado</strong> con el ODBC Driver instalado</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 13 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--warning);">&#9679;</span>
+                <span>No puedo ver data/.initial_password</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> Es un archivo oculto (empieza con punto) y ademas esta protegido por <code>.htaccess</code> contra acceso web.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Acceder via <strong>FTP</strong> y activar la opcion de ver archivos ocultos en el cliente FTP</li>
+                    <li>En <strong>cPanel File Manager</strong>: ir a Configuracion (esquina superior derecha) y activar <strong>"Mostrar archivos ocultos (dotfiles)"</strong></li>
+                    <li><strong>Alternativa:</strong> Subir <code>check_setup.php</code> (disponible en la raiz del proyecto) a la raiz del hosting y abrirlo en el navegador. Muestra las credenciales y diagnostico completo</li>
+                    <li><strong>IMPORTANTE:</strong> Eliminar <code>check_setup.php</code> inmediatamente despues de usar</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Problema 14 -->
+        <div class="trouble-item">
+            <div class="trouble-header" onclick="toggleTrouble(this)">
+                <span class="trouble-icon" style="color: var(--danger);">&#9679;</span>
+                <span>Error 500 al comparar esquemas / cross-join</span>
+            </div>
+            <div class="trouble-body">
+                <p><strong>Causa:</strong> La extension <code>pdo_sqlite</code> no esta disponible en el hosting. Es necesaria para la base de datos interna que almacena resultados temporales de comparacion de esquemas y cross-join.</p>
+                <p><strong>Solucion:</strong></p>
+                <ul>
+                    <li>Verificar que <code>pdo_sqlite</code> esta habilitado en <strong>cPanel &rarr; Select PHP Version</strong></li>
+                    <li>Ejecutar <code>check_setup.php</code> para un diagnostico completo de extensiones y permisos</li>
+                    <li>Si <code>pdo_sqlite</code> no esta disponible, contactar al proveedor de hosting para solicitarlo</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    PHPAdmin - Query Manager v1.1.0 &mdash; Guia de Deploy y Seguridad
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Deactivate all tabs and sections
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+        // Activate clicked tab and corresponding section
+        tab.classList.add('active');
+        const sectionId = tab.getAttribute('data-tab');
+        document.getElementById(sectionId).classList.add('active');
+
+        // Scroll to top of content
+        window.scrollTo({ top: document.querySelector('.nav-tabs').offsetTop, behavior: 'smooth' });
+    });
+});
+
+// Step card toggle
+function toggleStep(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+
+    body.classList.toggle('open');
+    header.setAttribute('aria-expanded', !isOpen);
+}
+
+// Checklist toggle
+function toggleCheck(li) {
+    li.classList.toggle('checked');
+}
+
+// Troubleshooting toggle
+function toggleTrouble(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+}
+
+// Copy button for code blocks
+document.querySelectorAll('pre').forEach(pre => {
+    // Skip if it's inside a diagram
+    if (pre.classList.contains('diagram')) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copiar';
+    btn.addEventListener('click', () => {
+        const text = pre.textContent.replace('Copiar', '').trim();
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copiado!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'Copiar';
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    });
+    pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

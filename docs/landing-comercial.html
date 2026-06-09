@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="es" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Primary Meta Tags -->
+    <title>Query Manager | Administrador SQL Web para MySQL y SQL Server - DesarrollaLoYa</title>
+    <meta name="title" content="Query Manager | Administrador SQL Web para MySQL y SQL Server - DesarrollaLoYa">
+    <meta name="description" content="Herramienta profesional web para gestionar, ejecutar y auditar consultas SQL en MySQL y SQL Server desde cualquier dispositivo. Sin instalacion, segura, con exportacion a Excel, CSV y JSON. Desarrollado por DesarrollaLoYa.com">
+    <meta name="keywords" content="query manager, administrador SQL web, ejecutar consultas SQL online, gestor MySQL, gestor SQL Server, herramienta DBA, exportar consultas Excel, auditoria SQL, explorador base de datos, PHP admin, herramienta SQL profesional, administrador de bases de datos, consultas SQL remoto, PWA base de datos, software a medida Colombia">
+    <meta name="author" content="DesarrollaLoYa.com">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="es">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="general">
+    <meta name="category" content="technology">
+    <link rel="canonical" href="https://desarrollaloya.com/query-manager">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://desarrollaloya.com/query-manager">
+    <meta property="og:title" content="Query Manager | Administrador SQL Web para MySQL y SQL Server">
+    <meta property="og:description" content="Gestiona, ejecuta y audita consultas SQL en MySQL y SQL Server desde el navegador. Exporta a Excel, CSV y JSON. Seguridad empresarial con cifrado AES-256. Sin instalacion.">
+    <meta property="og:image" content="https://desarrollaloya.com/assets/og-query-manager.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Query Manager - Interfaz del administrador SQL web mostrando editor de consultas y resultados">
+    <meta property="og:site_name" content="DesarrollaLoYa">
+    <meta property="og:locale" content="es_CO">
+    <meta property="product:price:amount" content="49">
+    <meta property="product:price:currency" content="USD">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://desarrollaloya.com/query-manager">
+    <meta name="twitter:title" content="Query Manager | Administrador SQL Web para MySQL y SQL Server">
+    <meta name="twitter:description" content="Gestiona, ejecuta y audita consultas SQL en MySQL y SQL Server desde el navegador. Seguridad empresarial, exportacion profesional, cero dependencias.">
+    <meta name="twitter:image" content="https://desarrollaloya.com/assets/og-query-manager.png">
+    <meta name="twitter:image:alt" content="Query Manager - Interfaz del administrador SQL web">
+
+    <!-- JSON-LD Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Query Manager",
+        "description": "Herramienta profesional web para gestionar, ejecutar y auditar consultas SQL en MySQL y SQL Server desde cualquier dispositivo.",
+        "url": "https://desarrollaloya.com/query-manager",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web (cualquier navegador)",
+        "softwareVersion": "1.0.0",
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "Arrendamiento mensual",
+                "price": "49",
+                "priceCurrency": "USD",
+                "priceValidUntil": "2027-12-31",
+                "availability": "https://schema.org/InStock",
+                "url": "https://desarrollaloya.com/query-manager#pricing"
+            },
+            {
+                "@type": "Offer",
+                "name": "Codigo fuente - Licencia perpetua",
+                "price": "499",
+                "priceCurrency": "USD",
+                "priceValidUntil": "2027-12-31",
+                "availability": "https://schema.org/InStock",
+                "url": "https://desarrollaloya.com/query-manager#pricing"
+            }
+        ],
+        "featureList": [
+            "Conexion a MySQL y SQL Server",
+            "Explorador de esquemas de base de datos",
+            "Editor SQL con ejecucion directa y via stored procedures",
+            "Exportacion a CSV, Excel XLSX y JSON",
+            "Auditoria completa de consultas",
+            "Seguridad AES-256-CBC y bcrypt",
+            "PWA instalable en movil y escritorio",
+            "Cero dependencias externas",
+            "Multi-Query simultaneo en multiples servidores",
+            "Cross-Connection JOIN entre servidores distintos",
+            "Comparador de esquemas con generacion de scripts de migracion",
+            "Intellisense y autocompletado SQL integrado"
+        ],
+        "screenshot": "https://desarrollaloya.com/assets/og-query-manager.png",
+        "author": {
+            "@type": "Organization",
+            "name": "DesarrollaLoYa",
+            "url": "https://desarrollaloya.com",
+            "email": "comercial@desarrollaloya.com",
+            "telephone": "+573012550175",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+573012550175",
+                "contactType": "sales",
+                "availableLanguage": "Spanish"
+            }
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "12",
+            "bestRating": "5"
+        }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "DesarrollaLoYa",
+        "url": "https://desarrollaloya.com",
+        "logo": "https://desarrollaloya.com/assets/logo.png",
+        "email": "comercial@desarrollaloya.com",
+        "telephone": "+573012550175",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "CO"
+        },
+        "sameAs": [
+            "https://wa.me/573012550175"
+        ]
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: FAQ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Que es Query Manager?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Query Manager es una herramienta web profesional para gestionar, ejecutar y auditar consultas SQL en bases de datos MySQL y SQL Server desde cualquier dispositivo con un navegador. No requiere instalacion de software adicional."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Que bases de datos soporta Query Manager?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Soporta MySQL 5.7+, MariaDB 10.2+ y SQL Server 2016+. Permite conectar multiples servidores simultaneamente con credenciales cifradas AES-256."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Cuanto cuesta Query Manager?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ofrecemos dos modalidades: Arrendamiento por USD $49 al mes sin permanencia minima, o adquisicion del codigo fuente completo por USD $499 en pago unico con licencia perpetua."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Se necesita instalar algo para usar Query Manager?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Query Manager funciona 100% en el navegador. Solo necesitas PHP 8.0+ y Apache en el servidor. No tiene dependencias de Composer ni npm. Tambien se puede instalar como app movil (PWA)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Es seguro usar Query Manager para bases de datos en produccion?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Si. Implementa cifrado AES-256-CBC para credenciales, hashing bcrypt para contrasenas, proteccion CSRF, headers de seguridad HTTP, CORS restrictivo, roles de usuario y auditoria completa de cada consulta ejecutada."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Que tipo de servidor o hosting necesito para Query Manager?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Para administrar solo MySQL o MariaDB, cualquier hosting compartido basico con PHP 8.0+ y Apache es suficiente (desde $5 USD/mes). Para conectar tambien a SQL Server, se necesita un VPS o servidor dedicado con el Microsoft ODBC Driver instalado. La herramienta detecta automaticamente los drivers disponibles y solo muestra las opciones soportadas al crear una conexion."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Funciona en hosting compartido como cPanel o Plesk?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Si. Query Manager funciona en hosting compartido sin problemas. No requiere Composer, npm ni Docker. Solo sube los archivos por FTP. La unica limitacion es que en hosting compartido solo estan disponibles las conexiones a MySQL/MariaDB, no SQL Server."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "DesarrollaLoYa", "item": "https://desarrollaloya.com" },
+            { "@type": "ListItem", "position": 2, "name": "Productos", "item": "https://desarrollaloya.com/productos" },
+            { "@type": "ListItem", "position": 3, "name": "Query Manager", "item": "https://desarrollaloya.com/query-manager" }
+        ]
+    }
+    </script>
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-darker: #1e40af;
+            --primary-light: #dbeafe;
+            --primary-50: #eff6ff;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --bg-dark: #0f172a;
+            --bg-dark-2: #1e293b;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-light: #94a3b8;
+            --text-white: #f8fafc;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); line-height: 1.6; background: var(--bg); -webkit-font-smoothing: antialiased; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(226,232,240,0.8);
+            transition: all 0.3s;
+        }
+        .navbar.scrolled { box-shadow: 0 1px 20px rgba(0,0,0,0.08); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between; height: 72px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+        .nav-logo {
+            width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 16px;
+        }
+        .nav-brand-text { font-weight: 700; font-size: 18px; }
+        .nav-brand-text span { color: var(--primary); }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            background: var(--primary); color: white; padding: 10px 24px; border-radius: 8px;
+            text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(37,99,235,0.3);
+        }
+        .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.4); }
+        .nav-mobile { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .nav-mobile svg { width: 24px; height: 24px; stroke: var(--text); }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 160px 24px 100px;
+            background: linear-gradient(180deg, var(--primary-50) 0%, var(--bg) 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37,99,235,0.08), transparent);
+        }
+        .hero-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; text-align: center; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: white; border: 1px solid var(--border); border-radius: 100px;
+            padding: 6px 16px 6px 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary);
+            margin-bottom: 28px; box-shadow: var(--shadow-sm);
+        }
+        .hero-badge-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.1;
+            letter-spacing: -0.03em; margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary-darker) 50%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-sub {
+            font-size: clamp(16px, 2vw, 20px); color: var(--text-secondary); max-width: 640px;
+            margin: 0 auto 40px; line-height: 1.7; font-weight: 400;
+        }
+        .hero-buttons { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white; padding: 16px 36px; border-radius: 12px; text-decoration: none;
+            font-weight: 700; font-size: 16px; transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.35);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,99,235,0.45); }
+        .btn-hero-secondary {
+            background: white; color: var(--text); padding: 16px 36px; border-radius: 12px;
+            text-decoration: none; font-weight: 600; font-size: 16px; transition: all 0.3s;
+            border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-hero-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+        .hero-image {
+            margin-top: 60px; border-radius: var(--radius-xl); overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--bg-dark);
+            max-width: 1000px; margin-left: auto; margin-right: auto;
+        }
+        .hero-mockup {
+            width: 100%; aspect-ratio: 16/9; position: relative;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            display: flex; overflow: hidden;
+        }
+        .mockup-sidebar {
+            width: 220px; background: #0f172a; padding: 20px 0;
+            border-right: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+        }
+        .mockup-sidebar-brand { padding: 0 20px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
+        .mockup-sidebar-logo { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 800; }
+        .mockup-sidebar-title { color: #f8fafc; font-size: 14px; font-weight: 700; }
+        .mockup-sidebar-ver { color: #64748b; font-size: 10px; }
+        .mockup-nav-item { padding: 10px 20px; display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 13px; cursor: default; }
+        .mockup-nav-item.active { color: white; background: rgba(37,99,235,0.15); border-right: 2px solid var(--primary); }
+        .mockup-nav-dot { width: 6px; height: 6px; border-radius: 2px; background: currentColor; opacity: 0.5; }
+        .mockup-main { flex: 1; display: flex; flex-direction: column; }
+        .mockup-topbar { height: 48px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; padding: 0 20px; }
+        .mockup-topbar-title { color: #f8fafc; font-size: 14px; font-weight: 600; }
+        .mockup-content { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        .mockup-editor {
+            background: #0d1117; border-radius: 8px; padding: 16px; flex: 0 0 auto;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .mockup-code { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 12px; line-height: 1.8; }
+        .mockup-kw { color: #ff7b72; }
+        .mockup-fn { color: #d2a8ff; }
+        .mockup-str { color: #a5d6ff; }
+        .mockup-op { color: #79c0ff; }
+        .mockup-cm { color: #8b949e; }
+        .mockup-table {
+            flex: 1; border-radius: 8px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .mockup-thead { background: rgba(37,99,235,0.12); display: flex; }
+        .mockup-th { flex: 1; padding: 8px 12px; color: #93c5fd; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mockup-row { display: flex; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .mockup-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+        .mockup-td { flex: 1; padding: 7px 12px; color: #cbd5e1; font-size: 12px; }
+        .mockup-status { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+        .mockup-status.active { background: rgba(5,150,105,0.15); color: #34d399; }
+
+        /* ===== LOGOS / TRUST ===== */
+        .trust { padding: 60px 24px; text-align: center; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .trust p { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-light); margin-bottom: 30px; }
+        .trust-logos { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; opacity: 0.5; }
+        .trust-logo { font-size: 28px; font-weight: 800; color: var(--text-secondary); letter-spacing: -0.5px; }
+        .trust-logo span { color: var(--primary); }
+
+        /* ===== FEATURES ===== */
+        .features { padding: 100px 24px; background: var(--bg); }
+        .features-inner { max-width: 1200px; margin: 0 auto; }
+        .section-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 12px; text-align: center; }
+        .section-title { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; text-align: center; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .section-subtitle { font-size: 17px; color: var(--text-secondary); text-align: center; max-width: 600px; margin: 0 auto 60px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .feature-card {
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 32px; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .feature-card:hover { border-color: var(--primary); box-shadow: 0 8px 30px rgba(37,99,235,0.1); transform: translateY(-4px); }
+        .feature-icon {
+            width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 22px; margin-bottom: 20px;
+        }
+        .feature-icon.blue { background: var(--primary-light); color: var(--primary); }
+        .feature-icon.purple { background: var(--accent-light); color: var(--accent); }
+        .feature-icon.green { background: var(--success-light); color: var(--success); }
+        .feature-icon.orange { background: #fff7ed; color: var(--warning); }
+        .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+        .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        /* ===== ARCHITECTURE ===== */
+        .architecture { padding: 100px 24px; background: var(--bg-dark); color: white; }
+        .arch-inner { max-width: 1200px; margin: 0 auto; }
+        .arch-inner .section-label { color: #93c5fd; }
+        .arch-inner .section-title { color: white; }
+        .arch-inner .section-subtitle { color: #94a3b8; }
+        .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 50px; }
+        .arch-layer {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius); padding: 24px; text-align: center; position: relative;
+        }
+        .arch-layer-num {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%;
+            font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+        }
+        .arch-layer h4 { font-size: 15px; font-weight: 700; margin: 8px 0; color: #f1f5f9; }
+        .arch-layer p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+        .arch-layer-icon { font-size: 28px; margin-bottom: 8px; }
+        .arch-tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 50px; }
+        .arch-tech {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px; padding: 16px; text-align: center;
+        }
+        .arch-tech-name { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+        .arch-tech-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+        /* ===== PRICING ===== */
+        .pricing { padding: 100px 24px; background: var(--bg-alt); }
+        .pricing-inner { max-width: 1000px; margin: 0 auto; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; margin-top: 50px; }
+        .price-card {
+            background: white; border: 1px solid var(--border); border-radius: var(--radius-xl);
+            padding: 40px; position: relative; transition: all 0.3s;
+        }
+        .price-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-4px); }
+        .price-card.featured {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            border: 1px solid rgba(99,102,241,0.3); color: white;
+        }
+        .price-card.featured .price-subtitle { color: #94a3b8; }
+        .price-card.featured .price-feature { color: #cbd5e1; border-bottom-color: rgba(255,255,255,0.06); }
+        .price-card.featured .price-feature-icon { color: #34d399; }
+        .price-popular {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white; padding: 6px 20px; border-radius: 100px; font-size: 12px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+        }
+        .price-header { margin-bottom: 28px; }
+        .price-icon { font-size: 36px; margin-bottom: 16px; }
+        .price-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .price-subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+        .price-amount { margin: 28px 0; padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .price-card.featured .price-amount { border-color: rgba(255,255,255,0.08); }
+        .price-currency { font-size: 20px; font-weight: 700; vertical-align: top; }
+        .price-value { font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .price-card.featured .price-value {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .price-period { font-size: 15px; color: var(--text-light); font-weight: 500; }
+        .price-card.featured .price-period { color: #64748b; }
+        .price-note { font-size: 12px; color: var(--text-light); margin-top: 6px; }
+        .price-card.featured .price-note { color: #64748b; }
+        .price-features { list-style: none; margin: 24px 0 32px; }
+        .price-feature {
+            display: flex; align-items: flex-start; gap: 12px; padding: 10px 0;
+            font-size: 14px; color: var(--text-secondary); border-bottom: 1px solid var(--border);
+        }
+        .price-feature:last-child { border-bottom: none; }
+        .price-feature-icon { color: var(--success); font-size: 16px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+        .btn-price {
+            display: block; width: 100%; padding: 16px; border-radius: 12px; text-align: center;
+            text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.3s; cursor: pointer; border: none;
+        }
+        .btn-price-outline {
+            background: white; color: var(--primary); border: 2px solid var(--primary);
+        }
+        .btn-price-outline:hover { background: var(--primary-50); }
+        .btn-price-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent)); color: white;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.35);
+        }
+        .btn-price-primary:hover { box-shadow: 0 8px 25px rgba(37,99,235,0.5); transform: translateY(-2px); }
+        .price-guarantee { text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: var(--radius); border: 1px solid var(--border); }
+        .price-guarantee p { font-size: 14px; color: var(--text-secondary); }
+        .price-guarantee strong { color: var(--text); }
+
+        /* ===== FAQ ===== */
+        .faq { padding: 100px 24px; background: var(--bg); }
+        .faq-inner { max-width: 800px; margin: 0 auto; }
+        .faq-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; background: white; }
+        .faq-question {
+            width: 100%; background: none; border: none; padding: 20px 24px; font-size: 16px; font-weight: 600;
+            color: var(--text); text-align: left; cursor: pointer; display: flex; align-items: center;
+            justify-content: space-between; gap: 16px; font-family: inherit; transition: background 0.2s;
+        }
+        .faq-question:hover { background: var(--bg-alt); }
+        .faq-question svg { flex-shrink: 0; transition: transform 0.3s; color: var(--text-light); }
+        .faq-item.open .faq-question svg { transform: rotate(180deg); color: var(--primary); }
+        .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height 0.3s, padding 0.3s; }
+        .faq-item.open .faq-answer { max-height: 300px; padding: 0 24px 20px; }
+        .faq-answer p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+        /* ===== STATS ===== */
+        .stats { padding: 80px 24px; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .stats-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+        .stat-value { font-size: 40px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 6px; }
+        .stat-label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+
+        /* ===== DEMO ===== */
+        .demo { padding: 100px 24px; background: var(--bg); }
+        .demo-inner { max-width: 1200px; margin: 0 auto; }
+        .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 50px; }
+        .demo-features { display: flex; flex-direction: column; gap: 24px; }
+        .demo-feature {
+            display: flex; gap: 16px; padding: 20px; border-radius: var(--radius);
+            transition: all 0.3s; cursor: default;
+        }
+        .demo-feature:hover { background: var(--primary-50); }
+        .demo-feature-num {
+            width: 40px; height: 40px; background: var(--primary-light); color: var(--primary);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 16px; flex-shrink: 0;
+        }
+        .demo-feature h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .demo-feature p { font-size: 14px; color: var(--text-secondary); }
+        .demo-visual {
+            background: linear-gradient(135deg, var(--primary-50), var(--accent-light));
+            border-radius: var(--radius-xl); padding: 40px; position: relative;
+        }
+        .demo-screen {
+            background: var(--bg-dark); border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow-xl); border: 1px solid rgba(0,0,0,0.1);
+        }
+        .demo-screen-bar {
+            height: 36px; background: #0f172a; display: flex; align-items: center; padding: 0 14px; gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .demo-screen-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .demo-screen-dot.r { background: #f87171; }
+        .demo-screen-dot.y { background: #fbbf24; }
+        .demo-screen-dot.g { background: #34d399; }
+        .demo-screen-body { padding: 20px; }
+        .demo-json { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 12px; line-height: 1.8; color: #cbd5e1; }
+        .demo-json .k { color: #93c5fd; }
+        .demo-json .s { color: #86efac; }
+        .demo-json .n { color: #fbbf24; }
+        .demo-json .b { color: #f472b6; }
+
+        /* ===== CTA ===== */
+        .cta {
+            padding: 100px 24px;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a3e 50%, var(--bg-dark) 100%);
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .cta::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(37,99,235,0.15), transparent 60%);
+        }
+        .cta-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+        .cta h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; color: white; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .cta p { font-size: 17px; color: #94a3b8; margin-bottom: 40px; line-height: 1.7; }
+        .cta-buttons { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+        .cta-contact {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: #94a3b8; font-size: 14px; margin-top: 24px; text-decoration: none;
+        }
+        .cta-contact:hover { color: white; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 40px 24px; background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
+        .footer-logo {
+            width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 12px;
+        }
+        .footer-name { color: #f8fafc; font-weight: 700; font-size: 16px; }
+        .footer p { color: #64748b; font-size: 13px; }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin: 16px 0; }
+        .footer-links a { color: #94a3b8; font-size: 13px; text-decoration: none; }
+        .footer-links a:hover { color: white; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-mobile { display: block; }
+            .hero { padding: 120px 16px 60px; }
+            .mockup-sidebar { display: none; }
+            .features-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+            .demo-grid { grid-template-columns: 1fr; }
+            .arch-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <div class="nav-logo">QM</div>
+            <div class="nav-brand-text">Query <span>Manager</span></div>
+        </a>
+        <div class="nav-links">
+            <a href="#features">Caracteristicas</a>
+            <a href="#architecture">Arquitectura</a>
+            <a href="#pricing">Precios</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact" class="nav-cta">Contactar</a>
+        </div>
+        <button class="nav-mobile" onclick="document.querySelector('.nav-links').style.display = document.querySelector('.nav-links').style.display === 'flex' ? 'none' : 'flex'">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor"/><line x1="3" y1="12" x2="21" y2="12" stroke="currentColor"/><line x1="3" y1="18" x2="21" y2="18" stroke="currentColor"/></svg>
+        </button>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            Disponible ahora &mdash; v1.0.0
+        </div>
+        <h1>Gestiona tus Bases de Datos desde Cualquier Lugar</h1>
+        <p class="hero-sub">
+            Herramienta profesional para ejecutar, construir y auditar consultas SQL en
+            <strong>MySQL</strong> y <strong>SQL Server</strong>. Instalable como app, accesible desde el navegador.
+        </p>
+        <div class="hero-buttons">
+            <a href="#pricing" class="btn-hero-primary">
+                <span>Ver Planes</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#demo" class="btn-hero-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Ver Demo</span>
+            </a>
+        </div>
+
+        <!-- App Mockup -->
+        <div class="hero-image">
+            <div class="hero-mockup">
+                <div class="mockup-sidebar">
+                    <div class="mockup-sidebar-brand">
+                        <div class="mockup-sidebar-logo">QM</div>
+                        <div>
+                            <div class="mockup-sidebar-title">Query Manager</div>
+                            <div class="mockup-sidebar-ver">v1.0.0</div>
+                        </div>
+                    </div>
+                    <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Conexiones</div>
+                    <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Explorador</div>
+                    <div class="mockup-nav-item active"><div class="mockup-nav-dot"></div> Consultas</div>
+                    <div style="height:12px"></div>
+                    <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Auditoria</div>
+                    <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Usuarios</div>
+                </div>
+                <div class="mockup-main">
+                    <div class="mockup-topbar">
+                        <div class="mockup-topbar-title">Constructor de Consultas</div>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="mockup-editor">
+                            <div class="mockup-code">
+                                <span class="mockup-kw">SELECT</span> c.nombre, c.email, <span class="mockup-fn">COUNT</span>(p.id) <span class="mockup-kw">AS</span> total_pedidos<br>
+                                <span class="mockup-kw">FROM</span> clientes c<br>
+                                <span class="mockup-kw">JOIN</span> pedidos p <span class="mockup-kw">ON</span> c.id <span class="mockup-op">=</span> p.cliente_id<br>
+                                <span class="mockup-kw">WHERE</span> p.fecha <span class="mockup-op">&gt;=</span> <span class="mockup-str">'2024-01-01'</span><br>
+                                <span class="mockup-kw">GROUP BY</span> c.id <span class="mockup-kw">ORDER BY</span> total_pedidos <span class="mockup-kw">DESC</span>;
+                            </div>
+                        </div>
+                        <div class="mockup-table">
+                            <div class="mockup-thead">
+                                <div class="mockup-th">nombre</div>
+                                <div class="mockup-th">email</div>
+                                <div class="mockup-th">total_pedidos</div>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="mockup-td">Carlos Mendez</div>
+                                <div class="mockup-td">carlos@empresa.com</div>
+                                <div class="mockup-td"><strong style="color:#60a5fa">47</strong></div>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="mockup-td">Ana Rodriguez</div>
+                                <div class="mockup-td">ana.r@corp.co</div>
+                                <div class="mockup-td"><strong style="color:#60a5fa">38</strong></div>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="mockup-td">Luis Herrera</div>
+                                <div class="mockup-td">lherrera@tech.io</div>
+                                <div class="mockup-td"><strong style="color:#60a5fa">31</strong></div>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="mockup-td">Maria Torres</div>
+                                <div class="mockup-td">m.torres@data.net</div>
+                                <div class="mockup-td"><strong style="color:#60a5fa">24</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TRUST ===== -->
+<section class="trust">
+    <p>Compatible con las tecnologias que ya usas</p>
+    <div class="trust-logos">
+        <div class="trust-logo"><span>My</span>SQL</div>
+        <div class="trust-logo">SQL <span>Server</span></div>
+        <div class="trust-logo"><span>Maria</span>DB</div>
+        <div class="trust-logo">Apache</div>
+        <div class="trust-logo"><span>PHP</span> 8</div>
+    </div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:16px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.6;">
+        <strong>Hosting compartido:</strong> MySQL y MariaDB. &nbsp;
+        <strong>VPS / Dedicado:</strong> MySQL, MariaDB y SQL Server. &nbsp;
+        La app detecta automaticamente los drivers disponibles.
+    </p>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+    <div class="stats-inner">
+        <div><div class="stat-value">9</div><div class="stat-label">Modulos Integrados</div></div>
+        <div><div class="stat-value">37+</div><div class="stat-label">Endpoints API REST</div></div>
+        <div><div class="stat-value">2</div><div class="stat-label">Motores de BD Soportados</div></div>
+        <div><div class="stat-value">0</div><div class="stat-label">Dependencias Externas</div></div>
+    </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features" id="features">
+    <div class="features-inner">
+        <div class="section-label">Caracteristicas</div>
+        <div class="section-title">Todo lo que necesitas para gestionar tus datos</div>
+        <div class="section-subtitle">Una solucion completa que reemplaza multiples herramientas. Sin instalaciones, sin dependencias, desde cualquier dispositivo.</div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg></div>
+                <h3>Multi-Conexion</h3>
+                <p>Conecta simultaneamente a multiples servidores MySQL y SQL Server. Guarda y organiza todas tus conexiones con credenciales cifradas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon purple"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                <h3>Explorador de Esquemas</h3>
+                <p>Navega bases de datos, tablas, vistas, procedimientos y funciones. Visualiza columnas, parametros y definiciones de rutinas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                <h3>Editor SQL Avanzado</h3>
+                <p>Ejecuta consultas directas o via stored procedures con formato JSON. Cancela queries largas, ve resultados en tiempo real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon orange"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+                <h3>Exportacion Profesional</h3>
+                <p>Exporta resultados a CSV, Excel (XLSX nativo) o JSON con metadatos. Todo generado en el servidor sin librerias externas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <h3>Auditoria Completa</h3>
+                <p>Registro automatico de cada consulta ejecutada: conexion, SQL, tiempo, filas, estado. Filtra, busca y marca favoritas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon purple"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <h3>Seguridad Empresarial</h3>
+                <p>AES-256-CBC para credenciales, bcrypt para passwords, CSRF, headers de seguridad, roles admin/user, cambio obligatorio de contrasena.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                <h3>PWA Instalable</h3>
+                <p>Instala como app nativa en cualquier dispositivo. Funciona offline con interfaz cacheada. Responsive en movil y escritorio.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon orange"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                <h3>Cero Dependencias</h3>
+                <p>PHP puro + JavaScript vanilla. Sin Composer, sin npm, sin frameworks. Sube los archivos al hosting y funciona.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="12" y1="3" x2="12" y2="17"/></svg></div>
+                <h3>Multi-Query Simultaneo</h3>
+                <p>Ejecuta la misma consulta en multiples servidores a la vez. Resultados por tabs, exportacion independiente. Ideal para comparar datos entre ambientes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon purple"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/><path d="M16 3l5 3-5 3"/><path d="M16 15l5 3-5 3"/></svg></div>
+                <h3>Cross-Connection JOIN</h3>
+                <p>Cruza datos de servidores completamente diferentes como si fueran uno solo. Constructor visual + Editor SQL libre con motor de consultas virtual en memoria.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/></svg></div>
+                <h3>Comparador de Esquemas</h3>
+                <p>Compara tablas, columnas, vistas y procedimientos entre dos bases de datos. Genera scripts de migracion automaticos (CREATE, ALTER, DROP) con ejecucion controlada.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon orange"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10"/><circle cx="17" cy="19" r="3"/><path d="M17 17v2h2"/></svg></div>
+                <h3>Intellisense y Autocompletado</h3>
+                <p>Sugerencias inteligentes de tablas, columnas y keywords mientras escribes. Explorador de objetos de BD integrado en todos los editores SQL.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ARCHITECTURE ===== -->
+<section class="architecture" id="architecture">
+    <div class="arch-inner">
+        <div class="section-label">Arquitectura</div>
+        <div class="section-title">Disenada para ser simple y robusta</div>
+        <div class="section-subtitle">Patron MVC simplificado con capas bien definidas, sin sobre-ingenieria.</div>
+
+        <div class="arch-grid">
+            <div class="arch-layer">
+                <div class="arch-layer-num">1</div>
+                <div class="arch-layer-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h4>Frontend SPA</h4>
+                <p>HTML unico + JS vanilla con paneles intercambiables. API Client centralizado con CSRF y abort.</p>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-num">2</div>
+                <div class="arch-layer-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                <h4>API REST</h4>
+                <p>Router PHP con rutas publicas y protegidas. Autenticacion por sesion + validacion CSRF.</p>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-num">3</div>
+                <div class="arch-layer-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+                <h4>Controllers</h4>
+                <p>6 controladores especializados: Auth, Connection, Browser, Query, Export, Audit.</p>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-num">4</div>
+                <div class="arch-layer-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+                <h4>Services</h4>
+                <p>7 servicios con logica de negocio: encriptacion, auth, DB, queries, schemas, audit, XLSX.</p>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-num">5</div>
+                <div class="arch-layer-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg></div>
+                <h4>Data Layer</h4>
+                <p>SQLite para datos internos (usuarios, conexiones, audit). PDO para MySQL y SQL Server objetivo.</p>
+            </div>
+        </div>
+
+        <div class="arch-tech-grid">
+            <div class="arch-tech"><div class="arch-tech-name">PHP 8.0+</div><div class="arch-tech-desc">Backend</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">SQLite 3</div><div class="arch-tech-desc">BD Interna</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">AES-256-CBC</div><div class="arch-tech-desc">Cifrado</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">bcrypt</div><div class="arch-tech-desc">Hashing</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">PDO</div><div class="arch-tech-desc">Conexiones</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">Vanilla JS</div><div class="arch-tech-desc">Frontend</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">Service Worker</div><div class="arch-tech-desc">PWA/Cache</div></div>
+            <div class="arch-tech"><div class="arch-tech-name">Office XML</div><div class="arch-tech-desc">Excel Nativo</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DEMO ===== -->
+<section class="demo" id="demo">
+    <div class="demo-inner">
+        <div class="section-label">Como Funciona</div>
+        <div class="section-title">Ejecutando consultas en minutos</div>
+        <div class="section-subtitle">Desde la configuracion hasta resultados exportables en 4 pasos.</div>
+
+        <div class="demo-grid">
+            <div class="demo-features">
+                <div class="demo-feature">
+                    <div class="demo-feature-num">1</div>
+                    <div>
+                        <h4>Configura tu conexion</h4>
+                        <p>Agrega tus servidores MySQL o SQL Server con credenciales cifradas AES-256. Prueba la conectividad al instante.</p>
+                    </div>
+                </div>
+                <div class="demo-feature">
+                    <div class="demo-feature-num">2</div>
+                    <div>
+                        <h4>Explora tus esquemas</h4>
+                        <p>Navega bases de datos, tablas, columnas y stored procedures desde un arbol interactivo.</p>
+                    </div>
+                </div>
+                <div class="demo-feature">
+                    <div class="demo-feature-num">3</div>
+                    <div>
+                        <h4>Ejecuta consultas</h4>
+                        <p>Escribe SQL en el editor oscuro, ejecuta directamente o via stored procedures JSON parametrizados.</p>
+                    </div>
+                </div>
+                <div class="demo-feature">
+                    <div class="demo-feature-num">4</div>
+                    <div>
+                        <h4>Exporta y audita</h4>
+                        <p>Descarga resultados en CSV, Excel o JSON. Cada query queda registrada en la auditoria automatica.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-visual">
+                <div class="demo-screen">
+                    <div class="demo-screen-bar">
+                        <div class="demo-screen-dot r"></div>
+                        <div class="demo-screen-dot y"></div>
+                        <div class="demo-screen-dot g"></div>
+                    </div>
+                    <div class="demo-screen-body">
+                        <div class="demo-json">
+<span class="k">{</span><br>
+&nbsp;&nbsp;<span class="k">"success"</span>: <span class="b">true</span>,<br>
+&nbsp;&nbsp;<span class="k">"data"</span>: <span class="k">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"is_select"</span>: <span class="b">true</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"columns"</span>: [<span class="s">"nombre"</span>, <span class="s">"email"</span>, <span class="s">"total"</span>],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"row_count"</span>: <span class="n">156</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"execution_time_ms"</span>: <span class="n">23</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"rows"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"nombre"</span>: <span class="s">"Carlos Mendez"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"email"</span>: <span class="s">"carlos@empresa.com"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"total"</span>: <span class="n">47</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;<span class="k">}</span><br>
+<span class="k">}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="pricing" id="pricing">
+    <div class="pricing-inner">
+        <div class="section-label">Precios</div>
+        <div class="section-title">Elige el plan que mejor se adapte</div>
+        <div class="section-subtitle">Dos modalidades claras: arrienda la herramienta o adquiere el codigo fuente completo.</div>
+
+        <div class="pricing-grid">
+            <!-- PLAN ARRENDAMIENTO -->
+            <div class="price-card">
+                <div class="price-header">
+                    <div class="price-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+                    <div class="price-title">Arrendamiento</div>
+                    <div class="price-subtitle">Acceso completo a la herramienta desplegada y mantenida. Ideal para equipos que necesitan una solucion lista para usar.</div>
+                </div>
+                <div class="price-amount">
+                    <span class="price-currency">USD </span><span class="price-value">49</span>
+                    <span class="price-period"> / mes</span>
+                    <div class="price-note">Facturacion mensual. Sin permanencia minima.</div>
+                </div>
+                <ul class="price-features">
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Herramienta desplegada en tu hosting o el nuestro</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Conexiones ilimitadas a MySQL y SQL Server</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Usuarios ilimitados con roles admin/user</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Actualizaciones incluidas durante la suscripcion</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Soporte tecnico por email (48h respuesta)</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Configuracion inicial asistida</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Backup mensual de configuracion</li>
+                </ul>
+                <a href="#contact" class="btn-price btn-price-outline">Solicitar Arrendamiento</a>
+            </div>
+
+            <!-- PLAN CODIGO FUENTE -->
+            <div class="price-card featured">
+                <div class="price-popular">Mas Popular</div>
+                <div class="price-header">
+                    <div class="price-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <div class="price-title">Codigo Fuente</div>
+                    <div class="price-subtitle">Adquiere el codigo fuente completo con licencia de uso ilimitado. Modifica, personaliza y despliega sin restricciones.</div>
+                </div>
+                <div class="price-amount">
+                    <span class="price-currency">USD </span><span class="price-value">499</span>
+                    <span class="price-period"> pago unico</span>
+                    <div class="price-note">Licencia perpetua. Un solo pago, tuyo para siempre.</div>
+                </div>
+                <ul class="price-features">
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Codigo fuente 100% completo y documentado</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Licencia de uso comercial ilimitado</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Despliega en servidores ilimitados</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Modifica y personaliza libremente</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Documentacion tecnica + funcional + API</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Stored Procedures incluidos (MySQL + SQL Server)</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> 3 meses de soporte tecnico incluidos</li>
+                    <li class="price-feature"><span class="price-feature-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Actualizaciones gratuitas por 1 ano</li>
+                </ul>
+                <a href="#contact" class="btn-price btn-price-primary">Adquirir Codigo Fuente</a>
+            </div>
+        </div>
+
+        <div class="price-guarantee">
+            <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><strong>Garantia de satisfaccion:</strong> Si la herramienta no cumple con tus expectativas, tienes 15 dias para solicitar reembolso completo en la modalidad de codigo fuente.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq" aria-label="Preguntas frecuentes">
+    <div class="faq-inner">
+        <div class="section-label">FAQ</div>
+        <div class="section-title">Preguntas Frecuentes</div>
+        <div class="section-subtitle">Resolvemos las dudas mas comunes sobre Query Manager.</div>
+
+        <div style="margin-top:50px;">
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Que es Query Manager?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Query Manager es una herramienta web profesional que permite gestionar, ejecutar y auditar consultas SQL en bases de datos MySQL y SQL Server desde cualquier dispositivo con un navegador. No requiere instalar software adicional en el equipo del usuario.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Que bases de datos soporta?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Soporta MySQL 5.7+, MariaDB 10.2+ y SQL Server 2016+. Puedes conectar multiples servidores simultaneamente, cada uno con sus credenciales cifradas con AES-256-CBC.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Necesito instalar algo en mi computador?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>No. Query Manager funciona 100% en el navegador. Solo se requiere PHP 8.0+ y Apache en el servidor. No tiene dependencias de Composer ni npm. Tambien puedes instalarlo como app movil (PWA) directamente desde el navegador.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Es seguro para bases de datos en produccion?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Si. Implementa cifrado AES-256-CBC para credenciales, hashing bcrypt para contrasenas de usuario, proteccion CSRF, headers de seguridad HTTP (CSP, X-Frame-Options), CORS restrictivo, sistema de roles admin/usuario, y auditoria completa de cada consulta ejecutada.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Cual es la diferencia entre arrendamiento y codigo fuente?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>El arrendamiento (USD $49/mes) te da acceso a la herramienta desplegada y mantenida, con soporte y actualizaciones incluidas. La compra del codigo fuente (USD $499 pago unico) te entrega todo el codigo para que lo despliegues, modifiques y personalices libremente con licencia perpetua.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Que tipo de servidor o hosting necesito?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Depende de las bases de datos que necesites administrar:</p>
+                    <p><strong style="color:var(--primary);">Solo MySQL / MariaDB:</strong> Cualquier hosting compartido basico (desde $5 USD/mes). Solo necesita PHP 8.0+ y Apache con mod_rewrite. Sin dependencias adicionales.</p>
+                    <p><strong style="color:var(--primary);">MySQL + SQL Server:</strong> Requiere un VPS o servidor dedicado con el Microsoft ODBC Driver instalado. Esto no esta disponible en hosting compartido convencional.</p>
+                    <p>La herramienta detecta automaticamente los drivers disponibles en el servidor y habilita solo las conexiones soportadas. Al crear una conexion, solo se muestran las opciones de driver que estan realmente funcionales.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Funciona en hosting compartido como cPanel, Plesk o similares?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Si. Query Manager esta disenado para funcionar en hosting compartido sin problemas. No requiere Composer, npm, Docker ni configuraciones especiales. Solo sube los archivos por FTP y funciona.</p>
+                    <p><strong>Requisitos minimos:</strong> PHP 8.0+, extensiones pdo_sqlite y openssl (incluidas en la mayoria de hostings), Apache con mod_rewrite.</p>
+                    <p><strong>Limitacion en hosting compartido:</strong> Solo conexiones a MySQL/MariaDB. Para SQL Server se necesita un VPS o servidor dedicado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+                    <span>Puedo solicitar una demostracion antes de comprar?</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Por supuesto. Ofrecemos demos gratuitas de 30 minutos. Contactanos por <a href="https://wa.me/573012550175?text=Hola%2C%20quiero%20agendar%20una%20demo%20de%20Query%20Manager" style="color:var(--primary);font-weight:600;" target="_blank" rel="noopener noreferrer">WhatsApp al +57 301 255 0175</a> o escribe a <a href="mailto:comercial@desarrollaloya.com" style="color:var(--primary);font-weight:600;">comercial@desarrollaloya.com</a> para agendar.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta" id="contact">
+    <div class="cta-inner">
+        <h2>Listo para optimizar tu gestion de datos?</h2>
+        <p>Contactanos para una demostracion personalizada, resolver dudas tecnicas o iniciar tu plan hoy mismo.</p>
+        <div class="cta-buttons">
+            <a href="mailto:comercial@desarrollaloya.com" class="btn-hero-primary" aria-label="Enviar correo a comercial@desarrollaloya.com">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                comercial@desarrollaloya.com
+            </a>
+            <a href="https://wa.me/573012550175?text=Hola%2C%20me%20interesa%20una%20demo%20de%20Query%20Manager" class="btn-hero-secondary" style="background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.15);" aria-label="Contactar por WhatsApp al +57 301 255 0175" rel="noopener noreferrer" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp +57 301 255 0175
+            </a>
+        </div>
+        <a href="https://wa.me/573012550175?text=Hola%2C%20quiero%20agendar%20una%20demo%20de%20Query%20Manager" class="cta-contact" rel="noopener noreferrer" target="_blank">O agenda una demo gratuita de 30 minutos &rarr;</a>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="footer-logo">QM</div>
+            <div class="footer-name">Query Manager</div>
+        </div>
+        <div class="footer-links">
+            <a href="#features">Caracteristicas</a>
+            <a href="#architecture">Arquitectura</a>
+            <a href="#pricing">Precios</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contacto</a>
+        </div>
+        <p style="margin-top:16px;">&copy; 2026 <a href="https://desarrollaloya.com" style="color:#93c5fd;text-decoration:none;font-weight:600;" rel="author">DesarrollaLoYa.com</a> &mdash; Todos los derechos reservados.</p>
+        <p style="margin-top:6px; font-size: 12px;">
+            <a href="mailto:comercial@desarrollaloya.com" style="color:#64748b;text-decoration:none;">comercial@desarrollaloya.com</a>
+            &nbsp;&middot;&nbsp;
+            <a href="https://wa.me/573012550175" style="color:#64748b;text-decoration:none;" rel="noopener noreferrer" target="_blank">WhatsApp +57 301 255 0175</a>
+            &nbsp;&middot;&nbsp;
+            <a href="https://desarrollaloya.com" style="color:#64748b;text-decoration:none;" rel="noopener noreferrer" target="_blank">desarrollaloya.com</a>
+        </p>
+        <p style="margin-top:12px; font-size: 11px; color:#475569;">Desarrollo de software a medida &middot; Aplicaciones web &middot; Consultoria tecnologica</p>
+    </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteBase /phpadmin/
+
+# Protect sensitive directories
+RewriteRule ^data/ - [F,L]
+RewriteRule ^config/ - [F,L]
+RewriteRule ^sql/ - [F,L]
+RewriteRule ^docs/ - [F,L]
+
+# Block access to .sqlite files
+RewriteRule \.sqlite$ - [F,L]
+
+# Block access to hidden files (.env, .gitignore, etc.)
+RewriteRule (^\.|/\.) - [F,L]
+
+# API routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]

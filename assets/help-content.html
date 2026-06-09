@@ -1,0 +1,464 @@
+<!-- ============================================================
+     HELP CONTENT - PHPAdmin Query Manager
+     Cada sección <div data-help="..."> corresponde a un panel.
+     El contenido se carga dinámicamente según el panel activo.
+     ============================================================ -->
+
+<!-- ==================== CONEXIONES ==================== -->
+<div data-help="connections">
+    <div class="help-section">
+        <h4>¿Qué es una conexión?</h4>
+        <p>Una conexión almacena las credenciales y datos de acceso a un servidor de base de datos (MySQL o SQL Server). Es el primer paso para poder explorar y ejecutar consultas.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Crear una conexión</h4>
+        <ol>
+            <li>Haz clic en <strong>+ Nueva Conexión</strong>.</li>
+            <li>Completa los campos:
+                <ul>
+                    <li><strong>Nombre</strong>: Identificador amigable (ej: "Producción MySQL").</li>
+                    <li><strong>Motor</strong>: MySQL o SQL Server.</li>
+                    <li><strong>Host</strong>: Dirección del servidor (ej: <code>localhost</code>, <code>192.168.1.100</code>).</li>
+                    <li><strong>Puerto</strong>: 3306 para MySQL, 1433 para SQL Server (se ajusta automáticamente).</li>
+                    <li><strong>Base de Datos</strong>: Nombre de la BD por defecto (opcional, se puede elegir después).</li>
+                    <li><strong>Usuario / Contraseña</strong>: Credenciales de acceso.</li>
+                    <li><strong>SP JSON</strong>: Nombre del procedimiento almacenado para modo JSON (opcional).</li>
+                </ul>
+            </li>
+            <li>Haz clic en <strong>Guardar</strong>.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Acciones disponibles</h4>
+        <table class="help-table">
+            <tr><td><strong>Probar</strong></td><td>Verifica que la conexión sea válida y muestra la versión del servidor.</td></tr>
+            <tr><td><strong>Usar</strong></td><td>Selecciona esta conexión como activa y te lleva al editor de consultas.</td></tr>
+            <tr><td><strong>Editar</strong></td><td>Modifica los datos de la conexión. La contraseña solo se actualiza si escribes una nueva.</td></tr>
+            <tr><td><strong>Eliminar</strong></td><td>Elimina la conexión permanentemente.</td></tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Seguridad</h4>
+        <p>Las contraseñas se almacenan encriptadas con <strong>AES-256-CBC</strong>. La clave de encriptación se genera automáticamente y se guarda en <code>/config/.encryption_key</code>, protegido por <code>.htaccess</code>.</p>
+    </div>
+</div>
+
+<!-- ==================== EXPLORADOR ==================== -->
+<div data-help="browser">
+    <div class="help-section">
+        <h4>Explorador de Base de Datos</h4>
+        <p>Permite navegar visualmente los objetos de una base de datos: tablas, vistas, procedimientos almacenados y funciones.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Cómo usar</h4>
+        <ol>
+            <li>Selecciona una <strong>Conexión</strong> del dropdown.</li>
+            <li>Selecciona una <strong>Base de Datos</strong>.</li>
+            <li>El árbol de objetos se carga automáticamente.</li>
+            <li>Haz clic en una categoría (Tablas, Vistas, etc.) para expandirla.</li>
+            <li>Haz clic en un objeto para ver sus detalles.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Detalle de tablas y vistas</h4>
+        <p>Al seleccionar una tabla o vista se muestra:</p>
+        <ul>
+            <li>Nombre de cada columna.</li>
+            <li>Tipo de dato completo (ej: <code>varchar(255)</code>).</li>
+            <li>Si permite NULL.</li>
+            <li>Si es Primary Key (PK).</li>
+            <li>Valor por defecto.</li>
+            <li>Extra (ej: <code>auto_increment</code>).</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Generación automática de SQL</h4>
+        <p>Desde el detalle de una tabla puedes generar sentencias automáticamente:</p>
+        <table class="help-table">
+            <tr><td><strong>SELECT</strong></td><td>Genera un SELECT con todas las columnas de la tabla.</td></tr>
+            <tr><td><strong>INSERT</strong></td><td>Genera un INSERT con placeholders <code>?</code> (excluye auto_increment).</td></tr>
+            <tr><td><strong>UPDATE</strong></td><td>Genera un UPDATE con SET para cada columna y WHERE por la PK.</td></tr>
+            <tr><td><strong>Usar en Consulta</strong></td><td>Abre el editor con un <code>SELECT * FROM tabla</code>.</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== CONSULTAS ==================== -->
+<div data-help="query">
+    <div class="help-section">
+        <h4>Constructor de Consultas</h4>
+        <p>Permite escribir y ejecutar consultas SQL de dos formas: mediante el editor de texto o el constructor visual.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Editor SQL</h4>
+        <ul>
+            <li>Escribe SQL directamente en el editor de texto oscuro.</li>
+            <li><kbd>Ctrl + Enter</kbd>: Ejecutar la consulta.</li>
+            <li><kbd>Tab</kbd>: Insertar indentación.</li>
+            <li>Haz clic en una tabla del panel izquierdo para insertar su nombre en el cursor.</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Constructor Visual</h4>
+        <ol>
+            <li>Haz <strong>doble clic</strong> en las tablas del panel izquierdo para agregarlas al canvas.</li>
+            <li>Marca las columnas que deseas incluir en el SELECT.</li>
+            <li>Opcionalmente escribe condiciones WHERE, ORDER BY y LIMIT.</li>
+            <li>Haz clic en <strong>Generar SQL</strong> o cambia a la pestaña "Editor SQL" para ver el SQL generado.</li>
+        </ol>
+        <p><strong>Sincronización automática:</strong> Al cambiar entre Editor y Constructor Visual, la consulta se sincroniza. Si escribes SQL en el editor y cambias al constructor, este intenta parsear las tablas, columnas y condiciones.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Modos de ejecución</h4>
+        <table class="help-table">
+            <tr>
+                <td><strong>Directo</strong></td>
+                <td>Ejecuta el SQL directamente contra la base de datos. Ideal para pruebas rápidas y consultas ad-hoc.</td>
+            </tr>
+            <tr>
+                <td><strong>JSON SP</strong></td>
+                <td>Envía la consulta empaquetada como JSON a un procedimiento almacenado genérico. Ideal para simular cómo se consumirá desde otros sistemas.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Modo JSON - Detalle</h4>
+        <p>Al activar el modo JSON SP se muestra un panel con:</p>
+        <ul>
+            <li><strong>Parámetros</strong>: Campos para definir los valores de cada <code>?</code> en la consulta. El botón "Detectar" los identifica automáticamente.</li>
+            <li><strong>Editor JSON</strong>: El JSON que se enviará al SP es <strong>editable directamente</strong>. Puedes modificarlo a mano y usar "Aplicar Cambios" para sincronizar con el editor SQL y los parámetros.</li>
+            <li><strong>Copiar</strong>: Copia el JSON al portapapeles para usarlo en otro sistema.</li>
+        </ul>
+
+        <h5>Formato del JSON</h5>
+        <pre class="help-code">{
+    "query": "SELECT * FROM tabla WHERE campo = ?",
+    "params": ["valor"],
+    "limit": 10
+}</pre>
+        <ul>
+            <li><code>query</code>: Sentencia SQL. Usa <code>?</code> como placeholder.</li>
+            <li><code>params</code>: Array de valores en orden. Enviar <code>[]</code> si no hay parámetros.</li>
+            <li><code>limit</code>: Solo aplica a SELECT (se ignora en INSERT/UPDATE/DELETE).</li>
+        </ul>
+
+        <h5>Ejemplos CRUD</h5>
+        <p><strong>SELECT con filtro:</strong></p>
+        <pre class="help-code">{
+    "query": "SELECT * FROM clientes WHERE ciudad = ?",
+    "params": ["Bogota"],
+    "limit": 10
+}</pre>
+
+        <p><strong>SELECT con LIKE</strong> (los comodines van en el valor):</p>
+        <pre class="help-code">{
+    "query": "SELECT nombre FROM contactos WHERE nombre LIKE ?",
+    "params": ["%NELSON%"],
+    "limit": 50
+}</pre>
+
+        <p><strong>INSERT:</strong></p>
+        <pre class="help-code">{
+    "query": "INSERT INTO clientes (codigo, nombre) VALUES (?, ?)",
+    "params": ["COD-002", "Empresa ABC"],
+    "limit": 10
+}</pre>
+
+        <p><strong>UPDATE:</strong></p>
+        <pre class="help-code">{
+    "query": "UPDATE clientes SET nombre = ? WHERE codigo = ?",
+    "params": ["Nuevo Nombre", "COD-002"],
+    "limit": 10
+}</pre>
+
+        <p><strong>DELETE:</strong></p>
+        <pre class="help-code">{
+    "query": "DELETE FROM clientes WHERE codigo = ?",
+    "params": ["COD-002"],
+    "limit": 10
+}</pre>
+    </div>
+
+    <div class="help-section">
+        <h4>Resultados</h4>
+        <ul>
+            <li><strong>Vista Tabla</strong>: Muestra todos los resultados en una tabla con scroll horizontal.</li>
+            <li><strong>Vista JSON</strong>: Muestra máximo 10 registros en formato JSON (para referencia de integración).</li>
+            <li>Usa el botón <strong>X</strong> en el toolbar para limpiar los resultados.</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Exportación</h4>
+        <table class="help-table">
+            <tr><td><strong>CSV</strong></td><td>Archivo separado por <code>;</code> con BOM UTF-8 (compatible con Excel).</td></tr>
+            <tr><td><strong>Excel</strong></td><td>Archivo .xls con formato de tabla y colores alternados.</td></tr>
+            <tr><td><strong>JSON</strong></td><td>Archivo .json limitado a 10 registros, con metadata incluida.</td></tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Instalación del SP genérico</h4>
+        <p>Para usar el modo JSON es necesario instalar el procedimiento almacenado en la base de datos destino:</p>
+        <ul>
+            <li><strong>MySQL</strong>: Ejecutar el archivo <code>sql/sp_mysql_json_query.sql</code></li>
+            <li><strong>SQL Server</strong>: Ejecutar el archivo <code>sql/sp_sqlserver_json_query.sql</code></li>
+        </ul>
+        <p>Luego configura el nombre del SP en la conexión (campo "SP JSON", por defecto: <code>sp_ExecuteJsonQuery</code>).</p>
+    </div>
+</div>
+
+<!-- ==================== MULTI-QUERY ==================== -->
+<div data-help="multiquery">
+    <div class="help-section">
+        <h4>Multi-Query: Consulta Simultanea</h4>
+        <p>Ejecuta la misma consulta SQL en multiples conexiones al mismo tiempo. Ideal para verificar datos en varios servidores, comparar resultados o ejecutar mantenimiento masivo.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Como usar</h4>
+        <ol>
+            <li>Selecciona las <strong>conexiones</strong> marcando las casillas. Puedes usar "Seleccionar todas" / "Deseleccionar todas".</li>
+            <li>Para cada conexion seleccionada, elige opcionalmente una <strong>base de datos</strong> del dropdown.</li>
+            <li>Escribe la consulta SQL en el editor (es la misma para todas las conexiones).</li>
+            <li>Haz clic en <strong>Ejecutar en Todas</strong> o presiona <kbd>Ctrl + Enter</kbd>.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Resultados</h4>
+        <ul>
+            <li>Los resultados se muestran en <strong>pestanas</strong>, una por cada conexion.</li>
+            <li>Un indicador verde o rojo muestra si la ejecucion fue exitosa o fallida.</li>
+            <li>La barra de resumen muestra: conexiones consultadas, exitosas, fallidas y tiempo total.</li>
+            <li>Cada pestana tiene botones de <strong>exportacion</strong>: CSV, Excel, JSON.</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Explorar BD</h4>
+        <p>Al seleccionar una conexion aparece un boton <strong>"Explorar BD"</strong> que abre un panel lateral con los objetos de esa base de datos (tablas, vistas, procedimientos, funciones). Haz clic en un objeto para insertarlo en el editor SQL.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Intellisense</h4>
+        <p>El editor SQL ofrece <strong>autocompletado</strong> mientras escribes (3+ caracteres). Sugiere:</p>
+        <ul>
+            <li>Nombres de tablas, vistas y procedimientos de las conexiones seleccionadas.</li>
+            <li>Palabras clave SQL (SELECT, FROM, WHERE, etc.).</li>
+        </ul>
+        <p>Usa <kbd>↑</kbd> <kbd>↓</kbd> para navegar y <kbd>Enter</kbd> o <kbd>Tab</kbd> para aceptar. <kbd>Esc</kbd> para cerrar.</p>
+    </div>
+</div>
+
+<!-- ==================== CROSS-JOIN ==================== -->
+<div data-help="crossjoin">
+    <div class="help-section">
+        <h4>Cross-Connection JOIN</h4>
+        <p>Combina datos de diferentes servidores y bases de datos como si fueran una sola. Ofrece dos modos de trabajo.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Modo Constructor</h4>
+        <p>Interfaz visual para combinar datos paso a paso:</p>
+        <ol>
+            <li><strong>Fuentes de datos</strong>: Agrega N fuentes, cada una con su conexion, BD y consulta SQL. Cada fuente trae datos de su servidor.</li>
+            <li><strong>Probar</strong>: Boton por fuente que ejecuta con TOP 1/LIMIT 1 para validar antes del JOIN completo.</li>
+            <li><strong>Combinar</strong>: Elige entre:
+                <ul>
+                    <li><strong>JOINs</strong>: INNER, LEFT, RIGHT, CROSS JOIN con cadena de JOINs.</li>
+                    <li><strong>Operaciones de conjuntos</strong>: EXCEPT, INTERSECT, UNION, UNION ALL.</li>
+                </ul>
+            </li>
+            <li>Haz clic en <strong>Ejecutar</strong>.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Modo Editor SQL Libre</h4>
+        <p>Escribe un query completo tratando las fuentes como tablas virtuales:</p>
+        <ol>
+            <li>Define fuentes (conexion + BD + SQL + alias: a, b, c...).</li>
+            <li>Cada fuente ejecuta su SQL y los resultados se convierten en <strong>tablas virtuales</strong>.</li>
+            <li>Escribe tu query en el editor referenciando los alias:
+                <pre class="help-code">SELECT a.nombre, b.total
+FROM a
+INNER JOIN b ON a.id = b.cliente_id
+WHERE b.total > 10
+ORDER BY b.total DESC</pre>
+            </li>
+        </ol>
+        <p><strong>Importante:</strong> siempre incluye <code>FROM alias</code> en tu consulta.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Operaciones soportadas en Editor Libre</h4>
+        <table class="help-table">
+            <tr><td><strong>SELECT, FROM</strong></td><td>Seleccion de columnas de tablas virtuales.</td></tr>
+            <tr><td><strong>JOIN</strong></td><td>INNER, LEFT, RIGHT, CROSS JOIN entre fuentes.</td></tr>
+            <tr><td><strong>WHERE</strong></td><td>=, &lt;&gt;, &gt;, &lt;, LIKE, IN, IS NULL, BETWEEN, AND, OR, NOT.</td></tr>
+            <tr><td><strong>ORDER BY, LIMIT</strong></td><td>Ordenar y limitar resultados.</td></tr>
+            <tr><td><strong>GROUP BY, HAVING</strong></td><td>Agrupacion con funciones agregadas.</td></tr>
+            <tr><td><strong>UNION, INTERSECT, EXCEPT</strong></td><td>Operaciones de conjuntos entre sub-selects.</td></tr>
+            <tr><td><strong>Funciones</strong></td><td>COUNT, SUM, AVG, MAX, MIN, UPPER, LOWER, TRIM, CONCAT.</td></tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Herramientas adicionales</h4>
+        <table class="help-table">
+            <tr><td><strong>BD</strong></td><td>Abre un panel lateral con los objetos de la BD de esa fuente. Clic para insertar nombres.</td></tr>
+            <tr><td><strong>Probar</strong></td><td>Ejecuta la consulta de la fuente con TOP 1 para validar.</td></tr>
+            <tr><td><strong>Drawer</strong></td><td>Boton de documento: muestra la consulta construida, pseudo-SQL equivalente y payload JSON.</td></tr>
+            <tr><td><strong>Exportar</strong></td><td>CSV, Excel, JSON desde los resultados.</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== COMPARAR ESQUEMAS ==================== -->
+<div data-help="compare">
+    <div class="help-section">
+        <h4>Comparar Esquemas</h4>
+        <p>Compara la estructura de dos bases de datos y genera scripts de migracion para sincronizarlas. Detecta diferencias en tablas, columnas, vistas, procedimientos y funciones.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Como comparar</h4>
+        <ol>
+            <li>Selecciona <strong>Conexion A</strong> (origen) con su base de datos.</li>
+            <li>Selecciona <strong>Conexion B</strong> (destino) con su base de datos.</li>
+            <li>Elige la <strong>direccion</strong>:
+                <ul>
+                    <li><strong>A &rarr; B</strong>: Generar script para que B quede igual a A.</li>
+                    <li><strong>B &rarr; A</strong>: Generar script para que A quede igual a B.</li>
+                    <li><strong>Bidireccional</strong>: Mostrar todas las diferencias sin preferencia.</li>
+                </ul>
+            </li>
+            <li>Haz clic en <strong>Comparar Esquemas</strong>.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Resultados de comparacion</h4>
+        <p>Los objetos se muestran con badges de estado:</p>
+        <table class="help-table">
+            <tr><td style="color:#059669;font-weight:700;">Identico</td><td>Existe en ambas bases de datos con la misma estructura.</td></tr>
+            <tr><td style="color:#d97706;font-weight:700;">Diferente</td><td>Existe en ambas pero con diferencias. Haz clic para expandir y ver el detalle.</td></tr>
+            <tr><td style="color:#dc2626;font-weight:700;">Solo en A</td><td>Existe solo en la conexion A (origen).</td></tr>
+            <tr><td style="color:#dc2626;font-weight:700;">Solo en B</td><td>Existe solo en la conexion B (destino).</td></tr>
+        </table>
+        <p>Usa los <strong>filtros</strong> (Todos, Diferentes, Solo en A, Solo en B, Identicos) para enfocarte en lo que necesitas.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Detalle de diferencias</h4>
+        <ul>
+            <li><strong>Tablas</strong>: clic para expandir y ver diferencias por columna (tipo, nullable, default).</li>
+            <li><strong>Vistas/Procedimientos/Funciones</strong>: clic para expandir y ver las definiciones lado a lado (A vs B).</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Script de migracion</h4>
+        <ol>
+            <li>Despues de comparar, haz clic en <strong>Generar Script de Migracion</strong>.</li>
+            <li>El script incluye: CREATE TABLE, ALTER TABLE, DROP COLUMN, CREATE/DROP VIEW, CREATE/DROP PROCEDURE, etc.</li>
+            <li>Revisa el script generado en el editor (no se ejecuta automaticamente).</li>
+            <li>Selecciona la <strong>conexion destino</strong> donde ejecutar.</li>
+            <li>Haz clic en <strong>Ejecutar Script</strong> (requiere confirmacion).</li>
+            <li>Los resultados muestran el exito o error de cada sentencia individualmente.</li>
+        </ol>
+        <p><strong>Precaucion:</strong> Revise siempre el script antes de ejecutar. Las operaciones DROP eliminan objetos permanentemente.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Exportar</h4>
+        <p>El boton <strong>Exportar CSV</strong> genera un archivo con todas las diferencias encontradas (tipo, nombre, estado, detalles).</p>
+    </div>
+</div>
+
+<!-- ==================== USUARIOS ==================== -->
+<div data-help="users">
+    <div class="help-section">
+        <h4>Administracion de Usuarios</h4>
+        <p>Gestion de usuarios con acceso a la aplicacion. Solo disponible para usuarios con rol <strong>Administrador</strong>.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Roles</h4>
+        <table class="help-table">
+            <tr><td><strong>admin</strong></td><td>Acceso total: conexiones, explorador, consultas, multi-query, cross-join, comparar, auditoria y gestion de usuarios.</td></tr>
+            <tr><td><strong>user</strong></td><td>Acceso a: conexiones, explorador, consultas, multi-query, cross-join, comparar y auditoria. Sin gestion de usuarios.</td></tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Crear usuario</h4>
+        <ol>
+            <li>Haz clic en <strong>+ Nuevo Usuario</strong>.</li>
+            <li>Completa: usuario, nombre completo, contrasena, rol.</li>
+            <li>Haz clic en <strong>Guardar</strong>.</li>
+        </ol>
+    </div>
+
+    <div class="help-section">
+        <h4>Reglas</h4>
+        <ul>
+            <li>No se puede eliminar el ultimo administrador.</li>
+            <li>La contrasena debe tener al menos 4 caracteres.</li>
+            <li>Se registra la fecha y hora del ultimo acceso de cada usuario.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==================== AUDITORÍA ==================== -->
+<div data-help="audit">
+    <div class="help-section">
+        <h4>Registro de Auditoría</h4>
+        <p>Todas las consultas ejecutadas (tanto en modo directo como JSON) quedan registradas automáticamente para trazabilidad y control.</p>
+    </div>
+
+    <div class="help-section">
+        <h4>Información registrada</h4>
+        <table class="help-table">
+            <tr><td><strong>Fecha/Hora</strong></td><td>Momento exacto de la ejecución.</td></tr>
+            <tr><td><strong>Conexión</strong></td><td>Nombre de la conexión utilizada.</td></tr>
+            <tr><td><strong>Base de Datos</strong></td><td>BD contra la que se ejecutó.</td></tr>
+            <tr><td><strong>Consulta</strong></td><td>Texto completo del SQL ejecutado.</td></tr>
+            <tr><td><strong>Modo</strong></td><td><code>direct</code> o <code>json_sp</code>.</td></tr>
+            <tr><td><strong>Tiempo</strong></td><td>Milisegundos que tardó la ejecución.</td></tr>
+            <tr><td><strong>Filas</strong></td><td>Cantidad de filas retornadas o afectadas.</td></tr>
+            <tr><td><strong>Estado</strong></td><td>OK (exitoso) o ERROR (con mensaje de error).</td></tr>
+            <tr><td><strong>IP</strong></td><td>Dirección IP del usuario que ejecutó.</td></tr>
+        </table>
+    </div>
+
+    <div class="help-section">
+        <h4>Dashboard de estadísticas</h4>
+        <p>En la parte superior se muestra un resumen con:</p>
+        <ul>
+            <li>Total de consultas ejecutadas.</li>
+            <li>Consultas exitosas vs. con error.</li>
+            <li>Tiempo promedio de ejecución.</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <h4>Filtros</h4>
+        <p>Puedes filtrar los registros por:</p>
+        <ul>
+            <li><strong>Texto</strong>: Busca dentro del SQL ejecutado.</li>
+            <li><strong>Estado</strong>: Solo exitosas o solo con error.</li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+# Sensitive files (NUNCA versionar - respaldar via backup.ps1, no git)
+config/.encryption_key
+data/app.sqlite
+data/*.sqlite
+data/.initial_password
+.env
+
+# Backups locales generados por backup.ps1
+backups/
+
+# NOTA sobre los scripts de mantenimiento (reset_admin.php, test_api.php, check_setup.php):
+# SI se versionan (para no perderlos ante fallo de disco). NO se ignoran aqui.
+# deploy.ps1 ya impide que lleguen a produccion (lista blanca + blocklist + .htaccess).
+
+# Logs and backups
+*.log
+*.bak
+*.sql.bak
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Dependencies
+vendor/
+node_modules/

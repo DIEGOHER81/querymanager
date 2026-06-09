@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Manager - Documentacion Tecnica</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-code: #e2e8f0;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+            --accent: #7c3aed;
+            --accent-bg: #ede9fe;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Header */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; position: relative; }
+        .hero p { font-size: 16px; opacity: 0.9; position: relative; max-width: 500px; margin: 0 auto; }
+        .hero .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 12px;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            justify-content: center;
+        }
+        .nav-tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .nav-tab .tab-icon { font-size: 18px; }
+
+        /* Content */
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 24px; }
+        .card h3 {
+            font-size: 17px;
+            margin: 24px 0 12px;
+            color: var(--primary-dark);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        .card h4 {
+            font-size: 15px;
+            margin: 18px 0 8px;
+            color: var(--text);
+        }
+
+        /* Code blocks */
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0;
+            position: relative;
+        }
+        pre .comment { color: #64748b; }
+        pre .keyword { color: #c084fc; }
+        pre .function { color: #7dd3fc; }
+        pre .string { color: #86efac; }
+        pre .type { color: #fbbf24; }
+        pre .variable { color: #f472b6; }
+        pre .number { color: #fb923c; }
+        pre .operator { color: #94a3b8; }
+        pre .tag { color: #7dd3fc; }
+        pre .attr { color: #fbbf24; }
+
+        code {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .alert-warning { background: var(--warning-bg); color: #92400e; border-left: 4px solid var(--warning); }
+        .alert-danger { background: var(--danger-bg); color: #991b1b; border-left: 4px solid var(--danger); }
+        .alert-info { background: var(--info-bg); color: #155e75; border-left: 4px solid var(--info); }
+        .alert-success { background: var(--success-bg); color: #166534; border-left: 4px solid var(--success); }
+
+        /* Tables */
+        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th {
+            background: var(--bg);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+        }
+        td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: var(--bg); }
+        tr:hover td { background: var(--primary-light); }
+        td code { font-size: 12px; }
+
+        /* Diagram */
+        .diagram {
+            background: var(--bg-code);
+            color: #7dd3fc;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 16px 0;
+            white-space: pre;
+        }
+
+        /* Lists */
+        ol, ul { padding-left: 24px; margin: 10px 0; }
+        li { margin-bottom: 8px; }
+        li strong { color: var(--text); }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-success { background: var(--success-bg); color: var(--success); }
+        .badge-danger { background: var(--danger-bg); color: var(--danger); }
+        .badge-primary { background: var(--primary-light); color: var(--primary); }
+        .badge-warning { background: var(--warning-bg); color: var(--warning); }
+        .badge-info { background: var(--info-bg); color: var(--info); }
+        .badge-accent { background: var(--accent-bg); color: var(--accent); }
+
+        /* Architecture flow boxes */
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .arch-box {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            min-width: 120px;
+            border: 2px solid;
+        }
+        .arch-box.frontend { background: var(--info-bg); color: #0e7490; border-color: var(--info); }
+        .arch-box.api { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
+        .arch-box.service { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+        .arch-box.data { background: var(--success-bg); color: var(--success); border-color: var(--success); }
+        .arch-box.external { background: var(--warning-bg); color: #92400e; border-color: var(--warning); }
+        .arch-arrow {
+            font-size: 22px;
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        /* File tree */
+        .file-tree {
+            background: var(--bg-code);
+            color: var(--text-code);
+            border-radius: 10px;
+            padding: 24px 20px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 16px 0;
+            white-space: pre;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .file-tree .folder { color: #7dd3fc; font-weight: 600; }
+        .file-tree .file { color: #e2e8f0; }
+        .file-tree .comment { color: #64748b; font-style: italic; }
+        .file-tree .tree-line { color: #334155; }
+        .file-tree .section-gap { display: block; height: 6px; }
+
+        /* Service card */
+        .service-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary);
+        }
+        .service-card.encryption { border-left-color: var(--danger); }
+        .service-card.auth { border-left-color: var(--accent); }
+        .service-card.database { border-left-color: var(--success); }
+        .service-card.query { border-left-color: var(--info); }
+        .service-card.schema { border-left-color: var(--warning); }
+        .service-card.audit { border-left-color: #64748b; }
+        .service-card.xlsx { border-left-color: #16a34a; }
+        .service-card h4 {
+            font-size: 16px;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .service-card p { font-size: 14px; color: var(--text-light); margin-bottom: 10px; }
+
+        /* Method list */
+        .method-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+        .method-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .method-list li:last-child { border-bottom: none; }
+        .method-name {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            color: var(--primary-dark);
+            background: var(--primary-light);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* Security grid */
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        @media (max-width: 700px) {
+            .security-grid { grid-template-columns: 1fr; }
+            .nav-tab { padding: 12px 16px; font-size: 13px; }
+        }
+        .security-item {
+            background: var(--bg-card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .security-item h4 {
+            font-size: 14px;
+            margin: 0 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .security-item p { font-size: 13px; color: var(--text-light); margin: 0; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Migration version label */
+        .migration-version {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Header -->
+    <div class="hero">
+        <div class="hero-logo">QM</div>
+        <h1>Documentacion Tecnica</h1>
+        <p>PHPAdmin - Query Manager: arquitectura, servicios, seguridad y base de datos interna</p>
+        <span class="version">v1.0.0</span>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="showTab('arquitectura')">
+            <span class="tab-icon">&#9881;</span> Arquitectura
+        </div>
+        <div class="nav-tab" onclick="showTab('database')">
+            <span class="tab-icon">&#128451;</span> Base de Datos
+        </div>
+        <div class="nav-tab" onclick="showTab('seguridad')">
+            <span class="tab-icon">&#128274;</span> Seguridad
+        </div>
+        <div class="nav-tab" onclick="showTab('servicios')">
+            <span class="tab-icon">&#9881;</span> Servicios
+        </div>
+        <div class="nav-tab" onclick="showTab('frontend')">
+            <span class="tab-icon">&#128187;</span> Frontend
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ==================== TAB 1: ARQUITECTURA ==================== -->
+        <div id="arquitectura" class="section active">
+            <div class="card">
+                <h2><span class="icon">&#9881;</span> Vision General de la Arquitectura</h2>
+                <p>
+                    PHPAdmin Query Manager es una <strong>aplicacion PHP de pagina unica (SPA)</strong> que permite a los usuarios
+                    gestionar conexiones a bases de datos, ejecutar consultas SQL y explorar esquemas de forma visual.
+                    La aplicacion sigue un patron <strong>MVC simplificado</strong> con un backend tipo REST API y un frontend
+                    construido en JavaScript puro (sin frameworks).
+                </p>
+
+                <h3>Patron Arquitectonico</h3>
+                <p>La aplicacion implementa una variacion del patron MVC con las siguientes capas:</p>
+
+                <div class="arch-flow">
+                    <div class="arch-box frontend">Frontend<br><small>Vanilla JS + SPA</small></div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-box api">API Router<br><small>index.php</small></div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-box api">Controllers<br><small>PHP</small></div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-box service">Services<br><small>Logica de negocio</small></div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-box data">Models + SQLite<br><small>Datos internos</small></div>
+                </div>
+
+                <div class="arch-flow" style="margin-top: 8px;">
+                    <div class="arch-box service">Services</div>
+                    <span class="arch-arrow">&#8594;</span>
+                    <div class="arch-box external">MySQL / SQL Server<br><small>Bases de datos destino</small></div>
+                </div>
+
+                <h3>Flujo de una Solicitud</h3>
+                <div class="diagram">  Cliente (Browser)
+       |
+       | HTTP Request (fetch API)
+       v
+  .htaccess (URL Rewriting)
+       |
+       v
+  api/index.php (Router)
+       |-- Analiza REQUEST_URI y METHOD
+       |-- Despacha al Controller correspondiente
+       v
+  Controller (AuthController, QueryController, etc.)
+       |-- Valida autenticacion (requireAuth)
+       |-- Valida CSRF token (POST/PUT/DELETE)
+       |-- Procesa parametros de entrada
+       v
+  Service (DatabaseService, QueryExecutionService, etc.)
+       |-- Ejecuta logica de negocio
+       |-- Interactua con PDO / SQLite
+       v
+  Response JSON
+       |
+       v
+  Cliente (actualiza UI)</div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128193;</span> Estructura del Proyecto</h2>
+                <p>Organizacion completa de archivos y directorios:</p>
+
+                <div class="file-tree"><span class="folder">phpadmin/</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">api/</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">Controllers/</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">AuthController.php</span>          <span class="comment"># Autenticacion y gestion de usuarios</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">AuditController.php</span>         <span class="comment"># Registros de auditoria</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">BrowserController.php</span>       <span class="comment"># Explorador de esquemas de BD</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">ConnectionController.php</span>    <span class="comment"># CRUD de conexiones</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">ExportController.php</span>        <span class="comment"># Exportacion CSV / XLSX / JSON</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">MultiQueryController.php</span>    <span class="comment"># Multi-query, cross-join y virtual SQL</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">QueryController.php</span>         <span class="comment"># Ejecucion de consultas SQL</span>
+<span class="tree-line">&#9474;   &#9474;   &#9492;&#9472;&#9472;</span> <span class="file">SchemaCompareController.php</span> <span class="comment"># Comparacion y migracion de esquemas</span>
+<span class="tree-line">&#9474;   &#9474;</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">Database/</span>
+<span class="tree-line">&#9474;   &#9474;   &#9492;&#9472;&#9472;</span> <span class="file">SQLiteManager.php</span>           <span class="comment"># Gestor SQLite + migraciones</span>
+<span class="tree-line">&#9474;   &#9474;</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">Models/</span>
+<span class="tree-line">&#9474;   &#9474;   &#9492;&#9472;&#9472;</span> <span class="file">Connection.php</span>              <span class="comment"># Modelo de conexion</span>
+<span class="tree-line">&#9474;   &#9474;</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">Services/</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">AuditService.php</span>            <span class="comment"># Registro de auditoria</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">AuthService.php</span>             <span class="comment"># Servicio de autenticacion</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">CrossJoinService.php</span>        <span class="comment"># JOIN en memoria entre result sets</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">DatabaseService.php</span>         <span class="comment"># Conexiones PDO</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">EncryptionService.php</span>       <span class="comment"># Cifrado AES-256-CBC</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">QueryExecutionService.php</span>   <span class="comment"># Ejecutor de consultas</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">SchemaCompareService.php</span>    <span class="comment"># Comparacion de esquemas y generacion DDL</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">SchemaService.php</span>           <span class="comment"># Introspeccion de esquemas</span>
+<span class="tree-line">&#9474;   &#9474;   &#9500;&#9472;&#9472;</span> <span class="file">VirtualQueryEngine.php</span>      <span class="comment"># Mini SQL engine en memoria (1630 lineas)</span>
+<span class="tree-line">&#9474;   &#9474;   &#9492;&#9472;&#9472;</span> <span class="file">XlsxService.php</span>             <span class="comment"># Generacion de archivos Excel</span>
+<span class="tree-line">&#9474;   &#9474;</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="file">bootstrap.php</span>               <span class="comment"># Inicializacion, sesiones, CSRF, headers</span>
+<span class="tree-line">&#9474;   &#9492;&#9472;&#9472;</span> <span class="file">index.php</span>                   <span class="comment"># Router principal de la API</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">assets/</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">css/</span>
+<span class="tree-line">&#9474;   &#9474;   &#9492;&#9472;&#9472;</span> <span class="file">app.css</span>                     <span class="comment"># Estilos principales</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="folder">icons/</span>                          <span class="comment"># Iconos SVG y PNG (PWA)</span>
+<span class="tree-line">&#9474;   &#9492;&#9472;&#9472;</span> <span class="folder">js/</span>
+<span class="tree-line">&#9474;       &#9500;&#9472;&#9472;</span> <span class="file">api-client.js</span>               <span class="comment"># Cliente API centralizado</span>
+<span class="tree-line">&#9474;       &#9500;&#9472;&#9472;</span> <span class="file">app.js</span>                      <span class="comment"># App principal + navegacion</span>
+<span class="tree-line">&#9474;       &#9500;&#9472;&#9472;</span> <span class="file">service-worker.js</span>           <span class="comment"># Cache PWA</span>
+<span class="tree-line">&#9474;       &#9492;&#9472;&#9472;</span> <span class="folder">components/</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">audit.js</span>                <span class="comment"># Panel de auditoria</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">browser.js</span>              <span class="comment"># Explorador de esquemas</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">client-export.js</span>        <span class="comment"># Exportacion cliente CSV/Excel/JSON en memoria</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">connections.js</span>          <span class="comment"># Gestion de conexiones</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">cross-join.js</span>           <span class="comment"># UI de Cross-Join entre result sets</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">help.js</span>                 <span class="comment"># Panel de ayuda</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">multi-query.js</span>          <span class="comment"># UI de Multi-Query con pestanas</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">query-editor.js</span>         <span class="comment"># Editor de consultas SQL</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">schema-compare.js</span>       <span class="comment"># UI de comparacion de esquemas</span>
+<span class="tree-line">&#9474;           &#9500;&#9472;&#9472;</span> <span class="file">sql-intellisense.js</span>     <span class="comment"># Autocompletado SQL + schema drawer</span>
+<span class="tree-line">&#9474;           &#9492;&#9472;&#9472;</span> <span class="file">users.js</span>                <span class="comment"># Gestion de usuarios</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">config/</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="file">app.php</span>                     <span class="comment"># Configuracion de la aplicacion</span>
+<span class="tree-line">&#9474;   &#9492;&#9472;&#9472;</span> <span class="file">.htaccess</span>                   <span class="comment"># Deny from all (proteccion)</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">data/</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="file">app.sqlite</span>                  <span class="comment"># Base de datos interna (auto-generada)</span>
+<span class="tree-line">&#9474;   &#9492;&#9472;&#9472;</span> <span class="file">.htaccess</span>                   <span class="comment"># Deny from all (proteccion)</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">docs/</span>                           <span class="comment"># Documentacion completa</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="folder">sql/</span>
+<span class="tree-line">&#9474;   &#9500;&#9472;&#9472;</span> <span class="file">sp_mysql_json_query.sql</span>     <span class="comment"># Stored Procedure MySQL</span>
+<span class="tree-line">&#9474;   &#9492;&#9472;&#9472;</span> <span class="file">sp_sqlserver_json_query.sql</span> <span class="comment"># Stored Procedure SQL Server</span>
+<span class="tree-line">&#9474;</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="file">.htaccess</span>                       <span class="comment"># Rewrite rules + proteccion directorios</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="file">.gitignore</span>                      <span class="comment"># Exclusion de archivos sensibles</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="file">index.php</span>                       <span class="comment"># Punto de entrada HTML (SPA)</span>
+<span class="tree-line">&#9500;&#9472;&#9472;</span> <span class="file">manifest.json</span>                   <span class="comment"># Manifiesto PWA</span>
+<span class="tree-line">&#9492;&#9472;&#9472;</span> <span class="file">Readme.md</span>                       <span class="comment"># Documentacion general</span></div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128268;</span> Componentes Clave</h2>
+
+                <h3>Router (api/index.php)</h3>
+                <p>
+                    El router analiza la URL de la solicitud y el metodo HTTP para despachar la peticion
+                    al controlador correspondiente. Utiliza un enfoque basado en patrones de ruta simples.
+                </p>
+                <pre><span class="comment">// Ejemplo de enrutamiento simplificado</span>
+<span class="variable">$uri</span> <span class="operator">=</span> <span class="function">parse_url</span>(<span class="variable">$_SERVER</span>[<span class="string">'REQUEST_URI'</span>], PHP_URL_PATH);
+<span class="variable">$method</span> <span class="operator">=</span> <span class="variable">$_SERVER</span>[<span class="string">'REQUEST_METHOD'</span>];
+
+<span class="keyword">switch</span>(<span class="keyword">true</span>) {
+    <span class="keyword">case</span> <span class="function">str_contains</span>(<span class="variable">$uri</span>, <span class="string">'/api/connections'</span>):
+        <span class="variable">$controller</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="type">ConnectionController</span>();
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="function">str_contains</span>(<span class="variable">$uri</span>, <span class="string">'/api/query'</span>):
+        <span class="variable">$controller</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="type">QueryController</span>();
+        <span class="keyword">break</span>;
+    <span class="comment">// ... mas rutas</span>
+}</pre>
+
+                <h3>Mapa de Rutas de la API</h3>
+                <p>Listado completo de endpoints expuestos por el router:</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Metodo</th><th>Ruta</th><th>Controller</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td>AuthController</td><td>Inicio de sesion</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/auth/logout</code></td><td>AuthController</td><td>Cierre de sesion</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/connections</code></td><td>ConnectionController</td><td>Listar conexiones</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/connections</code></td><td>ConnectionController</td><td>Crear conexion</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/query/execute</code></td><td>QueryController</td><td>Ejecutar consulta SQL</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/browser/*</code></td><td>BrowserController</td><td>Explorar esquemas de BD</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/export/*</code></td><td>ExportController</td><td>Exportar resultados</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/audit</code></td><td>AuditController</td><td>Consultar registros de auditoria</td></tr>
+                            <tr>
+                                <td colspan="4" style="background: var(--primary-light); font-weight: 600; color: var(--primary-dark); text-align: center;">
+                                    Nuevos endpoints - Multi-Query, Cross-Join y Schema Compare
+                                </td>
+                            </tr>
+                            <tr><td><code>POST</code></td><td><code>/api/query/multi-execute</code></td><td>MultiQueryController</td><td>Ejecutar multiples consultas en paralelo</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/query/cross-join</code></td><td>MultiQueryController</td><td>JOIN en memoria entre dos result sets</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/query/set-operation</code></td><td>MultiQueryController</td><td>UNION / INTERSECT / EXCEPT entre N datasets</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/query/virtual-sql</code></td><td>MultiQueryController</td><td>Ejecutar SQL virtual sobre datasets en memoria</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/schema-compare/compare</code></td><td>SchemaCompareController</td><td>Comparar esquemas entre dos conexiones/BD</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/schema-compare/generate-script</code></td><td>SchemaCompareController</td><td>Generar script DDL de migracion</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/schema-compare/execute-script</code></td><td>SchemaCompareController</td><td>Ejecutar script de migracion generado</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Bootstrap (api/bootstrap.php)</h3>
+                <p>
+                    El archivo de arranque se encarga de la inicializacion de la aplicacion:
+                </p>
+                <ul>
+                    <li>Configuracion de la sesion PHP (HttpOnly, SameSite, Secure)</li>
+                    <li>Generacion y validacion de token CSRF</li>
+                    <li>Establecimiento de cabeceras HTTP de seguridad</li>
+                    <li>Supresion de warnings de extensiones no disponibles (<code>E_ALL &amp; ~E_WARNING</code>) para evitar errores fatales cuando <code>pdo_sqlsrv</code> esta en <code>php.ini</code> pero el ODBC Driver no esta instalado</li>
+                    <li>Inicializacion del <code>SQLiteManager</code> con auto-migraciones</li>
+                    <li>Creacion del usuario por defecto si no existe ninguno</li>
+                </ul>
+
+                <h3>Soporte PWA</h3>
+                <p>
+                    La aplicacion es una <strong>Progressive Web App (PWA)</strong> completa con:
+                </p>
+                <ul>
+                    <li><strong>Service Worker</strong>: estrategia cache-first para activos estaticos (CSS, JS, iconos) y network-first para la API</li>
+                    <li><strong>Manifest</strong>: permite la instalacion en dispositivos (standalone display)</li>
+                    <li><strong>Offline</strong>: la interfaz funciona sin conexion (los datos cacheados se muestran, las llamadas a la API retornan 503)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 2: BASE DE DATOS ==================== -->
+        <div id="database" class="section">
+            <div class="card">
+                <h2><span class="icon">&#128451;</span> Base de Datos Interna (SQLite)</h2>
+                <p>
+                    La aplicacion utiliza <strong>SQLite</strong> como base de datos interna para almacenar la configuracion,
+                    conexiones, usuarios y registros de auditoria. El archivo se ubica en <code>data/app.sqlite</code>.
+                </p>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        <strong>Nota:</strong> SQLite es la base de datos <em>interna</em> de la aplicacion.
+                        Las bases de datos destino (MySQL, SQL Server) se configuran como conexiones externas
+                        y se acceden mediante PDO.
+                    </div>
+                </div>
+
+                <h3>Sistema de Auto-Migraciones</h3>
+                <p>
+                    El <code>SQLiteManager</code> implementa un sistema de migraciones automaticas basado en versiones.
+                    Al iniciar la aplicacion, verifica la <code>schema_version</code> (via <code>PRAGMA user_version</code>)
+                    y ejecuta las migraciones pendientes de forma secuencial.
+                </p>
+                <pre><span class="comment">// Logica de migracion simplificada</span>
+<span class="variable">$currentVersion</span> <span class="operator">=</span> <span class="variable">$db</span><span class="operator">-></span><span class="function">query</span>(<span class="string">'PRAGMA user_version'</span>)<span class="operator">-></span><span class="function">fetchColumn</span>();
+<span class="variable">$migrations</span> <span class="operator">=</span> [<span class="number">1</span> <span class="operator">=></span> <span class="string">'migrateV1'</span>, <span class="number">2</span> <span class="operator">=></span> <span class="string">'migrateV2'</span>, <span class="comment">/* ... */</span>];
+
+<span class="keyword">foreach</span> (<span class="variable">$migrations</span> <span class="keyword">as</span> <span class="variable">$version</span> <span class="operator">=></span> <span class="variable">$method</span>) {
+    <span class="keyword">if</span> (<span class="variable">$version</span> <span class="operator">></span> <span class="variable">$currentVersion</span>) {
+        <span class="variable">$this</span><span class="operator">-></span><span class="variable">$method</span>(<span class="variable">$db</span>);
+        <span class="variable">$db</span><span class="operator">-></span><span class="function">exec</span>(<span class="string">"PRAGMA user_version = <span class="variable">$version</span>"</span>);
+    }
+}</pre>
+            </div>
+
+            <!-- Migration V1 -->
+            <div class="card">
+                <div class="migration-version">&#128204; Migracion V1 - Esquema inicial</div>
+
+                <h3>Tabla: connections</h3>
+                <p>Almacena las configuraciones de conexion a bases de datos externas.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Columna</th><th>Tipo</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>id</code></td><td>INTEGER PK AUTOINCREMENT</td><td>Identificador unico</td></tr>
+                            <tr><td><code>name</code></td><td>TEXT NOT NULL UNIQUE</td><td>Nombre descriptivo de la conexion</td></tr>
+                            <tr><td><code>driver</code></td><td>TEXT NOT NULL</td><td>Driver PDO: <code>mysql</code> o <code>sqlsrv</code></td></tr>
+                            <tr><td><code>host</code></td><td>TEXT NOT NULL</td><td>Servidor de la base de datos</td></tr>
+                            <tr><td><code>port</code></td><td>INTEGER</td><td>Puerto (3306 MySQL, 1433 SQL Server)</td></tr>
+                            <tr><td><code>database_name</code></td><td>TEXT</td><td>Nombre de la base de datos por defecto</td></tr>
+                            <tr><td><code>username</code></td><td>TEXT NOT NULL</td><td>Usuario de la base de datos</td></tr>
+                            <tr><td><code>password_encrypted</code></td><td>TEXT</td><td>Contrasena cifrada con AES-256-CBC</td></tr>
+                            <tr><td><code>charset</code></td><td>TEXT DEFAULT 'utf8mb4'</td><td>Juego de caracteres</td></tr>
+                            <tr><td><code>sp_name</code></td><td>TEXT</td><td>Nombre del stored procedure para consultas JSON</td></tr>
+                            <tr><td><code>options_json</code></td><td>TEXT</td><td>Opciones adicionales en formato JSON</td></tr>
+                            <tr><td><code>is_active</code></td><td>INTEGER DEFAULT 1</td><td>Estado activo/inactivo</td></tr>
+                            <tr><td><code>created_at</code></td><td>DATETIME</td><td>Fecha de creacion</td></tr>
+                            <tr><td><code>updated_at</code></td><td>DATETIME</td><td>Ultima actualizacion</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Tabla: audit_logs</h3>
+                <p>Registra cada consulta ejecutada contra las bases de datos destino.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Columna</th><th>Tipo</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>id</code></td><td>INTEGER PK AUTOINCREMENT</td><td>Identificador unico</td></tr>
+                            <tr><td><code>connection_id</code></td><td>INTEGER</td><td>ID de la conexion utilizada</td></tr>
+                            <tr><td><code>connection_name</code></td><td>TEXT</td><td>Nombre de la conexion (desnormalizado)</td></tr>
+                            <tr><td><code>database_name</code></td><td>TEXT</td><td>Base de datos consultada</td></tr>
+                            <tr><td><code>query_text</code></td><td>TEXT</td><td>Texto completo de la consulta SQL</td></tr>
+                            <tr><td><code>execution_mode</code></td><td>TEXT</td><td>Modo: <code>direct</code> o <code>stored_procedure</code></td></tr>
+                            <tr><td><code>execution_time_ms</code></td><td>REAL</td><td>Tiempo de ejecucion en milisegundos</td></tr>
+                            <tr><td><code>row_count</code></td><td>INTEGER</td><td>Numero de filas retornadas</td></tr>
+                            <tr><td><code>status</code></td><td>TEXT</td><td><code>success</code> o <code>error</code></td></tr>
+                            <tr><td><code>error_message</code></td><td>TEXT</td><td>Mensaje de error (si aplica)</td></tr>
+                            <tr><td><code>user_ip</code></td><td>TEXT</td><td>Direccion IP del usuario</td></tr>
+                            <tr><td><code>executed_at</code></td><td>DATETIME</td><td>Momento de ejecucion</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Indices creados en V1:</h4>
+                <pre><span class="keyword">CREATE INDEX</span> idx_audit_connection <span class="keyword">ON</span> audit_logs(connection_id);
+<span class="keyword">CREATE INDEX</span> idx_audit_executed_at <span class="keyword">ON</span> audit_logs(executed_at);
+<span class="keyword">CREATE INDEX</span> idx_audit_status <span class="keyword">ON</span> audit_logs(status);</pre>
+            </div>
+
+            <!-- Migration V2 -->
+            <div class="card">
+                <div class="migration-version">&#128204; Migracion V2 - Consultas guardadas</div>
+                <h3>Tabla: saved_queries</h3>
+                <p>Permite a los usuarios guardar consultas SQL frecuentes para su reutilizacion.</p>
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>Esta tabla almacena consultas favoritas y reutilizables asociadas a conexiones especificas.</div>
+                </div>
+            </div>
+
+            <!-- Migration V3 -->
+            <div class="card">
+                <div class="migration-version">&#128204; Migracion V3 - Favoritos en auditoria</div>
+                <h3>Columna: audit_logs.is_favorite</h3>
+                <p>Agrega la posibilidad de marcar registros de auditoria como favoritos para referencia rapida.</p>
+                <pre><span class="keyword">ALTER TABLE</span> audit_logs <span class="keyword">ADD COLUMN</span> is_favorite <span class="type">INTEGER</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>;
+<span class="keyword">CREATE INDEX</span> idx_audit_favorite <span class="keyword">ON</span> audit_logs(is_favorite);</pre>
+            </div>
+
+            <!-- Migration V4 -->
+            <div class="card">
+                <div class="migration-version">&#128204; Migracion V4 - Sistema de usuarios</div>
+                <h3>Tabla: users</h3>
+                <p>Sistema de usuarios con roles y control de acceso.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Columna</th><th>Tipo</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>id</code></td><td>INTEGER PK AUTOINCREMENT</td><td>Identificador unico</td></tr>
+                            <tr><td><code>username</code></td><td>TEXT NOT NULL UNIQUE</td><td>Nombre de usuario</td></tr>
+                            <tr><td><code>password_hash</code></td><td>TEXT NOT NULL</td><td>Hash bcrypt de la contrasena</td></tr>
+                            <tr><td><code>full_name</code></td><td>TEXT</td><td>Nombre completo del usuario</td></tr>
+                            <tr><td><code>role</code></td><td>TEXT DEFAULT 'user'</td><td>Rol: <code>admin</code> o <code>user</code></td></tr>
+                            <tr><td><code>is_active</code></td><td>INTEGER DEFAULT 1</td><td>Estado activo/inactivo</td></tr>
+                            <tr><td><code>must_change_password</code></td><td>INTEGER DEFAULT 0</td><td>Fuerza cambio en el proximo login</td></tr>
+                            <tr><td><code>last_login</code></td><td>DATETIME</td><td>Ultimo inicio de sesion</td></tr>
+                            <tr><td><code>created_at</code></td><td>DATETIME</td><td>Fecha de creacion</td></tr>
+                            <tr><td><code>updated_at</code></td><td>DATETIME</td><td>Ultima actualizacion</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Migration V5 -->
+            <div class="card">
+                <div class="migration-version">&#128204; Migracion V5 - Actualizacion de esquema</div>
+                <h3>ALTER TABLE para bases de datos existentes</h3>
+                <p>
+                    Esta migracion garantiza que bases de datos creadas antes de la V4 reciban la columna
+                    <code>must_change_password</code> correctamente. Aplica <code>ALTER TABLE</code> solo si
+                    la columna no existe previamente.
+                </p>
+                <pre><span class="comment">-- Solo se ejecuta si la columna no existe</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD COLUMN</span> must_change_password <span class="type">INTEGER</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>;</pre>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>Importante:</strong> El SQLiteManager verifica la existencia de la columna antes de ejecutar
+                        el ALTER TABLE para evitar errores en bases de datos que ya fueron creadas con la V4.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption & Passwords -->
+            <div class="card">
+                <h2><span class="icon">&#128272;</span> Almacenamiento de Credenciales</h2>
+
+                <h3>Contrasenas de Conexiones (AES-256-CBC)</h3>
+                <p>
+                    Las contrasenas de las conexiones a bases de datos externas se almacenan cifradas usando
+                    <strong>AES-256-CBC</strong> a traves del <code>EncryptionService</code>. El valor cifrado
+                    incluye el vector de inicializacion (IV) concatenado con el texto cifrado, codificado en Base64.
+                </p>
+
+                <h3>Contrasenas de Usuarios (bcrypt)</h3>
+                <p>
+                    Las contrasenas de los usuarios del sistema se almacenan como hashes irreversibles usando
+                    <strong>PASSWORD_BCRYPT</strong> de PHP con costo por defecto. Se verifican con
+                    <code>password_verify()</code>.
+                </p>
+
+                <div class="diagram">Conexiones BD Externas          Usuarios del Sistema
+   |                                   |
+   v                                   v
+AES-256-CBC (reversible)        bcrypt (irreversible)
+   |                                   |
+   v                                   v
+password_encrypted              password_hash
+(se descifra para conectar)     (se verifica con password_verify)</div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 3: SEGURIDAD ==================== -->
+        <div id="seguridad" class="section">
+            <div class="card">
+                <h2><span class="icon">&#128274;</span> Mecanismos de Seguridad</h2>
+                <p>
+                    PHPAdmin Query Manager implementa multiples capas de seguridad para proteger
+                    los datos y las operaciones de la aplicacion.
+                </p>
+            </div>
+
+            <!-- Authentication -->
+            <div class="card">
+                <h3>Autenticacion Basada en Sesiones</h3>
+                <p>
+                    La autenticacion utiliza sesiones nativas de PHP con las siguientes configuraciones de seguridad:
+                </p>
+                <ul>
+                    <li><strong>HttpOnly</strong>: la cookie de sesion no es accesible desde JavaScript</li>
+                    <li><strong>SameSite=Strict</strong>: previene envio de cookies en solicitudes cross-site</li>
+                    <li><strong>Secure</strong>: solo se envia por HTTPS (cuando esta habilitado)</li>
+                    <li><strong>Strict mode</strong>: PHP solo acepta IDs de sesion generados por el servidor</li>
+                </ul>
+                <pre><span class="function">session_set_cookie_params</span>([
+    <span class="string">'httponly'</span>  <span class="operator">=></span> <span class="keyword">true</span>,
+    <span class="string">'samesite'</span> <span class="operator">=></span> <span class="string">'Strict'</span>,
+    <span class="string">'secure'</span>   <span class="operator">=></span> <span class="variable">$isHttps</span>,
+]);
+<span class="function">ini_set</span>(<span class="string">'session.use_strict_mode'</span>, <span class="number">1</span>);</pre>
+
+                <h3>Hashing de Contrasenas</h3>
+                <p>
+                    Las contrasenas de usuario se hashean con <strong>bcrypt</strong> (<code>PASSWORD_BCRYPT</code>),
+                    el algoritmo recomendado por PHP para almacenamiento seguro de contrasenas.
+                </p>
+                <pre><span class="comment">// Almacenamiento</span>
+<span class="variable">$hash</span> <span class="operator">=</span> <span class="function">password_hash</span>(<span class="variable">$password</span>, PASSWORD_BCRYPT);
+
+<span class="comment">// Verificacion</span>
+<span class="keyword">if</span> (<span class="function">password_verify</span>(<span class="variable">$inputPassword</span>, <span class="variable">$storedHash</span>)) {
+    <span class="comment">// Autenticacion exitosa</span>
+}</pre>
+            </div>
+
+            <!-- CSRF -->
+            <div class="card">
+                <h3>Proteccion CSRF</h3>
+                <p>
+                    Cada sesion genera un token CSRF unico usando <code>random_bytes(32)</code>.
+                    Todas las solicitudes que modifican datos (POST, PUT, DELETE) deben incluir el token
+                    en la cabecera <code>X-CSRF-Token</code>.
+                </p>
+                <pre><span class="comment">// Generacion del token (bootstrap.php)</span>
+<span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="variable">$_SESSION</span>[<span class="string">'csrf_token'</span>])) {
+    <span class="variable">$_SESSION</span>[<span class="string">'csrf_token'</span>] <span class="operator">=</span> <span class="function">bin2hex</span>(<span class="function">random_bytes</span>(<span class="number">32</span>));
+}
+
+<span class="comment">// Validacion en solicitudes mutantes</span>
+<span class="keyword">if</span> (<span class="function">in_array</span>(<span class="variable">$method</span>, [<span class="string">'POST'</span>, <span class="string">'PUT'</span>, <span class="string">'DELETE'</span>])) {
+    <span class="variable">$token</span> <span class="operator">=</span> <span class="variable">$_SERVER</span>[<span class="string">'HTTP_X_CSRF_TOKEN'</span>] <span class="operator">??</span> <span class="string">''</span>;
+    <span class="keyword">if</span> (!<span class="function">hash_equals</span>(<span class="variable">$_SESSION</span>[<span class="string">'csrf_token'</span>], <span class="variable">$token</span>)) {
+        <span class="comment">// 403 Forbidden</span>
+    }
+}</pre>
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>El token se regenera en cada inicio de sesion para prevenir ataques de fijacion de sesion.</div>
+                </div>
+            </div>
+
+            <!-- Encryption -->
+            <div class="card">
+                <h3>Cifrado de Contrasenas de Conexion</h3>
+                <p>
+                    Las contrasenas de las conexiones a bases de datos externas se cifran con <strong>AES-256-CBC</strong>
+                    para poder ser descifradas al momento de establecer la conexion PDO.
+                </p>
+
+                <h4>Fuente de la clave de cifrado (por prioridad):</h4>
+                <ol>
+                    <li>Variable de entorno <code>PHPADMIN_ENCRYPTION_KEY</code></li>
+                    <li>Archivo <code>config/.encryption_key</code></li>
+                    <li>Si ninguna existe, se genera automaticamente un archivo con una clave aleatoria</li>
+                </ol>
+
+                <pre><span class="comment">// Cifrado</span>
+<span class="variable">$iv</span> <span class="operator">=</span> <span class="function">openssl_random_pseudo_bytes</span>(<span class="number">16</span>);
+<span class="variable">$encrypted</span> <span class="operator">=</span> <span class="function">openssl_encrypt</span>(<span class="variable">$data</span>, <span class="string">'AES-256-CBC'</span>, <span class="variable">$key</span>, <span class="number">0</span>, <span class="variable">$iv</span>);
+<span class="keyword">return</span> <span class="function">base64_encode</span>(<span class="variable">$iv</span> <span class="operator">.</span> <span class="variable">$encrypted</span>);
+
+<span class="comment">// Descifrado</span>
+<span class="variable">$data</span> <span class="operator">=</span> <span class="function">base64_decode</span>(<span class="variable">$encryptedData</span>);
+<span class="variable">$iv</span> <span class="operator">=</span> <span class="function">substr</span>(<span class="variable">$data</span>, <span class="number">0</span>, <span class="number">16</span>);
+<span class="variable">$ciphertext</span> <span class="operator">=</span> <span class="function">substr</span>(<span class="variable">$data</span>, <span class="number">16</span>);
+<span class="keyword">return</span> <span class="function">openssl_decrypt</span>(<span class="variable">$ciphertext</span>, <span class="string">'AES-256-CBC'</span>, <span class="variable">$key</span>, <span class="number">0</span>, <span class="variable">$iv</span>);</pre>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>Critico:</strong> La clave de cifrado debe mantenerse segura. Si se pierde,
+                        todas las contrasenas almacenadas seran irrecuperables. Respaldela en un lugar seguro.
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTTP Headers -->
+            <div class="card">
+                <h3>Cabeceras HTTP de Seguridad</h3>
+                <p>El bootstrap configura las siguientes cabeceras en cada respuesta:</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Cabecera</th><th>Valor</th><th>Proposito</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>X-Content-Type-Options</code></td>
+                                <td><code>nosniff</code></td>
+                                <td>Previene MIME type sniffing</td>
+                            </tr>
+                            <tr>
+                                <td><code>X-Frame-Options</code></td>
+                                <td><code>DENY</code></td>
+                                <td>Bloquea insercion en iframes (clickjacking)</td>
+                            </tr>
+                            <tr>
+                                <td><code>X-XSS-Protection</code></td>
+                                <td><code>1; mode=block</code></td>
+                                <td>Filtro XSS del navegador</td>
+                            </tr>
+                            <tr>
+                                <td><code>Referrer-Policy</code></td>
+                                <td><code>strict-origin-when-cross-origin</code></td>
+                                <td>Limita informacion del referer</td>
+                            </tr>
+                            <tr>
+                                <td><code>Content-Security-Policy</code></td>
+                                <td>Politica restrictiva</td>
+                                <td>Previene inyeccion de scripts no autorizados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CORS & Directory Protection -->
+            <div class="card">
+                <h3>Proteccion de Directorios y Archivos</h3>
+                <p>
+                    Las reglas de <code>.htaccess</code> en la raiz del proyecto bloquean el acceso directo a
+                    archivos y directorios sensibles:
+                </p>
+                <pre><span class="comment"># Bloquear acceso a directorios sensibles</span>
+<span class="keyword">RewriteRule</span> <span class="string">^data/</span> - [<span class="type">F,L</span>]
+<span class="keyword">RewriteRule</span> <span class="string">^config/</span> - [<span class="type">F,L</span>]
+<span class="keyword">RewriteRule</span> <span class="string">^sql/</span> - [<span class="type">F,L</span>]
+<span class="keyword">RewriteRule</span> <span class="string">^docs/</span> - [<span class="type">F,L</span>]
+
+<span class="comment"># Bloquear archivos SQLite y ocultos</span>
+<span class="keyword">RewriteRule</span> <span class="string">\.sqlite$</span> - [<span class="type">F,L</span>]
+<span class="keyword">RewriteRule</span> <span class="string">(^|/)\.(?!well-known)</span> - [<span class="type">F,L</span>]</pre>
+
+                <p>Ademas, los directorios <code>config/</code> y <code>data/</code> contienen su propio <code>.htaccess</code> con <code>Deny from all</code>.</p>
+
+                <h3>CORS (Cross-Origin Resource Sharing)</h3>
+                <p>
+                    La API esta restringida al <strong>mismo origen</strong>. No se configuran cabeceras
+                    <code>Access-Control-Allow-Origin</code> para origenes externos, lo que previene
+                    solicitudes cross-origin no autorizadas.
+                </p>
+            </div>
+
+            <!-- API Security -->
+            <div class="card">
+                <h3>Seguridad de la API</h3>
+
+                <div class="security-grid">
+                    <div class="security-item">
+                        <h4>&#128274; requireAuth()</h4>
+                        <p>Verifica que el usuario tenga una sesion activa. Retorna 401 si no esta autenticado.</p>
+                    </div>
+                    <div class="security-item">
+                        <h4>&#128081; requireAdmin()</h4>
+                        <p>Requiere rol de administrador. Usado en rutas de gestion de usuarios. Retorna 403 si no es admin.</p>
+                    </div>
+                    <div class="security-item">
+                        <h4>&#128275; checkPasswordChange()</h4>
+                        <p>Bloquea todas las operaciones hasta que el usuario cambie su contrasena temporal.</p>
+                    </div>
+                    <div class="security-item">
+                        <h4>&#128736; DEBUG_MODE</h4>
+                        <p>En produccion (<code>false</code>), los errores no exponen stack traces ni detalles internos.</p>
+                    </div>
+                </div>
+
+                <h3>Politica de Contrasenas</h3>
+                <ul>
+                    <li><strong>Longitud minima:</strong> 4 caracteres</li>
+                    <li><strong>Cambio obligatorio:</strong> el flag <code>must_change_password</code> fuerza el cambio en el primer inicio de sesion</li>
+                    <li><strong>Usuario por defecto:</strong> al instalar, se crea un usuario <code>admin</code> con contrasena aleatoria y <code>must_change_password = 1</code></li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>Primer acceso:</strong> La contrasena generada aleatoriamente se muestra una unica vez
+                        en la consola del servidor o en los logs. El administrador debe cambiarla inmediatamente.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security summary diagram -->
+            <div class="card">
+                <h2><span class="icon">&#128737;</span> Resumen de Capas de Seguridad</h2>
+                <div class="diagram">
++------------------------------------------------------------------+
+|                        CAPA DE TRANSPORTE                        |
+|  HTTPS (recomendado) + Secure cookies + SameSite=Strict          |
++------------------------------------------------------------------+
+           |
++------------------------------------------------------------------+
+|                        CAPA DE SERVIDOR                          |
+|  .htaccess: bloqueo de /data, /config, /sql, .sqlite, dotfiles  |
+|  Cabeceras: X-Frame-Options, CSP, X-Content-Type-Options        |
+|  CORS: mismo origen unicamente                                   |
++------------------------------------------------------------------+
+           |
++------------------------------------------------------------------+
+|                       CAPA DE APLICACION                         |
+|  Sesion PHP: HttpOnly, strict mode                               |
+|  CSRF: token random_bytes(32) en X-CSRF-Token                   |
+|  Auth: requireAuth(), requireAdmin(), checkPasswordChange()      |
+|  Debug: DEBUG_MODE=false en produccion                           |
++------------------------------------------------------------------+
+           |
++------------------------------------------------------------------+
+|                        CAPA DE DATOS                             |
+|  Contrasenas usuario: bcrypt (PASSWORD_BCRYPT)                   |
+|  Contrasenas conexion: AES-256-CBC (EncryptionService)           |
+|  Clave: PHPADMIN_ENCRYPTION_KEY env o config/.encryption_key     |
++------------------------------------------------------------------+</div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 4: SERVICIOS ==================== -->
+        <div id="servicios" class="section">
+            <div class="card">
+                <h2><span class="icon">&#9881;</span> Capa de Servicios</h2>
+                <p>
+                    Los servicios encapsulan la logica de negocio de la aplicacion. Cada servicio es una clase PHP
+                    ubicada en <code>api/Services/</code> con responsabilidades bien definidas.
+                </p>
+
+                <div class="diagram">Controller
+    |
+    +-- AuthService         (autenticacion y usuarios)
+    +-- DatabaseService     (conexiones PDO)
+    +-- QueryExecutionService (ejecucion SQL + auditoria)
+    +-- SchemaService       (introspeccion de esquemas)
+    +-- AuditService        (registros de auditoria)
+    +-- EncryptionService   (cifrado AES-256-CBC)
+    +-- XlsxService         (generacion Excel)
+    +-- CrossJoinService    (JOIN en memoria entre result sets)
+    +-- VirtualQueryEngine  (mini SQL engine en memoria)
+    +-- SchemaCompareService (comparacion de esquemas + DDL)</div>
+            </div>
+
+            <!-- EncryptionService -->
+            <div class="service-card encryption">
+                <h4>&#128272; EncryptionService</h4>
+                <p>Cifrado y descifrado de contrasenas de conexion usando AES-256-CBC.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">encrypt($data)</span>
+                        Cifra un texto plano. Genera un IV aleatorio de 16 bytes y retorna IV+cifrado en Base64.
+                    </li>
+                    <li>
+                        <span class="method-name">decrypt($data)</span>
+                        Descifra datos previamente cifrados. Extrae el IV de los primeros 16 bytes.
+                    </li>
+                    <li>
+                        <span class="method-name">getKey()</span>
+                        Obtiene la clave: primero busca la variable de entorno <code>PHPADMIN_ENCRYPTION_KEY</code>,
+                        luego el archivo <code>config/.encryption_key</code>. Si ninguna existe, genera una clave aleatoria.
+                    </li>
+                </ul>
+
+                <pre><span class="comment">// Uso tipico en ConnectionController</span>
+<span class="variable">$encrypted</span> <span class="operator">=</span> <span class="variable">$encryptionService</span><span class="operator">-></span><span class="function">encrypt</span>(<span class="variable">$plainPassword</span>);
+<span class="comment">// Guardar $encrypted en connections.password_encrypted</span>
+
+<span class="comment">// Al conectar</span>
+<span class="variable">$password</span> <span class="operator">=</span> <span class="variable">$encryptionService</span><span class="operator">-></span><span class="function">decrypt</span>(<span class="variable">$connection</span>[<span class="string">'password_encrypted'</span>]);</pre>
+            </div>
+
+            <!-- AuthService -->
+            <div class="service-card auth">
+                <h4>&#128100; AuthService</h4>
+                <p>Gestion de autenticacion, sesiones y usuarios del sistema.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">ensureDefaultUser()</span>
+                        Crea el usuario <code>admin</code> si no existe ningun usuario. Genera contrasena aleatoria
+                        con <code>must_change_password = 1</code>.
+                    </li>
+                    <li>
+                        <span class="method-name">login($username, $password)</span>
+                        Verifica credenciales con bcrypt. Inicia sesion PHP y regenera CSRF token.
+                    </li>
+                    <li>
+                        <span class="method-name">logout()</span>
+                        Destruye la sesion y elimina la cookie.
+                    </li>
+                    <li>
+                        <span class="method-name">isLoggedIn()</span>
+                        Verifica si existe una sesion activa.
+                    </li>
+                    <li>
+                        <span class="method-name">getCurrentUser()</span>
+                        Retorna los datos del usuario autenticado actual.
+                    </li>
+                    <li>
+                        <span class="method-name">changePassword($userId, $current, $new)</span>
+                        Cambia la contrasena del usuario. Limpia el flag <code>must_change_password</code>.
+                    </li>
+                    <li>
+                        <span class="method-name">createUser($data)</span>
+                        Crea un nuevo usuario (solo admin). Hashea la contrasena con bcrypt.
+                    </li>
+                    <li>
+                        <span class="method-name">updateUser($id, $data)</span>
+                        Actualiza datos del usuario.
+                    </li>
+                    <li>
+                        <span class="method-name">deleteUser($id)</span>
+                        Elimina un usuario. Previene eliminar el ultimo administrador.
+                    </li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>Proteccion:</strong> El sistema impide eliminar el ultimo usuario con rol
+                        <code>admin</code> para evitar bloqueo total de la aplicacion.
+                    </div>
+                </div>
+            </div>
+
+            <!-- DatabaseService -->
+            <div class="service-card database">
+                <h4>&#128450; DatabaseService</h4>
+                <p>Fabrica de conexiones PDO con cache y soporte multi-driver.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">connect($connectionConfig)</span>
+                        Crea una conexion PDO a partir de la configuracion. Construye el DSN segun el driver
+                        (<code>mysql</code> o <code>sqlsrv</code>).
+                    </li>
+                    <li>
+                        <span class="method-name">getConnection($id)</span>
+                        Obtiene una conexion cacheada o crea una nueva. Descifra la contrasena con EncryptionService.
+                    </li>
+                    <li>
+                        <span class="method-name">testConnection($config)</span>
+                        Prueba la conectividad sin almacenar. Util para validar antes de guardar.
+                    </li>
+                    <li>
+                        <span class="method-name">buildDsn($config)</span>
+                        Construye la cadena DSN segun el driver:
+                    </li>
+                    <li>
+                        <span class="method-name">createPdo($dsn, $user, $pass)</span>
+                        Valida que el driver solicitado este realmente disponible antes de crear la conexion PDO. Si el driver no esta funcional, lanza una excepcion con mensaje claro en espanol (ej: <em>"El driver sqlsrv no esta disponible en este servidor"</em>).
+                    </li>
+                </ul>
+
+                <pre><span class="comment">// MySQL</span>
+<span class="string">"mysql:host={$host};port={$port};dbname={$db};charset={$charset}"</span>
+
+<span class="comment">// SQL Server</span>
+<span class="string">"sqlsrv:Server={$host},{$port};Database={$db}"</span></pre>
+
+                <div class="alert alert-info" style="margin-top:12px;">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        <strong>Validacion de drivers (v1.1.0):</strong> El endpoint <code>/csrf-token</code> ahora retorna la lista de drivers disponibles. El backend valida la disponibilidad real del driver intentando una conexion dummy con <code>new PDO('sqlsrv:Server=__test__')</code> y verificando si el error contiene "ODBC". Que <code>pdo_sqlsrv</code> este cargado en PHP <strong>no garantiza</strong> que el Microsoft ODBC Driver este instalado en el sistema operativo.
+                    </div>
+                </div>
+            </div>
+
+            <!-- QueryExecutionService -->
+            <div class="service-card query">
+                <h4>&#9654; QueryExecutionService</h4>
+                <p>Motor de ejecucion de consultas SQL con auditoria integrada.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">executeDirect($connection, $sql, $db)</span>
+                        Ejecuta SQL directamente contra la base de datos destino. Registra la ejecucion en audit_logs
+                        incluyendo tiempo, filas y estado.
+                    </li>
+                    <li>
+                        <span class="method-name">executeStoredProcedure($connection, $sql, $db)</span>
+                        Ejecuta la consulta a traves del stored procedure configurado (sp_name) que retorna
+                        resultados en formato JSON. Soporta MySQL y SQL Server.
+                    </li>
+                    <li>
+                        <span class="method-name">formatError($exception, $driver)</span>
+                        Formatea mensajes de error segun el driver para presentacion amigable al usuario.
+                    </li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        El modo <strong>stored procedure</strong> utiliza procedimientos almacenados especificos
+                        (ver <code>sql/sp_mysql_json_query.sql</code> y <code>sql/sp_sqlserver_json_query.sql</code>)
+                        que encapsulan la ejecucion y retornan los resultados como JSON, permitiendo
+                        mejor control de errores y limites de filas.
+                    </div>
+                </div>
+            </div>
+
+            <!-- SchemaService -->
+            <div class="service-card schema">
+                <h4>&#128269; SchemaService</h4>
+                <p>Introspeccion de esquemas de base de datos con soporte multi-driver.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">getDatabases($connection)</span>
+                        Lista las bases de datos disponibles en el servidor.
+                    </li>
+                    <li>
+                        <span class="method-name">getTables($connection, $db)</span>
+                        Lista las tablas de una base de datos.
+                    </li>
+                    <li>
+                        <span class="method-name">getViews($connection, $db)</span>
+                        Lista las vistas de una base de datos.
+                    </li>
+                    <li>
+                        <span class="method-name">getProcedures($connection, $db)</span>
+                        Lista los procedimientos almacenados.
+                    </li>
+                    <li>
+                        <span class="method-name">getFunctions($connection, $db)</span>
+                        Lista las funciones definidas por el usuario.
+                    </li>
+                    <li>
+                        <span class="method-name">getColumns($connection, $db, $table)</span>
+                        Obtiene las columnas de una tabla con tipo, nulabilidad, clave y valor por defecto.
+                    </li>
+                    <li>
+                        <span class="method-name">getRoutineParams($connection, $db, $routine)</span>
+                        Lista los parametros de un procedimiento o funcion.
+                    </li>
+                    <li>
+                        <span class="method-name">getRoutineDefinition($connection, $db, $routine)</span>
+                        Obtiene el codigo fuente de un procedimiento o funcion.
+                    </li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        Cada metodo contiene SQL diferente para MySQL y SQL Server, ya que los catologos de sistema
+                        (<code>INFORMATION_SCHEMA</code>, <code>sys.*</code>) difieren significativamente entre ambos motores.
+                    </div>
+                </div>
+            </div>
+
+            <!-- AuditService -->
+            <div class="service-card audit">
+                <h4>&#128203; AuditService</h4>
+                <p>Registro de auditoria para todas las consultas ejecutadas.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">log($data)</span>
+                        Registra una ejecucion de consulta con los siguientes datos:
+                    </li>
+                </ul>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Campo</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>connection_id</code></td><td>ID de la conexion utilizada</td></tr>
+                            <tr><td><code>connection_name</code></td><td>Nombre de la conexion</td></tr>
+                            <tr><td><code>database_name</code></td><td>Base de datos consultada</td></tr>
+                            <tr><td><code>query_text</code></td><td>Texto SQL ejecutado</td></tr>
+                            <tr><td><code>execution_mode</code></td><td><code>direct</code> o <code>stored_procedure</code></td></tr>
+                            <tr><td><code>execution_time_ms</code></td><td>Duracion en milisegundos</td></tr>
+                            <tr><td><code>row_count</code></td><td>Filas retornadas</td></tr>
+                            <tr><td><code>status</code></td><td><code>success</code> o <code>error</code></td></tr>
+                            <tr><td><code>error_message</code></td><td>Detalle del error (si aplica)</td></tr>
+                            <tr><td><code>user_ip</code></td><td>IP del cliente (REMOTE_ADDR)</td></tr>
+                            <tr><td><code>executed_at</code></td><td>Timestamp de ejecucion</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- XlsxService -->
+            <div class="service-card xlsx">
+                <h4>&#128196; XlsxService</h4>
+                <p>Generacion de archivos Excel (XLSX) en PHP puro sin librerias externas.</p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">create($data, $headers)</span>
+                        Genera un archivo XLSX completo usando el formato Office Open XML.
+                    </li>
+                </ul>
+
+                <p style="margin-top: 12px;">El servicio construye manualmente:</p>
+                <ul>
+                    <li><strong>[Content_Types].xml</strong> - tipos MIME del paquete</li>
+                    <li><strong>_rels/.rels</strong> - relaciones del paquete</li>
+                    <li><strong>xl/workbook.xml</strong> - definicion del libro</li>
+                    <li><strong>xl/worksheets/sheet1.xml</strong> - datos de la hoja</li>
+                    <li><strong>xl/sharedStrings.xml</strong> - cadenas compartidas</li>
+                    <li><strong>xl/styles.xml</strong> - estilos (cabecera en negrita, bordes)</li>
+                </ul>
+
+                <div class="alert alert-success">
+                    <span class="alert-icon">&#10003;</span>
+                    <div>
+                        <strong>Sin dependencias:</strong> La generacion XLSX se realiza completamente en PHP puro
+                        usando <code>ZipArchive</code>, sin necesidad de PHPSpreadsheet ni otras librerias externas.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CrossJoinService -->
+            <div class="service-card query">
+                <h4>&#128279; CrossJoinService</h4>
+                <p>
+                    Servicio para realizar operaciones JOIN y operaciones de conjuntos entre result sets en memoria.
+                    Ubicado en <code>api/Services/CrossJoinService.php</code>.
+                </p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">join($leftData, $rightData, $type, $leftKey, $rightKey)</span>
+                        Realiza un JOIN en memoria entre dos result sets. Soporta tipos: <code>INNER</code>,
+                        <code>LEFT</code>, <code>RIGHT</code> y <code>CROSS</code>.
+                    </li>
+                    <li>
+                        <span class="method-name">chainJoin($datasets, $joinConfigs)</span>
+                        Ejecuta una cadena secuencial de N operaciones JOIN, donde el resultado de cada JOIN
+                        alimenta al siguiente.
+                    </li>
+                    <li>
+                        <span class="method-name">setOperation($datasets, $operation)</span>
+                        Ejecuta operaciones de conjuntos entre N datasets: <code>UNION</code>,
+                        <code>UNION_ALL</code>, <code>INTERSECT</code> y <code>EXCEPT</code>.
+                    </li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">&#9888;</span>
+                    <div>
+                        <strong>Limites de memoria:</strong> <code>MAX_ROWS = 10,000</code> filas por dataset de entrada.
+                        <code>MAX_CROSS_ROWS = 50,000</code> filas para el resultado de un CROSS JOIN.
+                        Estos limites previenen el agotamiento de memoria del servidor.
+                    </div>
+                </div>
+            </div>
+
+            <!-- VirtualQueryEngine -->
+            <div class="service-card query">
+                <h4>&#9881; VirtualQueryEngine</h4>
+                <p>
+                    Mini motor SQL que ejecuta consultas contra datasets en memoria. Implementa un pipeline completo
+                    de Tokenizer, Parser (descenso recursivo) y Ejecutor sobre un AST.
+                    Ubicado en <code>api/Services/VirtualQueryEngine.php</code> (1630 lineas).
+                </p>
+
+                <h4>Pipeline de ejecucion:</h4>
+                <div class="diagram">SQL String
+    |
+    +-- Tokenizer (analisis lexico)
+    |       Genera tokens: keywords, identificadores, literales, operadores
+    |
+    +-- Parser (descenso recursivo)
+    |       Construye AST (Abstract Syntax Tree)
+    |
+    +-- Executor
+            Recorre el AST y opera sobre arrays PHP en memoria</div>
+
+                <h4>Clausulas SQL soportadas:</h4>
+                <ul>
+                    <li><code>SELECT</code> (con alias, <code>*</code>, expresiones)</li>
+                    <li><code>FROM</code> (con alias de tabla)</li>
+                    <li><code>JOIN</code> (INNER, LEFT, RIGHT, CROSS) con <code>ON</code></li>
+                    <li><code>WHERE</code> (todos los operadores: <code>=</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>IN</code>, <code>BETWEEN</code>, <code>IS NULL</code>, <code>IS NOT NULL</code>)</li>
+                    <li><code>ORDER BY</code> (ASC/DESC, multiples columnas)</li>
+                    <li><code>LIMIT</code> / <code>OFFSET</code></li>
+                    <li><code>GROUP BY</code> + <code>HAVING</code></li>
+                    <li><code>DISTINCT</code></li>
+                    <li><code>UNION</code> / <code>INTERSECT</code> / <code>EXCEPT</code></li>
+                </ul>
+
+                <h4>Funciones integradas:</h4>
+                <ul>
+                    <li><strong>Agregacion:</strong> <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code></li>
+                    <li><strong>Cadenas:</strong> <code>UPPER</code>, <code>LOWER</code>, <code>TRIM</code>, <code>CONCAT</code></li>
+                    <li><strong>Patrones:</strong> <code>LIKE</code> (convierte patrones SQL <code>%</code> y <code>_</code> a regex)</li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        <strong>Semantica NULL:</strong> El motor sigue la semantica SQL estandar para NULL:
+                        comparaciones con NULL retornan NULL (no true/false), <code>IS NULL</code> / <code>IS NOT NULL</code>
+                        son las unicas formas validas de testear nulidad. <code>MAX_RESULT_ROWS = 50,000</code>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- SchemaCompareService -->
+            <div class="service-card schema">
+                <h4>&#128203; SchemaCompareService</h4>
+                <p>
+                    Servicio de comparacion de esquemas entre dos bases de datos, con generacion de scripts DDL de migracion.
+                    Ubicado en <code>api/Services/SchemaCompareService.php</code> (936 lineas).
+                    Soporta comparaciones cross-driver (MySQL vs SQL Server).
+                </p>
+
+                <ul class="method-list">
+                    <li>
+                        <span class="method-name">compareAll($sourceConn, $targetConn, $sourceDb, $targetDb)</span>
+                        Comparacion completa del esquema: tablas, vistas, procedimientos almacenados y funciones.
+                        Retorna un informe detallado con diferencias categorizadas.
+                    </li>
+                    <li>
+                        <span class="method-name">compareTables($source, $target)</span>
+                        Compara la lista de tablas entre origen y destino. Identifica tablas que solo existen en uno de los dos lados.
+                    </li>
+                    <li>
+                        <span class="method-name">compareTableColumns($source, $target, $table)</span>
+                        Comparacion a nivel de columna: detecta diferencias en tipo de dato, nulabilidad, valor por defecto,
+                        columnas agregadas y columnas eliminadas.
+                    </li>
+                    <li>
+                        <span class="method-name">compareViews($source, $target)</span>
+                        Compara definiciones de vistas entre ambas bases de datos.
+                    </li>
+                    <li>
+                        <span class="method-name">compareProcedures($source, $target)</span>
+                        Compara definiciones de procedimientos almacenados.
+                    </li>
+                    <li>
+                        <span class="method-name">compareFunctions($source, $target)</span>
+                        Compara definiciones de funciones de usuario.
+                    </li>
+                    <li>
+                        <span class="method-name">generateScript($differences, $driver)</span>
+                        Genera un script DDL de migracion a partir del informe de diferencias.
+                        Produce sintaxis correcta para MySQL y SQL Server (CREATE TABLE, ALTER TABLE,
+                        ADD/DROP/MODIFY COLUMN, CREATE/ALTER VIEW, etc.).
+                    </li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">&#8505;</span>
+                    <div>
+                        <strong>Mapeo cross-driver:</strong> El servicio normaliza los tipos de datos entre MySQL y SQL Server
+                        (por ejemplo, <code>INT</code> vs <code>int</code>, <code>VARCHAR</code> vs <code>nvarchar</code>)
+                        para evitar falsos positivos en la comparacion.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 5: FRONTEND ==================== -->
+        <div id="frontend" class="section">
+            <div class="card">
+                <h2><span class="icon">&#128187;</span> Arquitectura del Frontend</h2>
+                <p>
+                    El frontend es una <strong>Single Page Application (SPA)</strong> construida completamente
+                    con JavaScript puro (Vanilla JS), sin frameworks ni bundlers. El HTML principal se sirve
+                    desde <code>index.php</code> y la navegacion se gestiona mediante paneles que se muestran
+                    u ocultan dinamicamente.
+                </p>
+
+                <h3>Patron de Navegacion</h3>
+                <div class="diagram">index.php (HTML + PHP para CSRF token)
+    |
+    +-- Sidebar (navegacion principal)
+    |       |
+    |       +-- Conexiones   -> connectionsPanel
+    |       +-- Explorador   -> browserPanel
+    |       +-- Consultas    -> queryPanel
+    |       +-- Auditoria    -> auditPanel
+    |       +-- Usuarios     -> usersPanel (solo admin)
+    |       +-- Ayuda        -> helpPanel
+    |
+    +-- Content Area
+            |
+            +-- Solo un panel visible a la vez
+            +-- Cada panel gestionado por su componente JS</div>
+            </div>
+
+            <!-- API Client -->
+            <div class="card">
+                <h3>API Client (api-client.js)</h3>
+                <p>
+                    Cliente centralizado para todas las comunicaciones con el backend. Encapsula la logica
+                    de autenticacion, CSRF y manejo de errores.
+                </p>
+
+                <h4>Caracteristicas principales:</h4>
+                <ul>
+                    <li><strong>CSRF automatico:</strong> incluye el token <code>X-CSRF-Token</code> en todas las solicitudes mutantes</li>
+                    <li><strong>AbortController:</strong> permite cancelar solicitudes en curso cuando el usuario navega a otro panel</li>
+                    <li><strong>Redireccion de autenticacion:</strong> si la API retorna 401, redirige automaticamente al login</li>
+                    <li><strong>Manejo de errores:</strong> parsea respuestas de error y muestra mensajes amigables</li>
+                </ul>
+
+                <pre><span class="comment">// Estructura del API Client</span>
+<span class="keyword">const</span> <span class="variable">ApiClient</span> <span class="operator">=</span> {
+    <span class="function">getHeaders</span>() {
+        <span class="keyword">return</span> {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+            <span class="string">'X-CSRF-Token'</span>: <span class="variable">csrfToken</span>,
+        };
+    },
+
+    <span class="keyword">async</span> <span class="function">get</span>(<span class="variable">url</span>) {
+        <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span>(<span class="variable">url</span>, {
+            <span class="attr">headers</span>: <span class="keyword">this</span>.<span class="function">getHeaders</span>(),
+            <span class="attr">signal</span>: <span class="variable">abortController</span>.<span class="variable">signal</span>,
+        });
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">handleResponse</span>(<span class="variable">response</span>);
+    },
+
+    <span class="keyword">async</span> <span class="function">post</span>(<span class="variable">url</span>, <span class="variable">data</span>) { <span class="comment">/* ... */</span> },
+    <span class="keyword">async</span> <span class="function">put</span>(<span class="variable">url</span>, <span class="variable">data</span>) { <span class="comment">/* ... */</span> },
+    <span class="keyword">async</span> <span class="function">delete</span>(<span class="variable">url</span>) { <span class="comment">/* ... */</span> },
+};</pre>
+            </div>
+
+            <!-- Components -->
+            <div class="card">
+                <h3>Componentes del Frontend</h3>
+                <p>
+                    Cada panel de la aplicacion esta gestionado por un componente JavaScript independiente:
+                </p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Componente</th><th>Archivo</th><th>Responsabilidad</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ConnectionsUI</strong></td>
+                                <td><code>connections.js</code></td>
+                                <td>CRUD de conexiones: formulario, listado, test de conectividad, activar/desactivar</td>
+                            </tr>
+                            <tr>
+                                <td><strong>BrowserUI</strong></td>
+                                <td><code>browser.js</code></td>
+                                <td>Explorador de esquemas: arbol de bases de datos, tablas, vistas, procedimientos, columnas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>QueryUI</strong></td>
+                                <td><code>query-editor.js</code></td>
+                                <td>Editor SQL: ejecucion, resultados en tabla, exportacion CSV/XLSX/JSON, consultas guardadas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AuditUI</strong></td>
+                                <td><code>audit.js</code></td>
+                                <td>Historial de consultas: filtros, busqueda, favoritos, paginacion</td>
+                            </tr>
+                            <tr>
+                                <td><strong>UsersUI</strong></td>
+                                <td><code>users.js</code></td>
+                                <td>Gestion de usuarios: crear, editar, activar/desactivar, resetear contrasena (solo admin)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HelpUI</strong></td>
+                                <td><code>help.js</code></td>
+                                <td>Panel de ayuda con guias y documentacion interactiva</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="background: var(--primary-light); font-weight: 600; color: var(--primary-dark); text-align: center;">
+                                    Nuevos componentes
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>MultiQueryUI</strong></td>
+                                <td><code>multi-query.js</code></td>
+                                <td>Ejecucion de multiples consultas con pestanas de resultados independientes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CrossJoinUI</strong></td>
+                                <td><code>cross-join.js</code></td>
+                                <td>Interfaz para JOIN en memoria entre result sets de distintas consultas/conexiones</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SchemaCompareUI</strong></td>
+                                <td><code>schema-compare.js</code></td>
+                                <td>Comparacion visual de esquemas, diff de columnas y generacion/ejecucion de scripts DDL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SqlIntellisense</strong></td>
+                                <td><code>sql-intellisense.js</code></td>
+                                <td>Autocompletado SQL compartido: sugerencias de tablas, columnas, keywords y schema drawer lateral</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ClientExport</strong></td>
+                                <td><code>client-export.js</code></td>
+                                <td>Exportacion client-side desde memoria: CSV, Excel (XLSX) y JSON sin round-trip al servidor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PWA -->
+            <div class="card">
+                <h3>Progressive Web App (PWA)</h3>
+
+                <h4>Service Worker (service-worker.js)</h4>
+                <p>
+                    El Service Worker implementa dos estrategias de cache diferentes segun el tipo de recurso:
+                </p>
+
+                <div class="security-grid">
+                    <div class="security-item">
+                        <h4>&#128230; Cache-First</h4>
+                        <p>
+                            Para activos estaticos (CSS, JS, iconos, fuentes). Sirve desde cache si esta disponible,
+                            actualiza en segundo plano.
+                        </p>
+                    </div>
+                    <div class="security-item">
+                        <h4>&#127760; Network-First</h4>
+                        <p>
+                            Para llamadas a la API (<code>/api/*</code>). Intenta la red primero; si falla,
+                            retorna respuesta 503 con mensaje offline.
+                        </p>
+                    </div>
+                </div>
+
+                <pre><span class="comment">// Estrategia de cache en el Service Worker</span>
+self.<span class="function">addEventListener</span>(<span class="string">'fetch'</span>, (<span class="variable">event</span>) <span class="operator">=></span> {
+    <span class="keyword">if</span> (<span class="variable">event</span>.<span class="variable">request</span>.<span class="variable">url</span>.<span class="function">includes</span>(<span class="string">'/api/'</span>)) {
+        <span class="comment">// Network-first para API</span>
+        <span class="variable">event</span>.<span class="function">respondWith</span>(
+            <span class="function">fetch</span>(<span class="variable">event</span>.<span class="variable">request</span>)
+                .<span class="function">catch</span>(() <span class="operator">=></span> <span class="keyword">new</span> <span class="type">Response</span>(
+                    <span class="string">'{"error": "Sin conexion"}'</span>,
+                    { <span class="attr">status</span>: <span class="number">503</span> }
+                ))
+        );
+    } <span class="keyword">else</span> {
+        <span class="comment">// Cache-first para activos estaticos</span>
+        <span class="variable">event</span>.<span class="function">respondWith</span>(
+            caches.<span class="function">match</span>(<span class="variable">event</span>.<span class="variable">request</span>)
+                .<span class="function">then</span>(<span class="variable">cached</span> <span class="operator">=></span> <span class="variable">cached</span> <span class="operator">||</span> <span class="function">fetch</span>(<span class="variable">event</span>.<span class="variable">request</span>))
+        );
+    }
+});</pre>
+
+                <h4>Manifest (manifest.json)</h4>
+                <p>
+                    Configura la aplicacion para instalacion en dispositivos:
+                </p>
+                <ul>
+                    <li><strong>display:</strong> <code>standalone</code> (sin barra del navegador)</li>
+                    <li><strong>start_url:</strong> raiz de la aplicacion</li>
+                    <li><strong>icons:</strong> multiples resoluciones para diferentes dispositivos</li>
+                    <li><strong>theme_color / background_color:</strong> colores del tema de la aplicacion</li>
+                </ul>
+            </div>
+
+            <!-- UI Libraries & Theme -->
+            <div class="card">
+                <h3>Librerias y Dependencias UI</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Libreria</th><th>Fuente</th><th>Uso</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>SweetAlert2</strong></td>
+                                <td>CDN</td>
+                                <td>Dialogos de confirmacion, alertas y notificaciones interactivas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vanilla JS</strong></td>
+                                <td>Propio</td>
+                                <td>Toda la logica de la aplicacion (sin jQuery, React, Vue, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CSS Custom Properties</strong></td>
+                                <td>Propio</td>
+                                <td>Sistema de temas via variables CSS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Tema Visual</h3>
+                <p>
+                    La aplicacion utiliza un esquema de <strong>sidebar oscuro</strong> con <strong>area de contenido claro</strong>.
+                    Todos los colores se definen mediante CSS Custom Properties en <code>app.css</code>, lo que facilita
+                    la personalizacion del tema.
+                </p>
+
+                <h3>Diseno Responsivo</h3>
+                <ul>
+                    <li><strong>Sidebar colapsable:</strong> en pantallas pequenas, el sidebar se oculta y se muestra con un boton hamburguesa</li>
+                    <li><strong>Tablas con scroll:</strong> las tablas de resultados usan <code>overflow-x: auto</code> para no romper el layout</li>
+                    <li><strong>Formularios adaptables:</strong> los campos se reorganizan en columnas segun el espacio disponible</li>
+                    <li><strong>Touch-friendly:</strong> botones y controles con tamano adecuado para interaccion tactil</li>
+                </ul>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="card">
+                <h2><span class="icon">&#128260;</span> Flujo de Datos Completo</h2>
+                <p>Ejemplo: el usuario ejecuta una consulta SQL desde el editor.</p>
+
+                <div class="diagram">
+1. Usuario escribe SQL en QueryUI
+            |
+2. QueryUI llama ApiClient.post('/api/query/execute', { sql, connectionId, db })
+            |
+3. ApiClient agrega X-CSRF-Token y Content-Type headers
+            |
+4. api/index.php recibe la peticion
+   +-- bootstrap.php: valida sesion, CSRF, headers
+   +-- Router despacha a QueryController
+            |
+5. QueryController:
+   +-- requireAuth()          -> verifica sesion
+   +-- checkPasswordChange()  -> verifica contrasena temporal
+   +-- Obtiene la conexion de SQLite
+            |
+6. DatabaseService.getConnection():
+   +-- Lee config de connections table
+   +-- EncryptionService.decrypt(password_encrypted)
+   +-- Crea/cachea conexion PDO
+            |
+7. QueryExecutionService.executeDirect():
+   +-- Ejecuta SQL via PDO
+   +-- Mide tiempo de ejecucion
+   +-- AuditService.log() -> guarda en audit_logs
+   +-- Retorna resultados + metadata
+            |
+8. QueryController retorna JSON response
+            |
+9. ApiClient parsea la respuesta
+            |
+10. QueryUI renderiza:
+    +-- Tabla de resultados
+    +-- Estadisticas (filas, tiempo)
+    +-- Botones de exportacion (CSV, XLSX, JSON)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        PHPAdmin Query Manager v1.0.0 - Documentacion Tecnica
+    </div>
+
+    <!-- JavaScript: Tab Navigation -->
+    <script>
+        function showTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Deactivate all tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected section
+            const section = document.getElementById(tabId);
+            if (section) section.classList.add('active');
+
+            // Activate selected tab
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('onclick').includes(tabId)) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle hash-based navigation
+        function handleHash() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) showTab(hash);
+        }
+        window.addEventListener('hashchange', handleHash);
+        if (window.location.hash) handleHash();
+    </script>
+</body>
+</html>

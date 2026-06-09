@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const fs=require\\(''fs''\\); const code=fs.readFileSync\\(''f:/xampp/htdocs/phpadmin/assets/js/components/query-editor.js'',''utf8''\\); try { new Function\\(code\\); console.log\\(''OK''\\); } catch\\(e\\) { console.error\\(''ERROR:'', e.message\\); }\")",
+      "Bash(node -e \"const fs=require\\(''''fs''''\\); [''''components/query-editor.js'''',''''components/browser.js''''].forEach\\(f => { const code=fs.readFileSync\\(''''f:/xampp/htdocs/phpadmin/assets/js/''''+f,''''utf8''''\\); try { new Function\\(code\\); console.log\\(f+'''': OK''''\\); } catch\\(e\\) { console.error\\(f+'''': ERROR -'''', e.message\\); } }\\)\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Services/SchemaService.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Controllers/BrowserController.php\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\); [''api-client.js'',''components/query-editor.js''].forEach\\(f => { const code=fs.readFileSync\\(''f:/xampp/htdocs/phpadmin/assets/js/''+f,''utf8''\\); try { new Function\\(code\\); console.log\\(f+'': OK''\\); } catch\\(e\\) { console.error\\(f+'': ERROR -'', e.message\\); } }\\)\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Services/XlsxService.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Controllers/ExportController.php\")",
+      "Bash(node -e \"const fs=require\\(''''fs''''\\); [''''api-client.js'''',''''components/query-editor.js'''',''''components/audit.js''''].forEach\\(f => { const code=fs.readFileSync\\(''''f:/xampp/htdocs/phpadmin/assets/js/''''+f,''''utf8''''\\); try { new Function\\(code\\); console.log\\(f+'''': OK''''\\); } catch\\(e\\) { console.error\\(f+'''': ERROR -'''', e.message\\); } }\\)\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Controllers/AuditController.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Services/AuditService.php\")",
+      "Bash(node -e \":*)",
+      "Bash(node -e \"const fs=require\\(''''fs''''\\); [''''app.js'''',''''api-client.js''''].forEach\\(f => { const code=fs.readFileSync\\(''''f:/xampp/htdocs/phpadmin/assets/js/''''+f,''''utf8''''\\); try { new Function\\(code\\); console.log\\(f+'''': OK''''\\); } catch\\(e\\) { console.error\\(f+'''': ERROR -'''', e.message\\); } }\\)\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/index.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Services/AuthService.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/Controllers/AuthController.php\")",
+      "Bash(\"f:/xampp/php/php.exe\" -l \"f:/xampp/htdocs/phpadmin/api/bootstrap.php\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\); [''app.js'',''components/users.js''].forEach\\(f => { const code=fs.readFileSync\\(''f:/xampp/htdocs/phpadmin/assets/js/''+f,''utf8''\\); try { new Function\\(code\\); console.log\\(f+'': OK''\\); } catch\\(e\\) { console.error\\(f+'': ERROR -'', e.message\\); } }\\)\")",
+      "Bash(find f:/xampp/htdocs/phpadmin/assets -type f -exec ls -lh {})",
+      "Bash(2)",
+      "Read(//f/xampp/htdocs/phpadmin/**)",
+      "Bash(php generate-icons.php)"
+    ]
+  }
+}

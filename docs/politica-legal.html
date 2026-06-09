@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[NOMBRE_PRODUCTO] - Politica Legal | DesarrollaLoYa</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+            --accent: #7c3aed;
+            --accent-bg: #ede9fe;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; position: relative; }
+        .hero p { font-size: 16px; opacity: 0.9; position: relative; max-width: 600px; margin: 0 auto; }
+        .hero .brand { font-size: 13px; opacity: 0.7; margin-top: 12px; position: relative; }
+
+        .nav-tabs {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .nav-tab {
+            padding: 16px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .nav-tab .tab-icon { font-size: 16px; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 24px; }
+        .card h3 { font-size: 17px; margin: 20px 0 10px; color: var(--text); }
+        .card h4 { font-size: 15px; margin: 16px 0 8px; color: var(--primary-dark); }
+        .card p { margin-bottom: 12px; color: var(--text-light); }
+        .card ul, .card ol { margin: 0 0 14px; padding-left: 22px; color: var(--text-light); }
+        .card li { margin-bottom: 6px; }
+        .card strong { color: var(--text); }
+
+        .callout {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .callout-blue { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a5f; }
+        .callout-green { background: #f0fdf4; border: 1px solid #bbf7d0; color: #14532d; }
+        .callout-purple { background: #faf5ff; border: 1px solid #e9d5ff; color: #581c87; }
+        .callout-amber { background: var(--warning-bg); border: 1px solid #fde68a; color: #92400e; }
+        .callout-red { background: var(--danger-bg); border: 1px solid #fecaca; color: #991b1b; }
+        .callout-title { font-weight: 700; margin-bottom: 6px; font-size: 13px; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-blue { background: var(--primary-light); color: var(--primary-dark); }
+        .badge-purple { background: var(--accent-bg); color: var(--accent); }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .contact-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-item .label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+        .contact-item .value { font-size: 15px; font-weight: 600; color: var(--text); }
+        .contact-item a { color: var(--primary); text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 13px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 40px 16px 30px; }
+            .hero h1 { font-size: 24px; }
+            .nav-tab { padding: 12px 14px; font-size: 12px; }
+            .card { padding: 20px; }
+            .container { padding: 20px 16px 40px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+    <div class="hero-logo">DLY</div>
+    <h1>Politica Legal</h1>
+    <p>Marco juridico, terminos de uso, privacidad y condiciones de licenciamiento de Query Manager</p>
+    <div class="brand">DesarrollaLoYa &middot; Documento vigente desde 2026</div>
+</div>
+
+<!-- ===================== TABS ===================== -->
+<div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('derechos')">
+        <span class="tab-icon">&copy;</span> Derechos de Autor
+    </div>
+    <div class="nav-tab" onclick="showTab('privacidad')">
+        <span class="tab-icon">&#128274;</span> Privacidad
+    </div>
+    <div class="nav-tab" onclick="showTab('terminos')">
+        <span class="tab-icon">&#128196;</span> Terminos y Condiciones
+    </div>
+    <div class="nav-tab" onclick="showTab('responsabilidad')">
+        <span class="tab-icon">&#9888;</span> Limitacion de Responsabilidad
+    </div>
+    <div class="nav-tab" onclick="showTab('jurisdiccion')">
+        <span class="tab-icon">&#9878;</span> Jurisdiccion
+    </div>
+    <div class="nav-tab" onclick="showTab('contacto')">
+        <span class="tab-icon">&#9993;</span> Contacto
+    </div>
+</div>
+
+<!-- ===================== CONTENT ===================== -->
+<div class="container">
+
+    <!-- ========== TAB 1: DERECHOS DE AUTOR ========== -->
+    <div id="derechos" class="section active">
+        <div class="card">
+            <h2><span class="icon">&copy;</span> Derechos de Autor y Propiedad Intelectual</h2>
+            <p>
+                <strong>Query Manager</strong> es un producto de software desarrollado y propiedad intelectual exclusiva de
+                <strong>DesarrollaLoYa</strong>, creado por <strong>Diego Hernandez</strong>.
+                Todos los derechos reservados &copy; 2026.
+            </p>
+            <p>
+                El codigo fuente, diseno, arquitectura, documentacion, logica de negocio, interfaces de usuario,
+                bases de datos, graficos, iconos, textos y todos los elementos que componen esta aplicacion
+                estan protegidos por las leyes de propiedad intelectual y derechos de autor aplicables en la
+                Republica de Colombia (Ley 23 de 1982, Decision Andina 351 de 1993) y por tratados internacionales,
+                incluyendo el Convenio de Berna, el Acuerdo sobre los ADPIC (TRIPS) de la OMC y el Tratado de la OMPI
+                sobre Derecho de Autor (WCT).
+            </p>
+            <p>
+                La marca <strong>DesarrollaLoYa</strong>, su logotipo y elementos distintivos son propiedad de Diego Hernandez
+                y no pueden ser utilizados sin autorizacion escrita previa.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Modalidades de Licenciamiento</h3>
+            <p>Query Manager se comercializa exclusivamente bajo dos modalidades autorizadas. Cualquier uso fuera de estas modalidades constituye una infraccion de derechos de autor.</p>
+
+            <div class="callout callout-blue">
+                <div class="callout-title"><span class="badge badge-blue">Modalidad 1</span> Arrendamiento (SaaS / Suscripcion Mensual)</div>
+                <ul>
+                    <li>El cliente obtiene acceso a la herramienta mediante el pago de una suscripcion mensual recurrente.</li>
+                    <li>La <strong>propiedad intelectual, el codigo fuente y todos los derechos</strong> permanecen exclusivamente de DesarrollaLoYa en todo momento.</li>
+                    <li>El cliente <strong>no puede</strong> copiar, reproducir, descompilar, realizar ingenieria inversa, distribuir ni sublicenciar el software, total ni parcialmente.</li>
+                    <li>Al finalizar o cancelar la suscripcion, el acceso se suspende de forma inmediata. El cliente conserva el derecho a exportar sus datos antes de la finalizacion.</li>
+                    <li>Las actualizaciones de funcionalidad, parches de seguridad y soporte tecnico estan incluidos durante toda la vigencia de la suscripcion.</li>
+                    <li>En caso de mora en el pago, DesarrollaLoYa concedera un periodo de gracia de <strong>15 dias calendario</strong> antes de proceder a la suspension del servicio.</li>
+                    <li>No existe clausula de permanencia minima. El cliente puede cancelar en cualquier momento sin penalizacion.</li>
+                </ul>
+            </div>
+
+            <div class="callout callout-purple">
+                <div class="callout-title"><span class="badge badge-purple">Modalidad 2</span> Adquisicion de Codigo Fuente (Licencia Perpetua)</div>
+                <ul>
+                    <li>El cliente adquiere una <strong>licencia perpetua de uso</strong> sobre el codigo fuente mediante un pago unico.</li>
+                    <li>El cliente puede modificar, personalizar, adaptar y desplegar el software en servidores de su propiedad sin restriccion en la cantidad de instalaciones internas.</li>
+                    <li><strong>No se transfiere la propiedad intelectual.</strong> DesarrollaLoYa sigue siendo el autor y titular de todos los derechos morales y patrimoniales sobre el software original.</li>
+                    <li>El cliente <strong>no puede revender, redistribuir, sublicenciar, publicar ni poner a disposicion</strong> el codigo fuente a terceros, ni en su forma original ni modificada.</li>
+                    <li>Incluye <strong>3 meses de soporte tecnico</strong> desde la fecha de compra, cubriendo instalacion, configuracion y resolucion de errores del producto original.</li>
+                    <li>Incluye <strong>1 ano de actualizaciones gratuitas</strong> desde la fecha de compra, entregadas como parches o nuevas versiones descargables.</li>
+                    <li><strong>Garantia de satisfaccion:</strong> el cliente dispone de 15 dias naturales desde la entrega para solicitar un reembolso completo si el producto no cumple con las especificaciones acordadas.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Proteccion Legal</h3>
+            <p>
+                Query Manager esta protegido bajo el marco juridico colombiano e internacional de propiedad intelectual.
+                DesarrollaLoYa se reserva el derecho de emprender acciones legales civiles y penales contra cualquier
+                persona natural o juridica que infrinja estos derechos.
+            </p>
+            <h4>Usos Prohibidos</h4>
+            <ul>
+                <li>Reproduccion total o parcial del software sin autorizacion escrita.</li>
+                <li>Distribucion, sublicenciamiento o puesta a disposicion del software o su codigo fuente a terceros no autorizados.</li>
+                <li>Ingenieria inversa, descompilacion o desensamblaje del software (en modalidad arrendamiento).</li>
+                <li>Remocion o alteracion de avisos de derechos de autor, marcas o atribuciones de propiedad intelectual.</li>
+                <li>Uso del software para desarrollar un producto competidor o sustancialmente similar.</li>
+                <li>Cesion de la licencia a un tercero sin consentimiento previo y escrito de DesarrollaLoYa.</li>
+            </ul>
+            <div class="callout callout-red">
+                <div class="callout-title">Consecuencias por Infraccion</div>
+                <p style="margin:0;">
+                    Cualquier uso fuera de las modalidades descritas queda estrictamente prohibido y sera perseguido
+                    conforme a la ley. Las infracciones pueden dar lugar a indemnizaciones por danos y perjuicios,
+                    acciones penales (articulos 270-272 del Codigo Penal colombiano) y medidas cautelares,
+                    incluyendo la remocion inmediata del software y el cese de actividades infractoras.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== TAB 2: PRIVACIDAD ========== -->
+    <div id="privacidad" class="section">
+        <div class="card">
+            <h2><span class="icon">&#128274;</span> Politica de Privacidad y Tratamiento de Datos</h2>
+            <p>
+                La presente politica describe el tratamiento que <strong>Query Manager</strong> realiza sobre los datos
+                personales y la informacion sensible que gestiona, en cumplimiento de la Ley Estatutaria 1581 de 2012
+                (Regimen General de Proteccion de Datos Personales de Colombia), el Decreto 1377 de 2013, y demas
+                normatividad vigente aplicable.
+            </p>
+
+            <h3>Datos Recopilados</h3>
+            <p>Query Manager recopila y almacena la siguiente informacion exclusivamente para su funcionamiento operativo:</p>
+            <ul>
+                <li><strong>Credenciales de usuario:</strong> nombre de usuario y contrasena protegida mediante hash bcrypt con factor de costo adaptativo. La contrasena <strong>nunca</strong> se almacena en texto plano ni en formato reversible.</li>
+                <li><strong>Credenciales de conexion a bases de datos:</strong> host, puerto, usuario y contrasena de las bases de datos configuradas, encriptados con <strong>AES-256-CBC</strong> utilizando claves unicas por instalacion.</li>
+                <li><strong>Registro de auditoria:</strong> consultas SQL ejecutadas, fecha y hora de ejecucion (con zona horaria), direccion IP del usuario, tiempo de ejecucion de la consulta, resultado (exitoso/fallido), numero de filas afectadas y conexion utilizada.</li>
+                <li><strong>Datos de sesion:</strong> informacion temporal almacenada del lado del servidor (server-side sessions) para mantener la autenticacion y las preferencias del usuario durante su sesion activa.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Compromisos de Privacidad</h3>
+            <div class="callout callout-green">
+                <div class="callout-title">Garantias de DesarrollaLoYa</div>
+                <ul>
+                    <li>Toda la informacion se almacena <strong>localmente</strong> en el servidor donde esta instalada la aplicacion. No se utiliza almacenamiento en la nube de terceros.</li>
+                    <li><strong>No se transmite, comparte ni vende informacion a terceros</strong> ni a servidores externos bajo ninguna circunstancia.</li>
+                    <li>La aplicacion <strong>no utiliza</strong> cookies de rastreo, herramientas de analitica de terceros (Google Analytics, Mixpanel, etc.) ni servicios de telemetria.</li>
+                    <li>No se recopilan datos con fines publicitarios, de perfilamiento ni de comercializacion.</li>
+                    <li>Las contrasenas de usuario se almacenan con hashing unidireccional (bcrypt) y las credenciales de bases de datos se cifran con AES-256-CBC.</li>
+                </ul>
+            </div>
+
+            <h3>Diferencias por Modalidad</h3>
+            <h4>Modalidad Arrendamiento (SaaS)</h4>
+            <ul>
+                <li>DesarrollaLoYa puede acceder al servidor <strong>unicamente</strong> para tareas de soporte tecnico, mantenimiento correctivo o aplicacion de actualizaciones.</li>
+                <li>Todo acceso requiere <strong>autorizacion previa y expresa</strong> del cliente, salvo en situaciones criticas de seguridad que requieran intervencion inmediata.</li>
+                <li>Se mantendra un registro de los accesos realizados por el equipo de soporte, disponible para consulta del cliente.</li>
+                <li>DesarrollaLoYa se compromete a no acceder, leer ni extraer datos de negocio del cliente almacenados en sus bases de datos.</li>
+            </ul>
+
+            <h4>Modalidad Codigo Fuente</h4>
+            <ul>
+                <li>El cliente es el <strong>unico responsable</strong> de la infraestructura, la seguridad del servidor, los datos almacenados y el cumplimiento de las regulaciones de proteccion de datos aplicables en su jurisdiccion.</li>
+                <li>DesarrollaLoYa no tiene acceso a la instalacion del cliente y no asume responsabilidad sobre la gestion de datos que el cliente realice.</li>
+                <li>Se recomienda que el cliente implemente sus propias politicas de privacidad, respaldo y gestion de datos conforme a la normativa local.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Retencion y Eliminacion de Datos</h3>
+            <ul>
+                <li>Los registros de auditoria se conservan de acuerdo con la configuracion del administrador del sistema. Se recomienda un periodo minimo de 6 meses y maximo de 5 anos, segun las necesidades regulatorias del cliente.</li>
+                <li>Los datos de sesion se eliminan automaticamente al cerrar la sesion o tras el periodo de inactividad configurado.</li>
+                <li>Al finalizar la relacion comercial (en cualquier modalidad), el cliente puede solicitar la eliminacion completa de todos sus datos. En modalidad arrendamiento, DesarrollaLoYa ejecutara la eliminacion dentro de los 30 dias siguientes a la solicitud.</li>
+                <li>El titular de los datos personales puede ejercer sus derechos de acceso, rectificacion, cancelacion y oposicion (derechos ARCO) contactando a DesarrollaLoYa a traves de los canales indicados en la seccion de Contacto.</li>
+            </ul>
+
+            <div class="callout callout-purple">
+                <div class="callout-title">Referencia Legal</div>
+                <p style="margin:0;">
+                    Esta politica se rige por la <strong>Ley 1581 de 2012</strong> (Colombia), el <strong>Decreto 1377 de 2013</strong>,
+                    y las disposiciones de la Superintendencia de Industria y Comercio (SIC) como autoridad de proteccion de datos.
+                    Para clientes internacionales, aplican adicionalmente las regulaciones locales de proteccion de datos
+                    (GDPR en Europa, LGPD en Brasil, CCPA en California, entre otras).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== TAB 3: TERMINOS Y CONDICIONES ========== -->
+    <div id="terminos" class="section">
+        <div class="card">
+            <h2><span class="icon">&#128196;</span> Terminos y Condiciones de Uso</h2>
+            <p>
+                Al utilizar <strong>Query Manager</strong>, en cualquiera de sus modalidades,
+                el usuario y/o cliente declara conocer, entender y aceptar integramente los siguientes terminos
+                y condiciones. El uso continuado del software constituye aceptacion tacita de los mismos.
+            </p>
+
+            <h3>Condiciones Generales (Ambas Modalidades)</h3>
+            <ul>
+                <li>La herramienta ejecuta consultas SQL directamente contra bases de datos reales en entornos de produccion, desarrollo o pruebas. <strong>El usuario es el unico responsable</strong> de las consultas que ejecuta y de todas las consecuencias derivadas de las mismas.</li>
+                <li>DesarrollaLoYa no se hace responsable por perdida de datos, corrupcion de informacion, danos a la infraestructura, interrupciones del servicio o perjuicios de cualquier naturaleza derivados del uso inadecuado, negligente o malintencionado de la herramienta.</li>
+                <li>El acceso al sistema esta sujeto a las credenciales proporcionadas por el administrador. Cada usuario es responsable de la confidencialidad de sus credenciales.</li>
+                <li>El registro de auditoria es un mecanismo de trazabilidad y puede ser utilizado por el administrador para supervision, cumplimiento normativo, resolucion de incidentes y procedimientos disciplinarios o legales.</li>
+                <li>El usuario se compromete a no utilizar la herramienta para actividades ilicitas, accesos no autorizados o cualquier accion que vulnere la seguridad de los sistemas o los datos de terceros.</li>
+                <li>DesarrollaLoYa se reserva el derecho de modificar estos terminos. Las modificaciones se notificaran con al menos 15 dias de antelacion a traves de los canales de comunicacion acordados.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Terminos Especificos: Modalidad Arrendamiento</h3>
+            <div class="callout callout-blue">
+                <div class="callout-title">Pago y Facturacion</div>
+                <ul>
+                    <li>El valor de la suscripcion mensual se acuerda al momento de la contratacion y puede ser revisado anualmente con previo aviso de 30 dias.</li>
+                    <li>El pago debe realizarse dentro de los primeros 5 dias de cada periodo de facturacion.</li>
+                    <li>Se aceptan los medios de pago acordados entre las partes (transferencia bancaria, pasarela de pagos, etc.).</li>
+                </ul>
+            </div>
+
+            <h4>Suspension y Reactivacion</h4>
+            <ul>
+                <li>En caso de mora, se concedera un periodo de gracia de <strong>15 dias calendario</strong>.</li>
+                <li>Transcurrido el periodo de gracia sin recibir el pago, DesarrollaLoYa procedera a suspender el acceso al servicio.</li>
+                <li>La reactivacion del servicio requiere el pago de los saldos pendientes. Los datos del cliente se conservaran durante 60 dias posteriores a la suspension.</li>
+                <li>Transcurridos 60 dias desde la suspension sin reactivacion, DesarrollaLoYa podra eliminar los datos de la instalacion.</li>
+            </ul>
+
+            <h4>Actualizaciones y Mantenimiento</h4>
+            <ul>
+                <li>Las actualizaciones de funcionalidad y parches de seguridad se aplican de forma automatica o programada durante la vigencia de la suscripcion.</li>
+                <li>DesarrollaLoYa notificara con antelacion razonable cualquier mantenimiento que pueda afectar la disponibilidad del servicio.</li>
+            </ul>
+
+            <h4>Cancelacion y Exportacion de Datos</h4>
+            <ul>
+                <li>El cliente puede cancelar la suscripcion en cualquier momento. No existen clausulas de permanencia minima ni penalizaciones por cancelacion anticipada.</li>
+                <li>Al cancelar, el cliente dispone de <strong>15 dias calendario</strong> para exportar sus datos (configuraciones, registros de auditoria, conexiones). DesarrollaLoYa proporcionara asistencia para la exportacion si es requerida.</li>
+                <li>Una vez finalizado el periodo de exportacion, el acceso se suspende de forma definitiva.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Terminos Especificos: Modalidad Codigo Fuente</h3>
+            <div class="callout callout-purple">
+                <div class="callout-title">Alcance de la Licencia Perpetua</div>
+                <ul>
+                    <li>La licencia es perpetua e irrevocable (excepto por incumplimiento). Autoriza el uso ilimitado en servidores propios del cliente.</li>
+                    <li>El cliente puede modificar, adaptar y personalizar el codigo fuente para sus necesidades internas sin restriccion.</li>
+                    <li>Las modificaciones realizadas por el cliente son de su propiedad, pero el software base subyacente sigue siendo propiedad intelectual de DesarrollaLoYa.</li>
+                </ul>
+            </div>
+
+            <h4>Restricciones de Redistribucion</h4>
+            <ul>
+                <li>Queda terminantemente prohibido revender, redistribuir, sublicenciar, publicar en repositorios publicos o poner a disposicion el codigo fuente, tanto en su forma original como modificada.</li>
+                <li>El cliente puede compartir el software dentro de su organizacion para uso interno, pero no con empresas afiliadas, subsidiarias o terceros sin autorizacion escrita.</li>
+            </ul>
+
+            <h4>Soporte Tecnico y Actualizaciones</h4>
+            <ul>
+                <li>El soporte tecnico incluido (3 meses) cubre: instalacion, configuracion inicial, resolucion de errores del producto original y orientacion tecnica general.</li>
+                <li>Las modificaciones, personalizaciones o integraciones realizadas por el cliente quedan <strong>fuera del alcance</strong> del soporte tecnico incluido.</li>
+                <li>Las actualizaciones gratuitas (1 ano) se entregan como parches o nuevas versiones descargables. El cliente es responsable de aplicarlas en su entorno.</li>
+                <li>Transcurrido el periodo de soporte o actualizaciones, el cliente puede contratar extensiones por periodos adicionales.</li>
+            </ul>
+
+            <h4>Garantia de Satisfaccion</h4>
+            <ul>
+                <li>El cliente dispone de <strong>15 dias naturales</strong> desde la fecha de entrega para evaluar el producto.</li>
+                <li>Si el producto no cumple con las especificaciones documentadas o las expectativas razonables acordadas previamente, el cliente puede solicitar un <strong>reembolso completo</strong>.</li>
+                <li>Para ejercer la garantia, el cliente debe desinstalar y eliminar todas las copias del software y certificar por escrito dicha eliminacion.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Responsabilidades del Usuario</h3>
+            <div class="callout callout-amber">
+                <div class="callout-title">Advertencia Importante</div>
+                <p style="margin:0;">
+                    Query Manager permite la ejecucion de consultas SQL directamente contra bases de datos reales,
+                    incluyendo entornos de produccion. Las operaciones ejecutadas (INSERT, UPDATE, DELETE, DROP, TRUNCATE, etc.)
+                    pueden causar modificaciones irreversibles en los datos. El usuario debe actuar con la maxima diligencia
+                    y verificar cada consulta antes de ejecutarla.
+                </p>
+            </div>
+            <ul>
+                <li>Verificar las consultas SQL antes de ejecutarlas, especialmente operaciones de escritura o eliminacion.</li>
+                <li>Mantener copias de seguridad actualizadas de las bases de datos antes de realizar operaciones criticas.</li>
+                <li>No compartir credenciales de acceso con personas no autorizadas.</li>
+                <li>Reportar cualquier vulnerabilidad de seguridad detectada a DesarrollaLoYa de forma responsable.</li>
+                <li>Cumplir con las politicas internas de su organizacion y la normativa aplicable al utilizar la herramienta.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========== TAB 4: LIMITACION DE RESPONSABILIDAD ========== -->
+    <div id="responsabilidad" class="section">
+        <div class="card">
+            <h2><span class="icon">&#9888;</span> Limitacion de Responsabilidad</h2>
+
+            <h3>Clausula "Tal Cual" (As Is)</h3>
+            <p>
+                <strong>Query Manager</strong> se proporciona "tal cual" (<em>as is</em>) y "segun disponibilidad"
+                (<em>as available</em>). En la maxima medida permitida por la legislacion aplicable, DesarrollaLoYa
+                renuncia expresamente a todas las garantias, ya sean explicitas, implicitas, legales o de cualquier
+                otra naturaleza, incluyendo, sin limitacion, garantias implicitas de comerciabilidad, idoneidad para
+                un proposito particular, titulo y no infraccion.
+            </p>
+            <p>
+                DesarrollaLoYa no garantiza que:
+            </p>
+            <ul>
+                <li>El software este libre de errores, defectos o vulnerabilidades de seguridad.</li>
+                <li>El software funcione de forma ininterrumpida, oportuna, segura o libre de fallas.</li>
+                <li>Los resultados obtenidos mediante el uso del software sean precisos, confiables o completos.</li>
+                <li>El software sea compatible con todos los entornos, sistemas operativos o versiones de bases de datos.</li>
+            </ul>
+
+            <h3>Limite de Responsabilidad Economica</h3>
+            <div class="callout callout-red">
+                <div class="callout-title">Limite Maximo</div>
+                <p style="margin:0;">
+                    La responsabilidad total y acumulada de DesarrollaLoYa frente al cliente, derivada de o relacionada con
+                    el uso del software, ya sea por responsabilidad contractual, extracontractual (incluyendo negligencia),
+                    responsabilidad objetiva o cualquier otra teoria legal, <strong>se limita al monto total efectivamente
+                    pagado por el cliente a DesarrollaLoYa durante los 12 meses inmediatamente anteriores</strong> al evento
+                    que dio origen a la reclamacion.
+                </p>
+            </div>
+
+            <h3>Exclusion de Danos Indirectos</h3>
+            <p>En ningun caso DesarrollaLoYa sera responsable por:</p>
+            <ul>
+                <li>Danos indirectos, incidentales, especiales, punitivos o consecuentes de cualquier tipo.</li>
+                <li>Perdida de datos, corrupcion de bases de datos o perdida de informacion almacenada.</li>
+                <li>Lucro cesante, perdida de ingresos, perdida de oportunidades de negocio o perdida de beneficios esperados.</li>
+                <li>Interrupcion de actividades comerciales o perdida de clientela.</li>
+                <li>Costos de adquisicion de bienes o servicios sustitutos.</li>
+                <li>Danos derivados del acceso no autorizado, alteracion o destruccion de datos por parte de terceros.</li>
+            </ul>
+            <p>
+                Estas exclusiones aplican aun cuando DesarrollaLoYa haya sido informada de la posibilidad de tales danos
+                y aun cuando un remedio limitado no cumpla con su proposito esencial.
+            </p>
+
+            <h3>Reconocimiento de Riesgos</h3>
+            <div class="callout callout-amber">
+                <div class="callout-title">Aceptacion del Usuario</div>
+                <p style="margin:0;">
+                    El usuario reconoce y acepta que Query Manager permite el acceso directo a bases de datos en produccion
+                    y que las operaciones ejecutadas a traves de la herramienta pueden tener consecuencias irreversibles sobre
+                    los datos. El usuario asume toda la responsabilidad por las operaciones realizadas y exime a DesarrollaLoYa
+                    de cualquier responsabilidad derivada de errores humanos, consultas mal formuladas o uso negligente
+                    de la herramienta.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== TAB 5: JURISDICCION ========== -->
+    <div id="jurisdiccion" class="section">
+        <div class="card">
+            <h2><span class="icon">&#9878;</span> Jurisdiccion y Ley Aplicable</h2>
+
+            <h3>Legislacion Aplicable</h3>
+            <p>
+                Los presentes terminos, condiciones y politicas se rigen e interpretan de conformidad con las leyes
+                de la <strong>Republica de Colombia</strong>, incluyendo pero no limitado a:
+            </p>
+            <ul>
+                <li><strong>Ley 23 de 1982</strong> - Derechos de autor.</li>
+                <li><strong>Ley 44 de 1993</strong> - Modificaciones a la Ley 23 de 1982.</li>
+                <li><strong>Decision Andina 351 de 1993</strong> - Regimen comun sobre derecho de autor y derechos conexos.</li>
+                <li><strong>Ley 1581 de 2012</strong> - Proteccion de datos personales.</li>
+                <li><strong>Decreto 1377 de 2013</strong> - Reglamentacion de la Ley 1581.</li>
+                <li><strong>Ley 527 de 1999</strong> - Comercio electronico y firmas digitales.</li>
+                <li><strong>Codigo Civil Colombiano</strong> y <strong>Codigo de Comercio</strong> - En lo pertinente a obligaciones contractuales.</li>
+            </ul>
+
+            <h3>Tribunales Competentes</h3>
+            <p>
+                Cualquier controversia, disputa o reclamacion derivada de o relacionada con estos terminos, incluyendo
+                su existencia, validez, interpretacion, cumplimiento, incumplimiento o terminacion, sera sometida a la
+                jurisdiccion exclusiva de los <strong>tribunales competentes de la ciudad de domicilio del titular</strong>
+                (DesarrollaLoYa / Diego Hernandez) en la Republica de Colombia.
+            </p>
+
+            <h3>Mediacion y Arbitraje</h3>
+            <div class="callout callout-green">
+                <div class="callout-title">Resolucion Alternativa de Conflictos</div>
+                <p style="margin:0 0 8px;">
+                    Antes de acudir a la via judicial, las partes se comprometen a intentar resolver cualquier controversia
+                    de buena fe mediante los siguientes mecanismos alternativos:
+                </p>
+                <ol style="margin:0;padding-left:20px;">
+                    <li><strong>Negociacion directa:</strong> Las partes dispondran de 30 dias calendario para alcanzar un acuerdo amigable.</li>
+                    <li><strong>Mediacion:</strong> Si la negociacion directa no prospera, las partes podran acudir a un mediador profesional certificado, cuyos honorarios seran asumidos por partes iguales.</li>
+                    <li><strong>Arbitraje:</strong> Por acuerdo expreso de ambas partes, la controversia podra someterse a arbitraje de conformidad con el reglamento del Centro de Arbitraje y Conciliacion de la Camara de Comercio correspondiente. El laudo arbitral sera definitivo y vinculante.</li>
+                </ol>
+            </div>
+
+            <h3>Clientes Internacionales</h3>
+            <p>
+                Para clientes ubicados fuera de la Republica de Colombia, se aplicaran adicionalmente las regulaciones
+                locales de proteccion de datos y derechos del consumidor vigentes en la jurisdiccion del cliente,
+                en la medida en que sean de obligatorio cumplimiento. En particular:
+            </p>
+            <ul>
+                <li><strong>Union Europea:</strong> Se respetaran las disposiciones del Reglamento General de Proteccion de Datos (GDPR - Reglamento UE 2016/679).</li>
+                <li><strong>Brasil:</strong> Se aplicara la Lei Geral de Protecao de Dados (LGPD - Ley 13.709/2018).</li>
+                <li><strong>Mexico:</strong> Se observara la Ley Federal de Proteccion de Datos Personales en Posesion de los Particulares.</li>
+                <li><strong>Estados Unidos:</strong> Segun el estado, podran aplicar regulaciones como CCPA (California), VCDPA (Virginia), entre otras.</li>
+            </ul>
+            <p>
+                En caso de conflicto entre la legislacion colombiana y la legislacion local del cliente, prevalecera
+                aquella que ofrezca mayor proteccion al titular de los datos personales.
+            </p>
+        </div>
+    </div>
+
+    <!-- ========== TAB 6: CONTACTO ========== -->
+    <div id="contacto" class="section">
+        <div class="card">
+            <h2><span class="icon">&#9993;</span> Contacto y Soporte</h2>
+            <p>
+                Para consultas legales, ejercicio de derechos sobre datos personales, soporte tecnico o cualquier
+                asunto relacionado con los presentes terminos, puede contactar a DesarrollaLoYa a traves de los
+                siguientes canales:
+            </p>
+
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="label">Empresa</div>
+                    <div class="value">DesarrollaLoYa</div>
+                </div>
+                <div class="contact-item">
+                    <div class="label">Titular / Representante Legal</div>
+                    <div class="value">Diego Hernandez</div>
+                </div>
+                <div class="contact-item">
+                    <div class="label">Correo Electronico</div>
+                    <div class="value"><a href="mailto:comercial@desarrollaloya.com">comercial@desarrollaloya.com</a></div>
+                </div>
+                <div class="contact-item">
+                    <div class="label">WhatsApp</div>
+                    <div class="value"><a href="https://wa.me/573012550175" target="_blank" rel="noopener">+57 301 255 0175</a></div>
+                </div>
+                <div class="contact-item">
+                    <div class="label">Sitio Web</div>
+                    <div class="value"><a href="https://desarrollaloya.com" target="_blank" rel="noopener">desarrollaloya.com</a></div>
+                </div>
+                <div class="contact-item">
+                    <div class="label">Horario de Atencion</div>
+                    <div class="value">Lunes a Viernes, 8:00 - 18:00 (COT)</div>
+                </div>
+            </div>
+
+            <div class="callout callout-blue" style="margin-top:24px;">
+                <div class="callout-title">Tiempos de Respuesta</div>
+                <ul>
+                    <li><strong>Consultas generales:</strong> hasta 3 dias habiles.</li>
+                    <li><strong>Soporte tecnico (suscripcion activa):</strong> hasta 24 horas habiles.</li>
+                    <li><strong>Incidentes criticos de seguridad:</strong> hasta 4 horas habiles.</li>
+                    <li><strong>Solicitudes de datos personales (derechos ARCO):</strong> hasta 15 dias habiles conforme a la Ley 1581 de 2012.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Sobre Este Documento</h3>
+            <p>
+                Este documento constituye el acuerdo legal completo entre el cliente/usuario y DesarrollaLoYa
+                con respecto al uso de Query Manager. Reemplaza y sustituye cualquier acuerdo, comunicacion
+                o entendimiento previo, ya sea oral o escrito, relacionado con el mismo objeto.
+            </p>
+            <p>
+                Si alguna disposicion de estos terminos fuera declarada invalida o inaplicable por un tribunal
+                competente, las demas disposiciones permanenceran en pleno vigor y efecto.
+            </p>
+            <p style="font-size:13px;color:var(--text-light);margin-top:16px;">
+                <strong>Ultima actualizacion:</strong> Marzo de 2026<br>
+                <strong>Version del documento:</strong> 1.0
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<div class="footer">
+    <p>&copy; 2026 <strong>DesarrollaLoYa</strong> by Diego Hernandez. Todos los derechos reservados.</p>
+    <p style="margin-top:6px;">Query Manager &middot; Politica Legal v1.0</p>
+</div>
+
+<!-- ===================== SCRIPT ===================== -->
+<script>
+    function showTab(tabId) {
+        document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+        document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.getElementById(tabId).classList.add('active');
+        var tabs = document.querySelectorAll('.nav-tab');
+        var tabMap = ['derechos','privacidad','terminos','responsabilidad','jurisdiccion','contacto'];
+        for (var i = 0; i < tabMap.length; i++) {
+            if (tabMap[i] === tabId) { tabs[i].classList.add('active'); break; }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

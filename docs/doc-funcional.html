@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHPAdmin - Query Manager v1.0.0 | Documentacion Funcional</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-code: #e2e8f0;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            padding: 56px 24px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 18px;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .hero h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .hero .subtitle {
+            font-size: 1.05rem;
+            opacity: 0.88;
+            margin-bottom: 4px;
+        }
+        .hero .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.17);
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== NAV TABS ========== */
+        .nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .nav-tabs {
+            max-width: 940px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-tabs::-webkit-scrollbar { height: 3px; }
+        .nav-tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 13px 18px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .nav-tab:hover { color: var(--primary); }
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        /* ========== SECTIONS ========== */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .section-desc {
+            color: var(--text-light);
+            margin-bottom: 28px;
+            font-size: 0.97rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 32px 0 12px;
+            color: var(--text);
+        }
+        h4 {
+            font-size: 1.02rem;
+            font-weight: 600;
+            margin: 20px 0 8px;
+            color: var(--text);
+        }
+
+        p { margin-bottom: 14px; }
+        ul, ol { margin: 0 0 16px 22px; }
+        li { margin-bottom: 6px; }
+
+        /* ========== CARDS ========== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* ========== STEP CARDS ========== */
+        .steps { margin: 20px 0 28px; }
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .step-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+        .step-content { flex: 1; }
+        .step-content strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.97rem;
+        }
+        .step-content p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.92rem;
+        }
+
+        /* ========== ALERT BOXES ========== */
+        .box {
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 18px 0;
+            font-size: 0.93rem;
+            border-left: 4px solid;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .box-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 1px; }
+        .box-tip    { background: var(--success-bg); border-color: var(--success); }
+        .box-warn   { background: var(--warning-bg); border-color: var(--warning); }
+        .box-danger { background: var(--danger-bg);  border-color: var(--danger); }
+        .box-info   { background: var(--info-bg);    border-color: var(--info); }
+
+        /* ========== CODE ========== */
+        code {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 0.88em;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        }
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 14px 0 18px;
+            font-size: 0.87rem;
+            line-height: 1.6;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        }
+        pre code { background: none; padding: 0; }
+
+        /* ========== TABLES ========== */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 16px 0 22px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th {
+            background: var(--primary);
+            color: #fff;
+            padding: 11px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:nth-child(even) td { background: #f8fafc; }
+        tr:last-child td { border-bottom: none; }
+
+        /* ========== BADGE ========== */
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .badge-mysql { background: #dbeafe; color: #1d4ed8; }
+        .badge-sqlsrv { background: #fee2e2; color: #dc2626; }
+        .badge-admin { background: #f3e8ff; color: #7c3aed; }
+        .badge-user { background: #dcfce7; color: #16a34a; }
+
+        /* ========== MOCKUPS ========== */
+        .mockup {
+            background: #f1f5f9;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0 24px;
+            font-size: 0.82rem;
+        }
+        .mockup-bar {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mockup-dots {
+            display: flex;
+            gap: 5px;
+        }
+        .mockup-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .mockup-dot.r { background: #ef4444; }
+        .mockup-dot.y { background: #eab308; }
+        .mockup-dot.g { background: #22c55e; }
+        .mockup-body {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            min-height: 160px;
+        }
+        .mockup-sidebar {
+            width: 180px;
+            flex-shrink: 0;
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-code);
+            font-size: 0.78rem;
+        }
+        .mockup-sidebar-item {
+            padding: 7px 10px;
+            border-radius: 6px;
+            margin-bottom: 3px;
+            cursor: default;
+        }
+        .mockup-sidebar-item.active {
+            background: rgba(37, 99, 235, 0.3);
+            color: #93c5fd;
+        }
+        .mockup-main {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 14px;
+        }
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+        .mockup-input {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            width: 100%;
+            margin-bottom: 6px;
+        }
+        .mockup-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 600;
+        }
+        .mockup-btn.sm { padding: 3px 10px; font-size: 0.72rem; }
+        .mockup-btn.danger { background: var(--danger); }
+        .mockup-btn.success { background: var(--success); }
+        .mockup-textarea {
+            background: var(--bg-code);
+            color: var(--text-code);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.78rem;
+            width: 100%;
+            min-height: 60px;
+            margin-bottom: 8px;
+        }
+        .mockup-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+        .mockup-table th {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 5px 8px;
+            text-align: left;
+            font-size: 0.72rem;
+        }
+        .mockup-table td {
+            padding: 4px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .mockup-tree-item {
+            padding: 3px 0 3px 12px;
+            border-left: 1px solid #475569;
+            margin-left: 6px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+        }
+        .mockup-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* ========== MISC ========== */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+        .kbd {
+            display: inline-block;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.82em;
+            font-family: 'Consolas', monospace;
+            box-shadow: 0 1px 0 var(--border);
+        }
+        .flex-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .flex-row > * { flex: 1; min-width: 220px; }
+
+        @media (max-width: 640px) {
+            .hero { padding: 36px 16px 32px; }
+            .hero h1 { font-size: 1.5rem; }
+            .container { padding: 20px 14px 40px; }
+            .nav-tab { padding: 11px 12px; font-size: 0.78rem; }
+            .mockup-body { flex-direction: column; }
+            .mockup-sidebar { width: 100%; }
+            .step { flex-direction: column; gap: 10px; }
+            .flex-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================== HERO ============================== -->
+<div class="hero">
+    <div class="hero-logo">QM</div>
+    <h1>PHPAdmin - Query Manager</h1>
+    <p class="subtitle">Documentacion Funcional &mdash; Manual de Usuario</p>
+    <span class="version">v1.0.0</span>
+</div>
+
+<!-- ============================== NAV ============================== -->
+<div class="nav-wrapper">
+    <div class="nav-tabs" id="navTabs">
+        <div class="nav-tab active" data-tab="login">Inicio de Sesion</div>
+        <div class="nav-tab" data-tab="connections">Conexiones</div>
+        <div class="nav-tab" data-tab="browser">Explorador BD</div>
+        <div class="nav-tab" data-tab="queries">Consultas</div>
+        <div class="nav-tab" data-tab="export">Exportacion</div>
+        <div class="nav-tab" data-tab="audit">Auditoria</div>
+        <div class="nav-tab" data-tab="users">Usuarios</div>
+        <div class="nav-tab" data-tab="pwa">PWA</div>
+        <div class="nav-tab" data-tab="multiquery">Multi-Query</div>
+        <div class="nav-tab" data-tab="crossjoin">Cross-Connection JOIN</div>
+        <div class="nav-tab" data-tab="comparar">Comparar Esquemas</div>
+        <div class="nav-tab" data-tab="intellisense">Intellisense y Explorador</div>
+    </div>
+</div>
+
+<!-- ============================== CONTENT ============================== -->
+<div class="container">
+
+<!-- ============================================================== -->
+<!--                     TAB 1: INICIO DE SESION                    -->
+<!-- ============================================================== -->
+<div class="section active" id="tab-login">
+    <h2 class="section-title">Inicio de Sesion</h2>
+    <p class="section-desc">Autenticacion de usuarios, primer acceso y cambio de contrasena obligatorio.</p>
+
+    <h3>Pantalla de Login</h3>
+    <p>Al acceder a la aplicacion, se presenta un formulario de inicio de sesion centrado en pantalla con los campos <strong>Usuario</strong> y <strong>Contrasena</strong>. No es posible acceder a ninguna funcionalidad sin autenticarse previamente.</p>
+
+    <!-- Mockup login -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>PHPAdmin - Query Manager</span>
+        </div>
+        <div style="padding:30px;display:flex;justify-content:center;align-items:center;min-height:200px;background:#f1f5f9;">
+            <div style="background:#fff;border-radius:12px;padding:28px 32px;width:320px;box-shadow:0 4px 16px rgba(0,0,0,0.08);text-align:center;">
+                <div style="width:48px;height:48px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:12px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;">QM</div>
+                <div style="font-weight:700;margin-bottom:16px;font-size:1rem;">Iniciar Sesion</div>
+                <div class="mockup-input" style="text-align:left;">admin</div>
+                <div class="mockup-input" style="text-align:left;">************</div>
+                <div style="margin-top:10px;"><span class="mockup-btn" style="width:100%;display:block;text-align:center;padding:8px;">Ingresar</span></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Primer Acceso al Sistema</h3>
+    <p>Cuando la aplicacion se ejecuta por primera vez, el sistema genera automaticamente un usuario administrador con una <strong>contrasena aleatoria</strong>. Esta contrasena se almacena en un archivo de texto plano dentro del servidor.</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Localizar la contrasena inicial</strong>
+                <p>Abra el archivo <code>data/.initial_password</code> en el servidor. Este archivo contiene el usuario y la contrasena generados automaticamente.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Iniciar sesion con las credenciales iniciales</strong>
+                <p>Ingrese el usuario y la contrasena exactamente como aparecen en el archivo. El sistema validara las credenciales y le permitira avanzar.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Cambio de contrasena obligatorio</strong>
+                <p>Inmediatamente despues del primer login, el sistema muestra un dialogo (SweetAlert2) que <strong>obliga al usuario a cambiar su contrasena</strong>. No es posible cerrar este dialogo ni acceder a ninguna otra ruta sin completar el cambio.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Acceso completo</strong>
+                <p>Tras cambiar la contrasena exitosamente, el usuario ingresa a la aplicacion con acceso completo segun su rol.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Dialogo de Cambio de Contrasena</h3>
+    <p>El formulario de cambio de contrasena solicita tres campos:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Descripcion</th>
+                    <th>Validacion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Contrasena actual</strong></td>
+                    <td>La contrasena con la que se acaba de iniciar sesion</td>
+                    <td>Debe coincidir con la contrasena almacenada</td>
+                </tr>
+                <tr>
+                    <td><strong>Nueva contrasena</strong></td>
+                    <td>La nueva contrasena que el usuario desea establecer</td>
+                    <td>Minimo 4 caracteres</td>
+                </tr>
+                <tr>
+                    <td><strong>Confirmar contrasena</strong></td>
+                    <td>Repeticion de la nueva contrasena</td>
+                    <td>Debe coincidir con la nueva contrasena</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box box-warn">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Importante:</strong> Mientras el cambio de contrasena este pendiente, todas las demas rutas de la aplicacion estaran bloqueadas. El usuario sera redirigido al dialogo de cambio hasta que complete el proceso.</div>
+    </div>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Despues de cambiar la contrasena, elimine o proteja el archivo <code>data/.initial_password</code> del servidor para evitar accesos no autorizados.</div>
+    </div>
+
+    <h3>Cerrar Sesion</h3>
+    <p>El boton de <strong>Cerrar Sesion</strong> se encuentra en la parte inferior del menu lateral (sidebar). Al hacer clic, la sesion se destruye y el usuario es redirigido a la pantalla de login.</p>
+</div>
+
+<!-- ============================================================== -->
+<!--                      TAB 2: CONEXIONES                         -->
+<!-- ============================================================== -->
+<div class="section" id="tab-connections">
+    <h2 class="section-title">Conexiones</h2>
+    <p class="section-desc">Gestion de conexiones a bases de datos MySQL y SQL Server.</p>
+
+    <h3>Descripcion del Modulo</h3>
+    <p>El modulo de Conexiones permite registrar, editar, probar y eliminar configuraciones de conexion a servidores de bases de datos. La aplicacion soporta dos motores:</p>
+
+    <div class="flex-row">
+        <div class="card" style="text-align:center;">
+            <span class="badge badge-mysql">MySQL</span>
+            <p style="margin-top:10px;font-size:0.9rem;">Puerto por defecto: <code>3306</code><br>Driver PDO: <code>mysql</code></p>
+        </div>
+        <div class="card" style="text-align:center;">
+            <span class="badge badge-sqlsrv">SQL Server</span>
+            <p style="margin-top:10px;font-size:0.9rem;">Puerto por defecto: <code>1433</code><br>Driver PDO: <code>sqlsrv</code></p>
+        </div>
+    </div>
+
+    <h3>Crear una Conexion</h3>
+    <p>Pulse el boton <strong>"Nueva Conexion"</strong> para abrir el formulario de creacion. Complete los siguientes campos:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Obligatorio</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Nombre</strong></td><td>Si</td><td>Nombre descriptivo para identificar la conexion (ej: "Produccion MySQL")</td></tr>
+                <tr><td><strong>Driver</strong></td><td>Si</td><td>Motor de base de datos: MySQL o SQL Server</td></tr>
+                <tr><td><strong>Host</strong></td><td>Si</td><td>Direccion del servidor (IP o hostname, ej: <code>localhost</code>, <code>192.168.1.50</code>)</td></tr>
+                <tr><td><strong>Puerto</strong></td><td>Si</td><td>Se autocompleta segun el driver: 3306 (MySQL) o 1433 (SQL Server)</td></tr>
+                <tr><td><strong>Base de datos</strong></td><td>No</td><td>Nombre de la base de datos por defecto. Si se omite, se podra seleccionar despues</td></tr>
+                <tr><td><strong>Usuario</strong></td><td>Si</td><td>Usuario de la base de datos</td></tr>
+                <tr><td><strong>Contrasena</strong></td><td>Si</td><td>Contrasena del usuario de la base de datos</td></tr>
+                <tr><td><strong>Charset</strong></td><td>No</td><td>Conjunto de caracteres (ej: <code>utf8mb4</code>, <code>utf8</code>)</td></tr>
+                <tr><td><strong>Stored Procedure</strong></td><td>No</td><td>Nombre del procedimiento almacenado para el modo JSON. Solo se requiere si se planea usar el modo JSON (SP)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mockup form -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Nueva Conexion</span>
+        </div>
+        <div style="padding:16px;background:#fff;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.78rem;">
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Nombre</div><div class="mockup-input">Produccion MySQL</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Driver</div><div class="mockup-input">MySQL &#9660;</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Host</div><div class="mockup-input">192.168.1.100</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Puerto</div><div class="mockup-input">3306</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Base de datos</div><div class="mockup-input">mi_aplicacion</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Usuario</div><div class="mockup-input">db_user</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Contrasena</div><div class="mockup-input">************</div></div>
+                <div><div style="font-weight:600;margin-bottom:3px;color:#64748b;">Charset</div><div class="mockup-input">utf8mb4</div></div>
+            </div>
+            <div style="font-weight:600;margin:8px 0 3px;color:#64748b;font-size:0.78rem;">Stored Procedure (modo JSON)</div>
+            <div class="mockup-input" style="width:50%;">sp_execute_query</div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+                <span class="mockup-btn">Guardar</span>
+                <span class="mockup-btn" style="background:#64748b;">Cancelar</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-warning">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Validacion de drivers:</strong> Al abrir el formulario de conexion, el sistema verifica automaticamente los drivers de base de datos disponibles en el servidor. Si SQL Server no esta disponible (por ejemplo, si falta el Microsoft ODBC Driver), la opcion aparece deshabilitada en el selector con el texto <strong>"(no disponible en este servidor)"</strong>. Ademas, se muestra un aviso amarillo: <em>"SQL Server no disponible: Este servidor no tiene el Microsoft ODBC Driver. Solo MySQL/MariaDB."</em> Si el usuario intenta seleccionar SQL Server sin el driver instalado, se muestra un error (toast) y la seleccion revierte automaticamente a MySQL.</div>
+    </div>
+
+    <div class="box box-info">
+        <span class="box-icon">&#8505;</span>
+        <div><strong>Nota:</strong> Al seleccionar el driver, el campo de puerto se autocompleta automaticamente con el valor por defecto correspondiente. Puede modificarlo si su servidor utiliza un puerto diferente.</div>
+    </div>
+
+    <h3>Lista de Conexiones</h3>
+    <p>Las conexiones guardadas se muestran como tarjetas (cards) con la siguiente informacion:</p>
+    <ul>
+        <li><strong>Badge del driver:</strong> Indicador visual del motor (MySQL en azul, SQL Server en rojo)</li>
+        <li><strong>Host y puerto</strong></li>
+        <li><strong>Base de datos</strong> (si fue especificada)</li>
+        <li><strong>Estado:</strong> Indicador visual de conectividad</li>
+        <li><strong>Acciones:</strong> Botones para probar, editar y eliminar</li>
+    </ul>
+
+    <h3>Probar Conexion</h3>
+    <p>Pulse el boton <strong>"Probar"</strong> en la tarjeta de una conexion. El sistema intentara establecer una conexion real con el servidor de base de datos y mostrara un mensaje de exito o error segun el resultado.</p>
+
+    <h3>Editar Conexion</h3>
+    <p>Al editar una conexion existente, todos los campos se precargan con los valores actuales. El campo de contrasena se muestra <strong>vacio</strong> por seguridad.</p>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Si deja el campo de contrasena en blanco al editar, el sistema conservara la contrasena existente. Solo ingrese un valor si desea cambiarla.</div>
+    </div>
+
+    <h3>Eliminar Conexion</h3>
+    <p>Al pulsar el boton de eliminar, se muestra un dialogo de confirmacion. Esta accion es <strong>irreversible</strong> y eliminara permanentemente la configuracion de la conexion.</p>
+
+    <div class="box box-warn">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Advertencia:</strong> Eliminar una conexion no afecta la base de datos remota, solo remueve la configuracion almacenada en la aplicacion.</div>
+    </div>
+
+    <h3>Conexion Seleccionada</h3>
+    <p>Una conexion se considera "seleccionada" cuando se utiliza activamente en los modulos de <strong>Explorador</strong> o <strong>Consultas</strong>. La conexion activa se muestra en los selectores superiores de dichos modulos.</p>
+</div>
+
+<!-- ============================================================== -->
+<!--                 TAB 3: EXPLORADOR DE BASE DE DATOS             -->
+<!-- ============================================================== -->
+<div class="section" id="tab-browser">
+    <h2 class="section-title">Explorador de Base de Datos</h2>
+    <p class="section-desc">Navegacion visual del esquema de bases de datos: tablas, vistas, procedimientos y funciones.</p>
+
+    <h3>Seleccion de Conexion</h3>
+    <p>En la parte superior del modulo se encuentra un <strong>selector de conexion</strong> (dropdown). Seleccione la conexion que desea explorar. El sistema cargara la lista de bases de datos disponibles en el servidor.</p>
+
+    <h3>Navegacion en Arbol</h3>
+    <p>El explorador presenta una estructura jerarquica en forma de arbol:</p>
+
+    <!-- Mockup browser -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Explorador de Base de Datos</span>
+        </div>
+        <div class="mockup-body">
+            <div class="mockup-sidebar" style="width:220px;">
+                <div style="font-weight:600;margin-bottom:8px;color:#93c5fd;font-size:0.82rem;">Conexion: Produccion <span class="badge badge-mysql" style="font-size:0.65rem;">MySQL</span></div>
+                <div style="color:#93c5fd;font-weight:600;padding:4px 0;">&#128194; mi_aplicacion</div>
+                <div style="padding-left:12px;">
+                    <div style="color:#94a3b8;font-weight:600;padding:3px 0;">&#128196; Tablas</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;cursor:pointer;">users</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;cursor:pointer;">orders</div>
+                    <div class="mockup-tree-item" style="color:#93c5fd;background:rgba(37,99,235,0.2);border-radius:4px;padding:3px 4px 3px 12px;">products</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;cursor:pointer;">categories</div>
+                    <div style="color:#94a3b8;font-weight:600;padding:3px 0;margin-top:4px;">&#128065; Vistas</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;">v_active_users</div>
+                    <div style="color:#94a3b8;font-weight:600;padding:3px 0;margin-top:4px;">&#9881; Procedimientos</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;">sp_get_report</div>
+                    <div style="color:#94a3b8;font-weight:600;padding:3px 0;margin-top:4px;">&#402; Funciones</div>
+                    <div class="mockup-tree-item" style="color:#e2e8f0;">fn_calc_total</div>
+                </div>
+            </div>
+            <div class="mockup-main">
+                <div class="mockup-header">
+                    &#128196; Tabla: products
+                    <span class="mockup-tag">4 columnas</span>
+                </div>
+                <table class="mockup-table">
+                    <thead>
+                        <tr><th>Columna</th><th>Tipo</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>id</td><td>int(11)</td><td>NO</td><td>PRI</td><td>NULL</td><td>auto_increment</td></tr>
+                        <tr><td>name</td><td>varchar(255)</td><td>NO</td><td></td><td>NULL</td><td></td></tr>
+                        <tr><td>price</td><td>decimal(10,2)</td><td>YES</td><td></td><td>0.00</td><td></td></tr>
+                        <tr><td>active</td><td>tinyint(1)</td><td>NO</td><td></td><td>1</td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <h3>Elementos del Arbol</h3>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Elemento</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Bases de datos</strong></td><td>Nivel raiz. Muestra todas las bases de datos accesibles en el servidor</td></tr>
+                <tr><td><strong>Tablas</strong></td><td>Tablas de la base de datos seleccionada</td></tr>
+                <tr><td><strong>Vistas</strong></td><td>Vistas definidas en la base de datos</td></tr>
+                <tr><td><strong>Procedimientos</strong></td><td>Procedimientos almacenados</td></tr>
+                <tr><td><strong>Funciones</strong></td><td>Funciones definidas por el usuario</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Detalle de Tablas</h3>
+    <p>Al seleccionar una tabla, el panel derecho muestra la estructura de columnas con:</p>
+    <ul>
+        <li><strong>Nombre</strong> de la columna</li>
+        <li><strong>Tipo de dato</strong> (ej: <code>varchar(255)</code>, <code>int(11)</code>, <code>decimal(10,2)</code>)</li>
+        <li><strong>Nullable</strong>: Indica si la columna acepta valores nulos</li>
+        <li><strong>Key</strong>: Tipo de clave (PRI = primaria, UNI = unica, MUL = indice)</li>
+        <li><strong>Default</strong>: Valor por defecto de la columna</li>
+        <li><strong>Extra</strong>: Informacion adicional (ej: <code>auto_increment</code>)</li>
+    </ul>
+
+    <h3>Detalle de Procedimientos y Funciones</h3>
+    <p>Al seleccionar un procedimiento o funcion, se muestra:</p>
+    <ul>
+        <li><strong>Parametros</strong>: Lista de parametros con nombre, tipo de dato y modo (<code>IN</code>, <code>OUT</code>, <code>INOUT</code>)</li>
+        <li><strong>Definicion</strong>: Codigo fuente (source) del procedimiento o funcion</li>
+    </ul>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Al hacer clic sobre el nombre de una tabla en el arbol, el sistema puede autocompletar el editor de consultas con un <code>SELECT * FROM nombre_tabla</code>, facilitando la consulta rapida de datos.</div>
+    </div>
+
+    <h3>Selector de Base de Datos</h3>
+    <p>En la parte superior del explorador se encuentra un selector adicional que permite cambiar entre las diferentes bases de datos del servidor sin necesidad de volver al selector de conexion.</p>
+</div>
+
+<!-- ============================================================== -->
+<!--                       TAB 4: CONSULTAS                         -->
+<!-- ============================================================== -->
+<div class="section" id="tab-queries">
+    <h2 class="section-title">Consultas</h2>
+    <p class="section-desc">Editor SQL avanzado con dos modos de ejecucion: directo y via procedimiento almacenado (JSON).</p>
+
+    <h3>Interfaz del Editor</h3>
+    <p>El modulo de consultas presenta un editor SQL con tema oscuro donde puede escribir y ejecutar sentencias SQL contra la base de datos seleccionada.</p>
+
+    <!-- Mockup query editor -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Editor de Consultas</span>
+        </div>
+        <div style="padding:14px;background:#fff;">
+            <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;font-size:0.78rem;">
+                <div class="mockup-input" style="width:180px;margin:0;">Produccion MySQL &#9660;</div>
+                <div class="mockup-input" style="width:160px;margin:0;">mi_aplicacion &#9660;</div>
+                <div style="display:flex;gap:4px;margin-left:auto;">
+                    <span class="mockup-btn sm">Modo Directo</span>
+                    <span class="mockup-btn sm" style="background:#7c3aed;">Modo JSON</span>
+                </div>
+            </div>
+            <div class="mockup-textarea">SELECT u.id, u.name, u.email, COUNT(o.id) as total_orders
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.active = 1
+GROUP BY u.id
+ORDER BY total_orders DESC;</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+                <span class="mockup-btn success">&#9654; Ejecutar</span>
+                <span class="mockup-btn danger">&#9632; Cancelar</span>
+                <span style="margin-left:auto;font-size:0.75rem;color:#64748b;">3 filas &middot; 45ms</span>
+            </div>
+            <table class="mockup-table">
+                <thead><tr><th>id</th><th>name</th><th>email</th><th>total_orders</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Maria Garcia</td><td>maria@email.com</td><td>24</td></tr>
+                    <tr><td>3</td><td>Carlos Lopez</td><td>carlos@email.com</td><td>18</td></tr>
+                    <tr><td>7</td><td>Ana Torres</td><td>ana@email.com</td><td>12</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3>Selectores Superiores</h3>
+    <ul>
+        <li><strong>Selector de conexion:</strong> Permite elegir la conexion activa sobre la cual ejecutar las consultas</li>
+        <li><strong>Selector de base de datos:</strong> Permite cambiar la base de datos dentro del servidor seleccionado</li>
+    </ul>
+
+    <h3>Modos de Ejecucion</h3>
+    <p>El editor soporta dos modos de ejecucion, seleccionables mediante botones en la barra superior:</p>
+
+    <hr class="divider">
+
+    <h4>1. Modo Directo</h4>
+    <div class="card">
+        <div class="card-title">Ejecucion directa contra la base de datos</div>
+        <p>Ejecuta la sentencia SQL tal como fue escrita directamente contra el servidor de base de datos seleccionado. Utiliza <strong>prepared statements</strong> de PDO para la ejecucion segura.</p>
+        <p><strong>Ideal para:</strong></p>
+        <ul>
+            <li>Consultas simples (SELECT, INSERT, UPDATE, DELETE)</li>
+            <li>Consultas ad-hoc y exploracion de datos</li>
+            <li>Ejecucion de DDL (CREATE, ALTER, DROP)</li>
+        </ul>
+        <p><strong>Ejemplo:</strong></p>
+        <pre><code>SELECT * FROM products WHERE price > 100 ORDER BY name ASC</code></pre>
+    </div>
+
+    <h4>2. Modo JSON (Stored Procedure)</h4>
+    <div class="card">
+        <div class="card-title">Ejecucion via procedimiento almacenado</div>
+        <p>Envia la consulta y los parametros en formato JSON a un <strong>procedimiento almacenado</strong> configurado previamente en la conexion. El procedimiento almacenado recibe el JSON, lo interpreta y ejecuta la consulta.</p>
+        <p><strong>Formato del JSON enviado:</strong></p>
+        <pre><code>{
+    "query": "SELECT * FROM users WHERE name = ?",
+    "params": ["John"],
+    "limit": 10
+}</code></pre>
+        <p><strong>Campos del JSON:</strong></p>
+        <ul>
+            <li><code>query</code>: La sentencia SQL con placeholders (<code>?</code>) para los parametros</li>
+            <li><code>params</code>: Array con los valores de los parametros, en orden</li>
+            <li><code>limit</code>: Limite de registros a retornar (opcional)</li>
+        </ul>
+
+        <div class="box box-warn">
+            <span class="box-icon">&#9888;</span>
+            <div><strong>Requisito:</strong> Para utilizar el modo JSON, la conexion debe tener configurado el nombre del procedimiento almacenado en el campo "Stored Procedure" del formulario de conexion.</div>
+        </div>
+    </div>
+
+    <h3>Resultados</h3>
+    <p>Los resultados de la consulta se muestran en una tabla con:</p>
+    <ul>
+        <li><strong>Encabezados de columna</strong> con los nombres de los campos retornados</li>
+        <li><strong>Conteo de filas</strong> retornadas</li>
+        <li><strong>Tiempo de ejecucion</strong> en milisegundos</li>
+    </ul>
+
+    <h3>Manejo de Errores</h3>
+    <p>Si la consulta genera un error, se muestra un mensaje con formato especifico del driver de base de datos utilizado. Esto incluye el codigo de error y la descripcion proporcionada por el motor.</p>
+
+    <h3>Cancelar Consultas</h3>
+    <p>Para consultas de larga duracion, el boton <strong>"Cancelar"</strong> permite abortar la ejecucion. Internamente utiliza <code>AbortController</code> para cancelar la solicitud HTTP al servidor.</p>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Las consultas ejecutadas se registran automaticamente en el modulo de Auditoria. Puede marcarlas como favoritas desde alli para accederlas rapidamente en el futuro.</div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!--                      TAB 5: EXPORTACION                        -->
+<!-- ============================================================== -->
+<div class="section" id="tab-export">
+    <h2 class="section-title">Exportacion</h2>
+    <p class="section-desc">Exportacion de resultados de consultas en multiples formatos: CSV, Excel y JSON.</p>
+
+    <h3>Disponibilidad</h3>
+    <p>Los botones de exportacion aparecen en la <strong>barra de herramientas de resultados</strong> despues de ejecutar una consulta exitosamente en el modulo de Consultas. Solo se muestran cuando hay datos disponibles para exportar.</p>
+
+    <!-- Mockup export toolbar -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Barra de Resultados</span>
+        </div>
+        <div style="padding:12px 16px;background:#fff;display:flex;align-items:center;gap:10px;font-size:0.8rem;">
+            <span style="color:#64748b;">156 filas &middot; 89ms</span>
+            <span style="margin-left:auto;"></span>
+            <span class="mockup-btn sm" style="background:#16a34a;">&#128196; CSV</span>
+            <span class="mockup-btn sm" style="background:#1d4ed8;">&#128202; Excel</span>
+            <span class="mockup-btn sm" style="background:#7c3aed;">&#123;&#125; JSON</span>
+        </div>
+    </div>
+
+    <h3>Formatos Disponibles</h3>
+
+    <div class="card">
+        <div class="card-title">&#128196; CSV (Comma-Separated Values)</div>
+        <ul>
+            <li>Codificacion: <strong>UTF-8 con BOM</strong> (Byte Order Mark) para compatibilidad con Excel</li>
+            <li>Separador: <strong>punto y coma</strong> (<code>;</code>) como delimitador de campos</li>
+            <li>Formato de descarga: archivo <code>.csv</code></li>
+            <li>Incluye fila de encabezados con nombres de columnas</li>
+        </ul>
+        <p><strong>Ejemplo de salida:</strong></p>
+        <pre><code>id;nombre;email;total
+1;Maria Garcia;maria@email.com;24
+3;Carlos Lopez;carlos@email.com;18</code></pre>
+    </div>
+
+    <div class="card">
+        <div class="card-title">&#128202; Excel (XLSX)</div>
+        <ul>
+            <li>Formato nativo <strong>Office Open XML</strong> (.xlsx)</li>
+            <li>Generado <strong>en el servidor</strong> (server-side) sin dependencia de librerias externas</li>
+            <li>Encabezados de columna en la primera fila con formato</li>
+            <li>Datos tipados correctamente en las celdas</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-title">&#123;&#125; JSON</div>
+        <ul>
+            <li>Formato JSON estructurado con metadatos adicionales</li>
+            <li>Limitado a <strong>JSON_RESULT_LIMIT</strong> registros por exportacion</li>
+        </ul>
+        <p><strong>Estructura del archivo:</strong></p>
+        <pre><code>{
+    "query": "SELECT * FROM users WHERE active = 1",
+    "connection": "Produccion MySQL",
+    "timestamp": "2026-03-27T10:30:00",
+    "row_count": 156,
+    "data": [
+        { "id": 1, "name": "Maria Garcia", "email": "maria@email.com" },
+        ...
+    ]
+}</code></pre>
+    </div>
+
+    <div class="box box-info">
+        <span class="box-icon">&#8505;</span>
+        <div><strong>Nota:</strong> La exportacion en formato JSON incluye metadatos contextuales como la consulta que genero los datos, el nombre de la conexion, la marca de tiempo y el conteo total de filas.</div>
+    </div>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Use CSV para importar datos en hojas de calculo. Use Excel para compartir informes con formato nativo. Use JSON para integraciones con otras aplicaciones o APIs.</div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!--                       TAB 6: AUDITORIA                         -->
+<!-- ============================================================== -->
+<div class="section" id="tab-audit">
+    <h2 class="section-title">Auditoria</h2>
+    <p class="section-desc">Registro automatico de todas las consultas ejecutadas, con filtros, favoritos y estadisticas.</p>
+
+    <h3>Registro Automatico</h3>
+    <p>Cada vez que se ejecuta una consulta desde el modulo de Consultas, el sistema registra automaticamente una entrada de auditoria con la siguiente informacion:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Campo</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Conexion</strong></td><td>Nombre de la conexion utilizada</td></tr>
+                <tr><td><strong>Base de datos</strong></td><td>Nombre de la base de datos contra la que se ejecuto</td></tr>
+                <tr><td><strong>Consulta SQL</strong></td><td>Texto completo de la sentencia SQL ejecutada</td></tr>
+                <tr><td><strong>Modo de ejecucion</strong></td><td>Indica si fue en modo <code>direct</code> o <code>json_sp</code></td></tr>
+                <tr><td><strong>Tiempo de ejecucion</strong></td><td>Duracion en milisegundos (ms)</td></tr>
+                <tr><td><strong>Filas retornadas</strong></td><td>Cantidad de registros devueltos por la consulta</td></tr>
+                <tr><td><strong>Estado</strong></td><td><code>success</code> o <code>error</code></td></tr>
+                <tr><td><strong>Mensaje de error</strong></td><td>Detalle del error (solo si el estado es <code>error</code>)</td></tr>
+                <tr><td><strong>IP del usuario</strong></td><td>Direccion IP desde la cual se ejecuto la consulta</td></tr>
+                <tr><td><strong>Fecha y hora</strong></td><td>Marca de tiempo (timestamp) de la ejecucion</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mockup audit log -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Registro de Auditoria</span>
+        </div>
+        <div style="padding:14px;background:#fff;">
+            <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;font-size:0.76rem;">
+                <div class="mockup-input" style="width:140px;margin:0;">Todas las conexiones &#9660;</div>
+                <div class="mockup-input" style="width:100px;margin:0;">Todos &#9660;</div>
+                <div class="mockup-input" style="width:110px;margin:0;">Desde: 01/03/2026</div>
+                <div class="mockup-input" style="width:110px;margin:0;">Hasta: 27/03/2026</div>
+                <div class="mockup-input" style="width:140px;margin:0;">Buscar texto...</div>
+            </div>
+            <table class="mockup-table">
+                <thead>
+                    <tr><th>Fecha</th><th>Conexion</th><th>SQL</th><th>Modo</th><th>Tiempo</th><th>Filas</th><th>Estado</th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>27/03 10:30</td>
+                        <td>Produccion</td>
+                        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">SELECT * FROM users WHERE...</td>
+                        <td><span class="mockup-tag">directo</span></td>
+                        <td>45ms</td>
+                        <td>156</td>
+                        <td style="color:#16a34a;font-weight:600;">OK</td>
+                        <td style="cursor:pointer;">&#9734;</td>
+                    </tr>
+                    <tr>
+                        <td>27/03 10:28</td>
+                        <td>Desarrollo</td>
+                        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">INSERT INTO orders ...</td>
+                        <td><span class="mockup-tag" style="background:#f3e8ff;color:#7c3aed;">json_sp</span></td>
+                        <td>120ms</td>
+                        <td>1</td>
+                        <td style="color:#16a34a;font-weight:600;">OK</td>
+                        <td style="cursor:pointer;">&#9733;</td>
+                    </tr>
+                    <tr>
+                        <td>27/03 10:25</td>
+                        <td>Produccion</td>
+                        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">SELECT invalid_col FROM...</td>
+                        <td><span class="mockup-tag">directo</span></td>
+                        <td>3ms</td>
+                        <td>0</td>
+                        <td style="color:#dc2626;font-weight:600;">Error</td>
+                        <td style="cursor:pointer;">&#9734;</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:0.75rem;color:#64748b;">
+                <span>Mostrando 1-25 de 342</span>
+                <div style="display:flex;gap:4px;">
+                    <span class="mockup-btn sm" style="background:#64748b;">&#171; Anterior</span>
+                    <span class="mockup-btn sm">Siguiente &#187;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Filtros</h3>
+    <p>Los registros de auditoria pueden filtrarse utilizando los controles superiores:</p>
+    <ul>
+        <li><strong>Conexion:</strong> Filtrar por conexion especifica o ver todas</li>
+        <li><strong>Estado:</strong> Filtrar por estado de ejecucion (todos, exitosos, errores)</li>
+        <li><strong>Rango de fechas:</strong> Seleccionar fecha de inicio y fin</li>
+        <li><strong>Busqueda de texto:</strong> Buscar dentro del texto SQL de las consultas</li>
+    </ul>
+
+    <h3>Paginacion</h3>
+    <p>Para conjuntos grandes de registros, la tabla incluye controles de paginacion que permiten navegar entre las paginas de resultados.</p>
+
+    <h3>Favoritos</h3>
+    <p>Puede marcar consultas importantes como <strong>favoritas</strong> haciendo clic en el icono de estrella junto a cada registro. Las consultas favoritas:</p>
+    <ul>
+        <li>Se pueden visualizar en una pestana dedicada de <strong>Favoritos</strong></li>
+        <li>Permiten acceso rapido a consultas frecuentes o importantes</li>
+        <li><strong>No se eliminan</strong> al limpiar los registros de auditoria</li>
+    </ul>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Use los favoritos para guardar consultas que ejecuta frecuentemente. Puede acceder a ellas rapidamente desde la pestana de Favoritos y reutilizarlas en el editor de consultas.</div>
+    </div>
+
+    <h3>Limpiar Registros</h3>
+    <p>La funcion <strong>"Limpiar registros"</strong> elimina todas las entradas de auditoria <strong>excepto las marcadas como favoritas</strong>. Se requiere confirmacion antes de proceder.</p>
+
+    <div class="box box-warn">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Advertencia:</strong> La limpieza de registros es irreversible. Asegurese de marcar como favoritas las consultas que desee conservar antes de ejecutar esta accion.</div>
+    </div>
+
+    <h3>Estadisticas</h3>
+    <p>El modulo muestra estadisticas generales de uso:</p>
+    <div class="flex-row">
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;color:var(--primary);">342</div>
+            <div style="font-size:0.82rem;color:var(--text-light);">Total de consultas</div>
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;color:var(--success);">328</div>
+            <div style="font-size:0.82rem;color:var(--text-light);">Exitosas</div>
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;color:var(--danger);">14</div>
+            <div style="font-size:0.82rem;color:var(--text-light);">Con error</div>
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;color:var(--warning);">67ms</div>
+            <div style="font-size:0.82rem;color:var(--text-light);">Tiempo promedio</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!--                       TAB 7: USUARIOS                          -->
+<!-- ============================================================== -->
+<div class="section" id="tab-users">
+    <h2 class="section-title">Usuarios</h2>
+    <p class="section-desc">Gestion de usuarios y roles de la aplicacion. Modulo exclusivo para administradores.</p>
+
+    <div class="box box-danger">
+        <span class="box-icon">&#128274;</span>
+        <div><strong>Acceso restringido:</strong> Este modulo solo es visible y accesible para usuarios con rol de <strong>Administrador</strong>. Los usuarios con rol <strong>User</strong> no veran esta opcion en el menu lateral.</div>
+    </div>
+
+    <h3>Roles del Sistema</h3>
+    <div class="flex-row">
+        <div class="card">
+            <div class="card-title"><span class="badge badge-admin">Admin</span> Administrador</div>
+            <ul>
+                <li>Acceso completo a todos los modulos</li>
+                <li>Gestion de conexiones, consultas, exportacion, auditoria</li>
+                <li>Gestion de usuarios (crear, editar, eliminar)</li>
+                <li>Acceso al modulo de Usuarios</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="badge badge-user">User</span> Usuario</div>
+            <ul>
+                <li>Acceso a conexiones, consultas, exportacion, auditoria</li>
+                <li><strong>Sin acceso</strong> al modulo de Usuarios</li>
+                <li>No puede crear, editar ni eliminar otros usuarios</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Crear Usuario</h3>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Abrir formulario</strong>
+                <p>Pulse el boton "Nuevo Usuario" para abrir el formulario de creacion.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Completar los campos</strong>
+                <p>Ingrese: nombre de usuario (unico), nombre completo, contrasena, rol (admin o user) y estado (activo/inactivo).</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Guardar</strong>
+                <p>Pulse "Guardar" para crear el usuario. El sistema validara que el nombre de usuario no exista previamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Campo</th><th>Obligatorio</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Nombre de usuario</strong></td><td>Si</td><td>Identificador unico para el login</td></tr>
+                <tr><td><strong>Nombre completo</strong></td><td>Si</td><td>Nombre para mostrar en la interfaz</td></tr>
+                <tr><td><strong>Contrasena</strong></td><td>Si (crear)</td><td>Contrasena del usuario. Minimo 4 caracteres</td></tr>
+                <tr><td><strong>Rol</strong></td><td>Si</td><td><code>admin</code> o <code>user</code></td></tr>
+                <tr><td><strong>Estado</strong></td><td>Si</td><td>Activo o inactivo. Usuarios inactivos no pueden iniciar sesion</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Editar Usuario</h3>
+    <p>Al editar un usuario, todos los campos se precargan con sus valores actuales. El campo de contrasena se muestra <strong>vacio</strong>.</p>
+
+    <div class="box box-info">
+        <span class="box-icon">&#8505;</span>
+        <div><strong>Nota:</strong> Si deja el campo de contrasena en blanco al editar, la contrasena actual del usuario se mantendra sin cambios. Solo ingrese un valor si desea establecer una nueva contrasena.</div>
+    </div>
+
+    <h3>Eliminar Usuario</h3>
+    <p>Al eliminar un usuario, se muestra un dialogo de confirmacion. La accion es irreversible.</p>
+
+    <div class="box box-danger">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Restriccion:</strong> El sistema no permite eliminar al <strong>ultimo administrador</strong>. Siempre debe existir al menos un usuario con rol de administrador para garantizar el acceso a la gestion del sistema.</div>
+    </div>
+
+    <!-- Mockup users list -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Gestion de Usuarios</span>
+        </div>
+        <div style="padding:14px;background:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-weight:700;font-size:0.9rem;">Usuarios del sistema</div>
+                <span class="mockup-btn sm">+ Nuevo Usuario</span>
+            </div>
+            <table class="mockup-table">
+                <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>admin</td>
+                        <td>Administrador Principal</td>
+                        <td><span class="badge badge-admin" style="font-size:0.65rem;">Admin</span></td>
+                        <td style="color:#16a34a;font-weight:600;">Activo</td>
+                        <td><span class="mockup-btn sm" style="background:#d97706;">Editar</span></td>
+                    </tr>
+                    <tr>
+                        <td>jperez</td>
+                        <td>Juan Perez</td>
+                        <td><span class="badge badge-user" style="font-size:0.65rem;">User</span></td>
+                        <td style="color:#16a34a;font-weight:600;">Activo</td>
+                        <td><span class="mockup-btn sm" style="background:#d97706;">Editar</span> <span class="mockup-btn sm danger">Eliminar</span></td>
+                    </tr>
+                    <tr>
+                        <td>mgarcia</td>
+                        <td>Maria Garcia</td>
+                        <td><span class="badge badge-user" style="font-size:0.65rem;">User</span></td>
+                        <td style="color:#dc2626;font-weight:600;">Inactivo</td>
+                        <td><span class="mockup-btn sm" style="background:#d97706;">Editar</span> <span class="mockup-btn sm danger">Eliminar</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!--                         TAB 8: PWA                             -->
+<!-- ============================================================== -->
+<div class="section" id="tab-pwa">
+    <h2 class="section-title">Aplicacion Web Progresiva (PWA)</h2>
+    <p class="section-desc">Instalacion, funcionamiento offline y experiencia nativa en dispositivos moviles y escritorio.</p>
+
+    <h3>Que es una PWA?</h3>
+    <p>PHPAdmin - Query Manager esta implementado como una <strong>Progressive Web Application (PWA)</strong>, lo que permite instalarlo como una aplicacion nativa en dispositivos moviles (Android, iOS) y de escritorio (Windows, macOS, Linux).</p>
+
+    <h3>Instalacion</h3>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Acceder desde un navegador compatible</strong>
+                <p>Abra la aplicacion en Chrome, Edge, Safari u otro navegador compatible con PWA.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Aceptar el prompt de instalacion</strong>
+                <p>El navegador mostrara automaticamente un banner o boton de instalacion si detecta que la aplicacion es una PWA valida. Haga clic en <strong>"Instalar"</strong>.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Usar como aplicacion nativa</strong>
+                <p>Una vez instalada, la aplicacion aparecera en el menu de aplicaciones del dispositivo y se abrira en ventana independiente sin barra de navegacion del navegador.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Caracteristicas PWA</h3>
+    <div class="flex-row">
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:6px;">&#128268;</div>
+            <div class="card-title">Instalable</div>
+            <p style="font-size:0.85rem;color:var(--text-light);margin:0;">Se instala como aplicacion nativa en movil y escritorio</p>
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:6px;">&#128246;</div>
+            <div class="card-title">Offline</div>
+            <p style="font-size:0.85rem;color:var(--text-light);margin:0;">Interfaz cacheada disponible sin conexion</p>
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:6px;">&#128187;</div>
+            <div class="card-title">Standalone</div>
+            <p style="font-size:0.85rem;color:var(--text-light);margin:0;">Se ejecuta sin barra de navegacion del navegador</p>
+        </div>
+    </div>
+
+    <h3>Funcionamiento Offline</h3>
+    <p>La aplicacion utiliza un <strong>Service Worker</strong> para cachear los recursos estaticos de la interfaz (HTML, CSS, JavaScript, iconos). Esto permite que:</p>
+    <ul>
+        <li>La interfaz de usuario se cargue aunque no haya conexion a Internet</li>
+        <li>Las llamadas a la API que requieran conectividad mostraran un mensaje <strong>"Sin conexion"</strong> informando al usuario</li>
+        <li>Al recuperar la conexion, la aplicacion vuelve a funcionar normalmente sin necesidad de recargar</li>
+    </ul>
+
+    <div class="box box-info">
+        <span class="box-icon">&#8505;</span>
+        <div><strong>Nota:</strong> El modo offline permite visualizar la interfaz, pero las operaciones que requieren comunicacion con el servidor (consultas, conexiones, etc.) no estaran disponibles hasta que se restablezca la conectividad.</div>
+    </div>
+
+    <h3>Iconos</h3>
+    <p>La aplicacion incluye multiples formatos de iconos para garantizar la mejor experiencia visual en todas las plataformas:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Formato</th><th>Tamano</th><th>Uso</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>SVG</strong></td><td>Vectorial</td><td>Icono principal escalable para cualquier resolucion</td></tr>
+                <tr><td><strong>PNG 192px</strong></td><td>192 x 192</td><td>Icono para la pantalla de inicio en dispositivos moviles</td></tr>
+                <tr><td><strong>PNG 512px</strong></td><td>512 x 512</td><td>Icono de alta resolucion para splash screen y tiendas de apps</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Modo de Visualizacion</h3>
+    <p>La aplicacion se ejecuta en modo <code>standalone</code>, lo que significa que al abrirla como PWA instalada, <strong>no se muestra la barra de direcciones ni los controles del navegador</strong>. Esto proporciona una experiencia similar a la de una aplicacion nativa.</p>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Para la mejor experiencia, instale la aplicacion como PWA en su dispositivo. Esto le dara acceso rapido desde el escritorio o la pantalla de inicio, sin necesidad de recordar la URL.</div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!--                     TAB 9: MULTI-QUERY                         -->
+<!-- ============================================================== -->
+<div class="section" id="tab-multiquery">
+    <h2 class="section-title">Multi-Query</h2>
+    <p class="section-desc">Ejecute la misma consulta SQL contra multiples conexiones de base de datos de forma simultanea y compare resultados.</p>
+
+    <h3>Descripcion General</h3>
+    <p>El modulo <strong>Multi-Query</strong> permite seleccionar varias conexiones previamente configuradas y ejecutar una unica sentencia SQL en todas ellas al mismo tiempo. Los resultados se presentan en pestanas individuales (una por conexion), facilitando la comparacion de datos entre distintos servidores o bases de datos.</p>
+
+    <h3>Seleccion de Conexiones</h3>
+    <p>En la parte superior de la pantalla se muestra una lista de todas las conexiones disponibles con <strong>checkboxes</strong> para seleccionar cuales participaran en la ejecucion. Cada conexion puede tener opcionalmente una <strong>base de datos especifica</strong> asignada.</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Elemento</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Checkbox de conexion</strong></td><td>Activa o desactiva la conexion para la ejecucion multiple</td></tr>
+                <tr><td><strong>Nombre de conexion</strong></td><td>Identificador de la conexion (servidor, alias)</td></tr>
+                <tr><td><strong>Base de datos (opcional)</strong></td><td>Permite especificar una BD diferente a la predeterminada para esa conexion</td></tr>
+                <tr><td><strong>Boton "Explorar BD"</strong></td><td>Abre el drawer lateral con el esquema de esa conexion (tablas, vistas, procedimientos)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Editor SQL Compartido</h3>
+    <p>Un unico editor SQL se comparte para todas las conexiones seleccionadas. El editor incluye <strong>Intellisense</strong> con autocompletado de palabras clave SQL, nombres de tablas, vistas, procedimientos y columnas. La consulta escrita se enviara a cada conexion seleccionada.</p>
+
+    <div class="box box-info">
+        <span class="box-icon">&#8505;</span>
+        <div><strong>Nota:</strong> El autocompletado se activa tras escribir 3 o mas caracteres y utiliza un mecanismo de debounce para optimizar las peticiones. Los esquemas se cachean por conexion para mejorar el rendimiento.</div>
+    </div>
+
+    <h3>Ejecucion y Resultados</h3>
+    <p>Al ejecutar la consulta, se envia simultaneamente a todas las conexiones seleccionadas. Los resultados se muestran en <strong>pestanas</strong>, una por cada conexion:</p>
+    <ul>
+        <li><span class="badge" style="background:var(--success-bg);color:var(--success);">OK</span> Pestana con indicador <strong>verde</strong> si la consulta se ejecuto correctamente</li>
+        <li><span class="badge" style="background:var(--danger-bg);color:var(--danger);">ERROR</span> Pestana con indicador <strong>rojo</strong> si hubo un error en esa conexion</li>
+    </ul>
+
+    <!-- Mockup Multi-Query -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Multi-Query</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;">
+            <!-- Connection selection area -->
+            <div style="background:#fff;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #e2e8f0;">
+                <div style="font-weight:700;font-size:0.82rem;margin-bottom:10px;">Conexiones</div>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.78rem;">
+                    <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" checked disabled> <strong>Produccion MySQL</strong> <span style="color:#64748b;">- db_prod</span> <span class="mockup-btn sm">Explorar BD</span></label>
+                    <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" checked disabled> <strong>Staging SQL Server</strong> <span style="color:#64748b;">- db_staging</span> <span class="mockup-btn sm">Explorar BD</span></label>
+                    <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" disabled> <strong>Dev Local</strong> <span style="color:#64748b;">- db_dev</span> <span class="mockup-btn sm">Explorar BD</span></label>
+                </div>
+            </div>
+            <!-- SQL Editor -->
+            <div class="mockup-textarea">SELECT COUNT(*) AS total FROM users WHERE active = 1;</div>
+            <div style="margin-bottom:12px;"><span class="mockup-btn">Ejecutar en Todas</span></div>
+            <!-- Result tabs -->
+            <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                <div style="display:flex;gap:2px;margin-bottom:10px;font-size:0.76rem;">
+                    <div style="padding:6px 14px;background:var(--primary);color:#fff;border-radius:6px 6px 0 0;font-weight:600;">Produccion MySQL <span style="background:#22c55e;color:#fff;padding:1px 6px;border-radius:4px;font-size:0.68rem;margin-left:4px;">OK</span></div>
+                    <div style="padding:6px 14px;background:#f1f5f9;color:var(--text-light);border-radius:6px 6px 0 0;">Staging SQL Server <span style="background:#ef4444;color:#fff;padding:1px 6px;border-radius:4px;font-size:0.68rem;margin-left:4px;">ERR</span></div>
+                </div>
+                <table class="mockup-table">
+                    <thead><tr><th>total</th></tr></thead>
+                    <tbody><tr><td>1,247</td></tr></tbody>
+                </table>
+                <div style="margin-top:10px;display:flex;gap:6px;">
+                    <span class="mockup-btn sm">CSV</span>
+                    <span class="mockup-btn sm">Excel</span>
+                    <span class="mockup-btn sm">JSON</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Exportacion por Pestana</h3>
+    <p>Cada pestana de resultados permite exportar los datos de esa conexion especifica en los siguientes formatos:</p>
+    <ul>
+        <li><strong>CSV</strong> - Archivo de valores separados por comas</li>
+        <li><strong>Excel</strong> - Libro de Excel (.xlsx)</li>
+        <li><strong>JSON</strong> - Formato JSON estructurado</li>
+    </ul>
+
+    <h3>Boton "Explorar BD"</h3>
+    <p>Cada conexion dispone de un boton <strong>"Explorar BD"</strong> que abre un <strong>drawer lateral</strong> con el esquema completo de la base de datos seleccionada. Desde el drawer se puede navegar por tablas, vistas, procedimientos y funciones, e insertar nombres de objetos directamente en el editor SQL haciendo clic sobre ellos.</p>
+</div>
+
+<!-- ============================================================== -->
+<!--                  TAB 10: CROSS-CONNECTION JOIN                  -->
+<!-- ============================================================== -->
+<div class="section" id="tab-crossjoin">
+    <h2 class="section-title">Cross-Connection JOIN</h2>
+    <p class="section-desc">Combine datos de diferentes servidores y bases de datos en una sola consulta, sin necesidad de mover datos manualmente.</p>
+
+    <h3>Descripcion General</h3>
+    <p>El modulo <strong>Cross-Connection JOIN</strong> permite cruzar informacion procedente de distintas conexiones de base de datos como si estuvieran en el mismo servidor. Esto es util para comparar datos entre entornos (produccion vs staging), combinar informacion de sistemas heterogeneos (MySQL + SQL Server), o realizar auditorias cruzadas.</p>
+
+    <h3>Dos Modos de Operacion</h3>
+    <p>El modulo ofrece dos modos de trabajo complementarios:</p>
+
+    <div class="flex-row">
+        <div class="card">
+            <div class="card-title">Modo Constructor</div>
+            <p>Interfaz visual guiada para definir fuentes de datos y combinarlas mediante JOINs o operaciones de conjuntos.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">Modo Editor SQL Libre</div>
+            <p>Editor SQL donde las fuentes definidas se convierten en tablas virtuales y se puede escribir SQL libremente.</p>
+        </div>
+    </div>
+
+    <h3>Modo Constructor</h3>
+    <h4>Definicion de Fuentes (N fuentes)</h4>
+    <p>Cada fuente de datos se configura con los siguientes parametros:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Campo</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Conexion</strong></td><td>Seleccionar una de las conexiones configuradas en el sistema</td></tr>
+                <tr><td><strong>Base de datos</strong></td><td>Seleccionar la BD dentro de esa conexion</td></tr>
+                <tr><td><strong>SQL</strong></td><td>Consulta SQL que define los datos de esta fuente</td></tr>
+                <tr><td><strong>Alias</strong></td><td>Nombre corto que identificara esta fuente en los JOINs (ej: <code>src_a</code>, <code>prod_users</code>)</td></tr>
+                <tr><td><strong>Boton Probar</strong></td><td>Ejecuta la consulta de la fuente individualmente para verificar que devuelve datos correctos</td></tr>
+                <tr><td><strong>Boton BD</strong></td><td>Abre el drawer lateral con el esquema de la BD seleccionada para esa fuente</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Combinacion mediante JOINs</h4>
+    <p>Las fuentes se pueden combinar utilizando una <strong>cadena de JOINs</strong> con los siguientes tipos:</p>
+    <ul>
+        <li><code>INNER JOIN</code> - Solo filas que coinciden en ambas fuentes</li>
+        <li><code>LEFT JOIN</code> - Todas las filas de la fuente izquierda, coincidencias de la derecha</li>
+        <li><code>RIGHT JOIN</code> - Todas las filas de la fuente derecha, coincidencias de la izquierda</li>
+        <li><code>CROSS JOIN</code> - Producto cartesiano de ambas fuentes</li>
+    </ul>
+
+    <h4>Combinacion mediante Operaciones de Conjuntos</h4>
+    <p>Alternativamente, las fuentes se pueden combinar con operaciones de conjuntos:</p>
+    <ul>
+        <li><code>UNION</code> - Combina resultados eliminando duplicados</li>
+        <li><code>UNION ALL</code> - Combina resultados incluyendo duplicados</li>
+        <li><code>INTERSECT</code> - Solo filas presentes en ambas fuentes</li>
+        <li><code>EXCEPT</code> - Filas de la primera fuente que no estan en la segunda</li>
+    </ul>
+
+    <!-- Mockup Constructor -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Cross-Connection JOIN - Modo Constructor</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;">
+            <!-- Sources -->
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+                <div style="flex:1;min-width:220px;background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                    <div style="font-weight:700;font-size:0.82rem;margin-bottom:8px;">Fuente A</div>
+                    <div class="mockup-input">Conexion: Produccion MySQL</div>
+                    <div class="mockup-input">BD: db_prod</div>
+                    <div class="mockup-textarea" style="min-height:40px;">SELECT id, name, email FROM users</div>
+                    <div class="mockup-input">Alias: prod_users</div>
+                    <div style="display:flex;gap:4px;"><span class="mockup-btn sm success">Probar</span> <span class="mockup-btn sm">BD</span></div>
+                </div>
+                <div style="flex:1;min-width:220px;background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                    <div style="font-weight:700;font-size:0.82rem;margin-bottom:8px;">Fuente B</div>
+                    <div class="mockup-input">Conexion: Staging SQL Server</div>
+                    <div class="mockup-input">BD: db_staging</div>
+                    <div class="mockup-textarea" style="min-height:40px;">SELECT id, name, email FROM users</div>
+                    <div class="mockup-input">Alias: stg_users</div>
+                    <div style="display:flex;gap:4px;"><span class="mockup-btn sm success">Probar</span> <span class="mockup-btn sm">BD</span></div>
+                </div>
+            </div>
+            <!-- Join config -->
+            <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;margin-bottom:12px;">
+                <div style="font-weight:700;font-size:0.82rem;margin-bottom:8px;">Combinacion</div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;flex-wrap:wrap;">
+                    <span class="mockup-tag">prod_users</span>
+                    <select disabled style="padding:4px 8px;border-radius:4px;border:1px solid #e2e8f0;font-size:0.76rem;"><option>INNER JOIN</option></select>
+                    <span class="mockup-tag">stg_users</span>
+                    <span style="color:var(--text-light);">ON</span>
+                    <span style="font-family:Consolas,monospace;font-size:0.76rem;">prod_users.id = stg_users.id</span>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+                <span class="mockup-btn">Ejecutar</span>
+                <span class="mockup-btn sm" style="background:var(--info);">Ver Query</span>
+            </div>
+            <!-- Results -->
+            <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                <table class="mockup-table">
+                    <thead><tr><th>prod_users.id</th><th>prod_users.name</th><th>stg_users.name</th><th>stg_users.email</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Juan Perez</td><td>Juan Perez</td><td>juan@test.com</td></tr>
+                        <tr><td>2</td><td>Ana Garcia</td><td>Ana G.</td><td>ana@test.com</td></tr>
+                    </tbody>
+                </table>
+                <div style="margin-top:10px;display:flex;gap:6px;">
+                    <span class="mockup-btn sm">CSV</span>
+                    <span class="mockup-btn sm">Excel</span>
+                    <span class="mockup-btn sm">JSON</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Modo Editor SQL Libre</h3>
+    <p>En este modo, las fuentes definidas se convierten en <strong>tablas virtuales</strong> accesibles por su alias. El usuario escribe SQL libremente utilizando todas las clausulas estandar:</p>
+    <ul>
+        <li><code>SELECT</code>, <code>JOIN</code>, <code>WHERE</code>, <code>ORDER BY</code>, <code>GROUP BY</code></li>
+        <li><code>UNION</code>, <code>EXCEPT</code>, <code>INTERSECT</code></li>
+        <li>Funciones de agregacion, subconsultas, etc.</li>
+    </ul>
+
+    <p>Este modo esta impulsado por el <strong>VirtualQueryEngine</strong>, que se encarga de resolver las fuentes virtuales y ejecutar la consulta combinada de forma transparente.</p>
+
+    <!-- Mockup Editor Libre -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Cross-Connection JOIN - Editor SQL Libre</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;">
+            <div style="display:flex;gap:6px;margin-bottom:10px;font-size:0.76rem;">
+                <span class="mockup-tag">prod_users (Produccion MySQL)</span>
+                <span class="mockup-tag">stg_users (Staging SQL Server)</span>
+                <span class="mockup-tag">logs (Dev Local)</span>
+            </div>
+            <div class="mockup-textarea" style="min-height:80px;">SELECT p.name, p.email, s.last_login
+FROM prod_users p
+INNER JOIN stg_users s ON p.id = s.id
+WHERE p.active = 1
+ORDER BY s.last_login DESC</div>
+            <div style="display:flex;gap:6px;">
+                <span class="mockup-btn">Ejecutar</span>
+                <span class="mockup-btn sm" style="background:var(--info);">Ver Query Construida</span>
+            </div>
+        </div>
+    </div>
+
+    <h3>Drawer de Esquema por Fuente</h3>
+    <p>Cada fuente dispone de un boton <strong>BD</strong> que abre un drawer lateral mostrando el esquema de la base de datos seleccionada. Esto facilita la exploracion de la estructura sin salir del modulo.</p>
+
+    <h3>Drawer de Query Construida</h3>
+    <p>El boton <strong>"Ver Query"</strong> abre un drawer que muestra la consulta completa que sera ejecutada, incluyendo las resoluciones de las fuentes virtuales. Esto es util para depuracion y comprension de la consulta final.</p>
+
+    <h3>Exportacion de Resultados</h3>
+    <p>Los resultados combinados se pueden exportar en los formatos:</p>
+    <ul>
+        <li><strong>CSV</strong> - Valores separados por comas</li>
+        <li><strong>Excel</strong> - Libro de Excel (.xlsx)</li>
+        <li><strong>JSON</strong> - Formato JSON estructurado</li>
+    </ul>
+</div>
+
+<!-- ============================================================== -->
+<!--                  TAB 11: COMPARAR ESQUEMAS                     -->
+<!-- ============================================================== -->
+<div class="section" id="tab-comparar">
+    <h2 class="section-title">Comparar Esquemas</h2>
+    <p class="section-desc">Compare la estructura de dos bases de datos en diferentes conexiones y genere scripts de migracion automaticamente.</p>
+
+    <h3>Descripcion General</h3>
+    <p>El modulo <strong>Comparar Esquemas</strong> permite seleccionar dos conexiones con sus respectivas bases de datos y realizar una comparacion estructural completa. Identifica diferencias en tablas, columnas, vistas, procedimientos almacenados y funciones, y puede generar un script de migracion para sincronizar los esquemas.</p>
+
+    <h3>Configuracion de la Comparacion</h3>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Parametro</th><th>Descripcion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Conexion A + BD</strong></td><td>Primera conexion y base de datos (origen de referencia)</td></tr>
+                <tr><td><strong>Conexion B + BD</strong></td><td>Segunda conexion y base de datos (destino de comparacion)</td></tr>
+                <tr><td><strong>Direccion</strong></td><td>Define la perspectiva de la comparacion: <code>A &rarr; B</code>, <code>B &rarr; A</code> o <code>Bidireccional</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Elementos Comparados</h3>
+    <p>La comparacion analiza los siguientes elementos de cada base de datos:</p>
+    <ul>
+        <li><strong>Tablas</strong> - Existencia y estructura completa</li>
+        <li><strong>Columnas</strong> - Tipo de dato, nulabilidad (nullable), valor por defecto (default)</li>
+        <li><strong>Vistas</strong> - Existencia y definicion SQL</li>
+        <li><strong>Procedimientos almacenados</strong> - Existencia y definicion SQL</li>
+        <li><strong>Funciones</strong> - Existencia y definicion SQL</li>
+    </ul>
+
+    <h3>Resultados de la Comparacion</h3>
+    <p>Cada elemento comparado recibe un <strong>badge de estado</strong> que indica el resultado:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Estado</th><th>Badge</th><th>Significado</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Identico</strong></td><td><span class="badge" style="background:var(--success-bg);color:var(--success);">IDENTICO</span></td><td>El objeto existe en ambas BD y su estructura es exactamente igual</td></tr>
+                <tr><td><strong>Diferente</strong></td><td><span class="badge" style="background:var(--warning-bg);color:var(--warning);">DIFERENTE</span></td><td>El objeto existe en ambas BD pero tiene diferencias estructurales</td></tr>
+                <tr><td><strong>Solo en A</strong></td><td><span class="badge" style="background:var(--danger-bg);color:var(--danger);">SOLO EN A</span></td><td>El objeto solo existe en la Conexion A</td></tr>
+                <tr><td><strong>Solo en B</strong></td><td><span class="badge" style="background:var(--danger-bg);color:var(--danger);">SOLO EN B</span></td><td>El objeto solo existe en la Conexion B</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Filtrado por Estado</h3>
+    <p>Los resultados se pueden filtrar por estado para enfocarse en las diferencias relevantes. Por ejemplo, mostrar solo los elementos marcados como <strong>"Diferente"</strong> o <strong>"Solo en A"</strong>.</p>
+
+    <h3>Detalles Expandibles</h3>
+    <p>Cada elemento del resultado se puede expandir para ver informacion detallada:</p>
+    <ul>
+        <li><strong>Tablas con diferencias</strong>: Muestra un diff a nivel de columnas indicando que columnas se agregaron, eliminaron o cambiaron (tipo, nullable, default)</li>
+        <li><strong>Vistas / Procedimientos / Funciones</strong>: Muestra una comparacion lado a lado (side-by-side) de la definicion SQL en cada BD</li>
+    </ul>
+
+    <!-- Mockup Comparar Esquemas -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Comparar Esquemas</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;">
+            <!-- Config row -->
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+                <div style="flex:1;min-width:180px;background:#fff;border-radius:8px;padding:10px;border:1px solid #e2e8f0;">
+                    <div style="font-weight:700;font-size:0.78rem;margin-bottom:6px;">Conexion A</div>
+                    <div class="mockup-input">Produccion MySQL</div>
+                    <div class="mockup-input">BD: db_prod</div>
+                </div>
+                <div style="display:flex;align-items:center;font-size:1.1rem;font-weight:700;color:var(--primary);">&harr;</div>
+                <div style="flex:1;min-width:180px;background:#fff;border-radius:8px;padding:10px;border:1px solid #e2e8f0;">
+                    <div style="font-weight:700;font-size:0.78rem;margin-bottom:6px;">Conexion B</div>
+                    <div class="mockup-input">Staging SQL Server</div>
+                    <div class="mockup-input">BD: db_staging</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;align-items:center;">
+                <span style="font-size:0.78rem;font-weight:600;">Direccion:</span>
+                <select disabled style="padding:4px 8px;border-radius:4px;border:1px solid #e2e8f0;font-size:0.76rem;"><option>Bidireccional</option></select>
+                <span class="mockup-btn">Comparar</span>
+            </div>
+            <!-- Results -->
+            <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                <div style="display:flex;gap:6px;margin-bottom:10px;font-size:0.72rem;">
+                    <span style="padding:3px 10px;background:var(--success-bg);color:var(--success);border-radius:4px;font-weight:600;cursor:pointer;">Identico (12)</span>
+                    <span style="padding:3px 10px;background:var(--warning-bg);color:var(--warning);border-radius:4px;font-weight:600;cursor:pointer;">Diferente (3)</span>
+                    <span style="padding:3px 10px;background:var(--danger-bg);color:var(--danger);border-radius:4px;font-weight:600;cursor:pointer;">Solo en A (2)</span>
+                    <span style="padding:3px 10px;background:var(--danger-bg);color:var(--danger);border-radius:4px;font-weight:600;cursor:pointer;">Solo en B (1)</span>
+                </div>
+                <table class="mockup-table">
+                    <thead><tr><th>Tipo</th><th>Nombre</th><th>Estado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tabla</td><td>users</td><td><span class="badge" style="background:var(--warning-bg);color:var(--warning);">DIFERENTE</span></td></tr>
+                        <tr><td>Tabla</td><td>orders</td><td><span class="badge" style="background:var(--success-bg);color:var(--success);">IDENTICO</span></td></tr>
+                        <tr><td>Tabla</td><td>audit_log</td><td><span class="badge" style="background:var(--danger-bg);color:var(--danger);">SOLO EN A</span></td></tr>
+                        <tr><td>Vista</td><td>v_active_users</td><td><span class="badge" style="background:var(--warning-bg);color:var(--warning);">DIFERENTE</span></td></tr>
+                        <tr><td>Proc</td><td>sp_get_report</td><td><span class="badge" style="background:var(--success-bg);color:var(--success);">IDENTICO</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <h3>Generacion de Script de Migracion</h3>
+    <p>Una vez completada la comparacion, el sistema puede generar automaticamente un <strong>script de migracion SQL</strong> que incluye las sentencias necesarias para sincronizar el esquema destino con el origen:</p>
+    <ul>
+        <li><code>CREATE TABLE</code> - Para tablas que solo existen en el origen</li>
+        <li><code>ALTER TABLE ADD COLUMN</code> - Para columnas faltantes</li>
+        <li><code>ALTER TABLE ALTER COLUMN</code> - Para columnas con tipo de dato diferente</li>
+        <li><code>DROP TABLE</code> / <code>DROP COLUMN</code> - Para objetos que solo existen en el destino (segun direccion)</li>
+        <li><code>CREATE/ALTER VIEW</code>, <code>CREATE/ALTER PROCEDURE</code>, <code>CREATE/ALTER FUNCTION</code> - Para vistas, procedimientos y funciones</li>
+    </ul>
+
+    <h3>Ejecucion del Script de Migracion</h3>
+    <p>El script generado se puede ejecutar directamente contra la conexion destino. La ejecucion se realiza <strong>sentencia por sentencia</strong>, mostrando el resultado individual de cada una (exito o error con detalle). Esto permite identificar rapidamente que parte de la migracion fallo.</p>
+
+    <div class="box box-warn">
+        <span class="box-icon">&#9888;</span>
+        <div><strong>Precaucion:</strong> Los scripts de migracion pueden incluir sentencias destructivas (DROP). Revise cuidadosamente el script generado antes de ejecutarlo, especialmente en entornos de produccion.</div>
+    </div>
+
+    <h3>Exportacion de Diferencias</h3>
+    <p>Las diferencias encontradas se pueden exportar a un archivo <strong>CSV</strong> para analisis externo o documentacion.</p>
+</div>
+
+<!-- ============================================================== -->
+<!--              TAB 12: INTELLISENSE Y EXPLORADOR BD              -->
+<!-- ============================================================== -->
+<div class="section" id="tab-intellisense">
+    <h2 class="section-title">Intellisense y Explorador BD</h2>
+    <p class="section-desc">Funcionalidades compartidas de autocompletado SQL y exploracion de esquemas disponibles en todos los modulos de la aplicacion.</p>
+
+    <h3>Descripcion General</h3>
+    <p>Los modulos de <strong>Intellisense</strong> (autocompletado) y <strong>Explorador de BD</strong> (drawer de esquema) son funcionalidades transversales presentes en todos los editores SQL de la aplicacion: Consultas, Multi-Query, Cross-Connection JOIN y cualquier otro modulo que incluya un editor SQL.</p>
+
+    <h3>Autocompletado Intellisense</h3>
+    <p>El sistema de autocompletado ofrece sugerencias contextuales mientras el usuario escribe en cualquier editor SQL:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Tipo de Sugerencia</th><th>Ejemplos</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Palabras clave SQL</strong></td><td><code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>ORDER BY</code>, etc.</td></tr>
+                <tr><td><strong>Nombres de tablas</strong></td><td><code>users</code>, <code>orders</code>, <code>products</code>, etc.</td></tr>
+                <tr><td><strong>Nombres de vistas</strong></td><td><code>v_active_users</code>, <code>v_monthly_sales</code>, etc.</td></tr>
+                <tr><td><strong>Procedimientos almacenados</strong></td><td><code>sp_get_report</code>, <code>sp_update_status</code>, etc.</td></tr>
+                <tr><td><strong>Nombres de columnas</strong></td><td><code>id</code>, <code>name</code>, <code>email</code>, <code>created_at</code>, etc.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Comportamiento del Autocompletado</h3>
+    <ul>
+        <li><strong>Activacion:</strong> Se activa automaticamente tras escribir <strong>3 o mas caracteres</strong></li>
+        <li><strong>Debounce:</strong> Las solicitudes al servidor se optimizan con un mecanismo de debounce para evitar peticiones excesivas</li>
+        <li><strong>Cache:</strong> Los esquemas se almacenan en cache por conexion, evitando consultas repetidas al servidor</li>
+        <li><strong>Seleccion:</strong> Navegar con flechas arriba/abajo y confirmar con <span class="kbd">Tab</span> o <span class="kbd">Enter</span></li>
+    </ul>
+
+    <!-- Mockup Intellisense -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Intellisense - Autocompletado SQL</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;">
+            <div style="position:relative;background:var(--bg-code);border-radius:8px;padding:14px;font-family:Consolas,monospace;font-size:0.82rem;color:var(--text-code);">
+                <span style="color:#93c5fd;">SELECT</span> * <span style="color:#93c5fd;">FROM</span> use<span style="border-right:2px solid #93c5fd;animation:blink 1s infinite;">&#8203;</span>
+                <!-- Autocomplete dropdown -->
+                <div style="position:absolute;top:38px;left:130px;background:#1e293b;border:1px solid #475569;border-radius:6px;overflow:hidden;font-size:0.76rem;min-width:200px;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+                    <div style="padding:6px 10px;background:rgba(37,99,235,0.3);color:#93c5fd;display:flex;justify-content:space-between;"><span>users</span><span style="color:#64748b;">tabla</span></div>
+                    <div style="padding:6px 10px;color:var(--text-code);display:flex;justify-content:space-between;"><span>user_roles</span><span style="color:#64748b;">tabla</span></div>
+                    <div style="padding:6px 10px;color:var(--text-code);display:flex;justify-content:space-between;"><span>user_sessions</span><span style="color:#64748b;">tabla</span></div>
+                    <div style="padding:6px 10px;color:var(--text-code);display:flex;justify-content:space-between;"><span>v_user_summary</span><span style="color:#64748b;">vista</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Explorador de BD (Drawer de Esquema)</h3>
+    <p>El <strong>Explorador de BD</strong> es un panel lateral (drawer) que muestra la estructura completa de la base de datos seleccionada en forma de arbol expandible.</p>
+
+    <h4>Estructura del Arbol</h4>
+    <p>El arbol organiza los objetos de la base de datos en las siguientes categorias:</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Categoria</th><th>Contenido</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Tablas</strong></td><td>Cada tabla se puede expandir para ver sus columnas (nombre, tipo, nulabilidad)</td></tr>
+                <tr><td><strong>Vistas</strong></td><td>Lista de vistas disponibles en la BD</td></tr>
+                <tr><td><strong>Procedimientos</strong></td><td>Lista de stored procedures con sus parametros</td></tr>
+                <tr><td><strong>Funciones</strong></td><td>Lista de funciones con sus parametros</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mockup Schema Drawer -->
+    <div class="mockup">
+        <div class="mockup-bar">
+            <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+            <span>Explorador de BD - Drawer de Esquema</span>
+        </div>
+        <div style="padding:16px;background:#f1f5f9;display:flex;gap:12px;">
+            <!-- Main editor area -->
+            <div style="flex:1;background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">Editor SQL</div>
+                <div class="mockup-textarea">SELECT * FROM |</div>
+            </div>
+            <!-- Schema drawer -->
+            <div style="width:220px;flex-shrink:0;background:var(--bg-code);border-radius:8px;padding:12px;color:var(--text-code);font-size:0.76rem;">
+                <div style="font-weight:700;margin-bottom:8px;font-size:0.8rem;">Explorador BD</div>
+                <div class="mockup-input" style="background:#334155;border-color:#475569;color:var(--text-code);margin-bottom:10px;">Buscar...</div>
+                <div style="margin-bottom:6px;font-weight:600;color:#93c5fd;">Tablas</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">users</div>
+                <div class="mockup-tree-item" style="padding-left:24px;font-size:0.72rem;color:#94a3b8;">id (int, PK)</div>
+                <div class="mockup-tree-item" style="padding-left:24px;font-size:0.72rem;color:#94a3b8;">name (varchar)</div>
+                <div class="mockup-tree-item" style="padding-left:24px;font-size:0.72rem;color:#94a3b8;">email (varchar)</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">orders</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">products</div>
+                <div style="margin-top:8px;margin-bottom:6px;font-weight:600;color:#93c5fd;">Vistas</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">v_active_users</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">v_monthly_sales</div>
+                <div style="margin-top:8px;margin-bottom:6px;font-weight:600;color:#93c5fd;">Procedimientos</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">sp_get_report</div>
+                <div style="margin-top:8px;margin-bottom:6px;font-weight:600;color:#93c5fd;">Funciones</div>
+                <div class="mockup-tree-item" style="cursor:pointer;">fn_calc_total</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Interaccion: Clic para Insertar</h3>
+    <p>Al hacer clic en cualquier objeto del arbol (tabla, vista, procedimiento, funcion o columna), el <strong>nombre del objeto se inserta automaticamente</strong> en la posicion actual del cursor en el editor SQL. Esto acelera significativamente la escritura de consultas y reduce errores de tipeo.</p>
+
+    <h3>Filtro de Busqueda</h3>
+    <p>En la parte superior del drawer se encuentra un <strong>campo de busqueda</strong> que filtra en tiempo real los objetos mostrados en el arbol. Escriba parte del nombre de una tabla, columna o procedimiento para encontrarlo rapidamente entre esquemas grandes.</p>
+
+    <div class="box box-tip">
+        <span class="box-icon">&#10004;</span>
+        <div><strong>Consejo:</strong> Combine el Explorador de BD con el Intellisense para una experiencia de desarrollo SQL eficiente. Use el explorador para descubrir la estructura y el autocompletado para escribir consultas rapidamente.</div>
+    </div>
+</div>
+
+</div><!-- /.container -->
+
+<!-- ============================== JS ============================== -->
+<script>
+(function () {
+    const tabs = document.querySelectorAll('.nav-tab');
+    const sections = document.querySelectorAll('.section');
+    const tabIds = ['login', 'connections', 'browser', 'queries', 'export', 'audit', 'users', 'pwa', 'multiquery', 'crossjoin', 'comparar', 'intellisense'];
+
+    function activate(tabName) {
+        tabs.forEach(function (t) {
+            t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+        });
+        sections.forEach(function (s) {
+            s.classList.toggle('active', s.id === 'tab-' + tabName);
+        });
+    }
+
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            var name = this.getAttribute('data-tab');
+            activate(name);
+            history.replaceState(null, '', '#' + name);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    // Deep-link support
+    var hash = window.location.hash.replace('#', '');
+    if (tabIds.indexOf(hash) !== -1) {
+        activate(hash);
+    }
+})();
+</script>
+
+</body>
+</html>

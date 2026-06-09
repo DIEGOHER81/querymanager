@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Manager - Guia de Instalacion</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-code: #e2e8f0;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --info: #0891b2;
+            --info-bg: #cffafe;
+            --accent: #7c3aed;
+            --accent-bg: #ede9fe;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Header */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; position: relative; }
+        .hero p { font-size: 16px; opacity: 0.9; position: relative; max-width: 500px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-tabs {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .nav-tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .nav-tab .tab-icon { font-size: 18px; }
+
+        /* Content */
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 24px; }
+        .card h3 {
+            font-size: 17px;
+            margin: 24px 0 12px;
+            color: var(--primary-dark);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        /* Step cards */
+        .step-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .step-header:hover { background: var(--bg); }
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .step-number.done { background: var(--success); }
+        .step-title { font-weight: 600; font-size: 16px; flex: 1; }
+        .step-toggle {
+            color: var(--text-light);
+            transition: transform 0.3s;
+            font-size: 20px;
+        }
+        .step-header[aria-expanded="true"] .step-toggle { transform: rotate(180deg); }
+        .step-body {
+            padding: 0 24px 24px;
+            display: none;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        .step-body.open { display: block; }
+
+        /* Code blocks */
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0;
+            position: relative;
+        }
+        pre .comment { color: #64748b; }
+        pre .cmd { color: #7dd3fc; }
+        pre .flag { color: #a78bfa; }
+        pre .string { color: #86efac; }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-code);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .copy-btn.copied { background: var(--success); color: white; }
+
+        code {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .alert-warning { background: var(--warning-bg); color: #92400e; border-left: 4px solid var(--warning); }
+        .alert-danger { background: var(--danger-bg); color: #991b1b; border-left: 4px solid var(--danger); }
+        .alert-info { background: var(--info-bg); color: #155e75; border-left: 4px solid var(--info); }
+        .alert-success { background: var(--success-bg); color: #166534; border-left: 4px solid var(--success); }
+
+        /* Tables */
+        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th {
+            background: var(--bg);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 2px solid var(--border);
+        }
+        td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg); }
+        td code { font-size: 12px; }
+
+        /* Diagram */
+        .diagram {
+            background: var(--bg-code);
+            color: #7dd3fc;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 16px 0;
+            white-space: pre;
+        }
+
+        /* Lists */
+        ol, ul { padding-left: 24px; margin: 10px 0; }
+        li { margin-bottom: 8px; }
+        li strong { color: var(--text); }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-free { background: var(--success-bg); color: var(--success); }
+        .badge-required { background: var(--danger-bg); color: var(--danger); }
+        .badge-optional { background: var(--primary-light); color: var(--primary); }
+
+        /* Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .comparison-col {
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 16px;
+        }
+        .comparison-col h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-col.winner { border-color: var(--success); background: var(--success-bg); }
+        .comparison-col.winner h4 { color: var(--success); }
+
+        /* PWA section */
+        .pwa-tip {
+            background: var(--accent-bg);
+            border: 1px solid #c4b5fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .pwa-tip h4 { color: var(--accent); margin-bottom: 8px; }
+
+        /* Print */
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: transform 0.2s;
+            z-index: 200;
+        }
+        .print-btn:hover { transform: scale(1.1); }
+
+        @media print {
+            .nav-tabs, .print-btn { display: none; }
+            .section { display: block !important; page-break-inside: avoid; }
+            .step-body { display: block !important; }
+            .hero { padding: 30px 20px; }
+            body { font-size: 12px; }
+        }
+
+        @media (max-width: 640px) {
+            .hero { padding: 40px 16px 30px; }
+            .hero h1 { font-size: 24px; }
+            .container { padding: 16px 12px 40px; }
+            .card { padding: 18px; }
+            .comparison { grid-template-columns: 1fr; }
+            .nav-tab { padding: 12px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-logo">QM</div>
+        <h1>Query Manager</h1>
+        <p>Guia completa de instalacion en Android y configuracion de VPN</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="showSection('termux')" data-section="termux">
+            <span class="tab-icon">&#128241;</span> Servidor en Android
+        </div>
+        <div class="nav-tab" onclick="showSection('vpn')" data-section="vpn">
+            <span class="tab-icon">&#128274;</span> VPN con ZeroTier
+        </div>
+        <div class="nav-tab" onclick="showSection('pwa')" data-section="pwa">
+            <span class="tab-icon">&#128228;</span> Instalar como PWA
+        </div>
+        <div class="nav-tab" onclick="showSection('troubleshooting')" data-section="troubleshooting">
+            <span class="tab-icon">&#128295;</span> Problemas comunes
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ==================== SECTION: TERMUX ==================== -->
+        <div class="section active" id="section-termux">
+
+            <div class="card">
+                <h2><span class="icon">&#128241;</span> Servidor PHP en Android con Termux</h2>
+                <p>Convierte tu celular o tablet Android en un servidor PHP completo para ejecutar Query Manager sin necesidad de una PC.</p>
+
+                <div class="diagram">         &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+         &#9474;         Tablet/Celular Android       &#9474;
+         &#9474;                                      &#9474;
+         &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9474;        &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+         &#9474;  &#9474; Chrome  &#9474;&#9472;&#9472;&#9472;&#9654;&#9474; Termux         &#9474;  &#9474;        &#9474; MySQL/SQL Srv&#9474;
+         &#9474;  &#9474; (naveg.)&#9474;    &#9474; Apache + PHP   &#9474;&#9472;&#9472;&#9508;&#9472;WiFi&#9472;&#9654;&#9474; (otro equipo)&#9474;
+         &#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    &#9474; Puerto 8080    &#9474;  &#9474;        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+         &#9474;                 &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9474;
+         &#9474;  http://localhost:8080/phpadmin/      &#9474;
+         &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</div>
+
+                <p>Otros dispositivos en la misma red tambien pueden acceder usando la IP del tablet.</p>
+            </div>
+
+            <!-- Requisitos -->
+            <div class="card">
+                <h2><span class="icon">&#9989;</span> Requisitos</h2>
+                <ul>
+                    <li>Android <strong>7.0</strong> o superior</li>
+                    <li>Minimo <strong>2GB</strong> de RAM disponible</li>
+                    <li>~<strong>500MB</strong> de espacio libre</li>
+                    <li>Conexion a la misma red donde estan las bases de datos</li>
+                </ul>
+            </div>
+
+            <!-- Paso 1 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="true">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Instalar Termux</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body open">
+                    <div class="alert alert-danger">
+                        <span class="alert-icon">&#9888;&#65039;</span>
+                        <div><strong>NO instalar desde Google Play</strong> &mdash; la version esta desactualizada y tiene errores.</div>
+                    </div>
+                    <ol>
+                        <li>Descargar desde <strong>F-Droid</strong> (tienda de apps libre):
+                            <br>Abrir en el navegador del celular: <code>https://f-droid.org/en/packages/com.termux/</code>
+                        </li>
+                        <li>Descargar e instalar el APK.</li>
+                        <li>Si pide permiso para <em>"instalar desde origenes desconocidos"</em>, aceptar.</li>
+                        <li>Abrir Termux. Aparece una terminal negra.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Actualizar paquetes e instalar PHP + Apache</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Copiar y pegar estos comandos <strong>uno por uno</strong> en Termux:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="comment"># Actualizar repositorios</span>
+<span class="cmd">pkg update</span> <span class="flag">-y</span> && <span class="cmd">pkg upgrade</span> <span class="flag">-y</span>
+
+<span class="comment"># Instalar PHP, Apache, git y herramientas</span>
+<span class="cmd">pkg install</span> <span class="flag">-y</span> <span class="string">php-apache apache2 git zip unzip</span>
+
+<span class="comment"># Instalar extensiones PHP necesarias</span>
+<span class="cmd">pkg install</span> <span class="flag">-y</span> <span class="string">php-pdo php-openssl</span></pre>
+                </div>
+            </div>
+
+            <!-- Paso 3 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Configurar Apache</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Abrir el archivo de configuracion:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">nano</span> <span class="string">$PREFIX/etc/apache2/httpd.conf</span></pre>
+
+                    <p>Buscar y modificar estas lineas (usar <code>Ctrl+W</code> para buscar en nano):</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="comment"># Cambiar el puerto (Android no permite el 80 sin root)</span>
+Listen <span class="string">8080</span>
+
+<span class="comment"># Habilitar PHP - buscar la linea de LoadModule php y descomentarla</span>
+LoadModule <span class="string">php_module libexec/apache2/libphp.so</span>
+
+<span class="comment"># Buscar DirectoryIndex y agregar index.php</span>
+DirectoryIndex <span class="string">index.php index.html</span></pre>
+
+                    <p>Guardar con <code>Ctrl+O</code>, Enter, <code>Ctrl+X</code>.</p>
+                </div>
+            </div>
+
+            <!-- Paso 4 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Descargar Query Manager</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="comment"># Ir a la carpeta web de Apache</span>
+<span class="cmd">cd</span> <span class="string">$PREFIX/share/apache2/default-site/htdocs</span>
+
+<span class="comment"># Opcion A: Si tienes el codigo en git</span>
+<span class="cmd">git clone</span> <span class="string">&lt;tu-repositorio&gt;</span> phpadmin
+
+<span class="comment"># Opcion B: Copiar desde el almacenamiento del celular</span>
+<span class="comment"># Primero dar permiso de almacenamiento a Termux:</span>
+<span class="cmd">termux-setup-storage</span>
+<span class="comment"># Luego copiar:</span>
+<span class="cmd">cp</span> <span class="flag">-r</span> <span class="string">~/storage/downloads/phpadmin</span> ./phpadmin
+
+<span class="comment"># Dar permisos de escritura a las carpetas de datos</span>
+<span class="cmd">chmod</span> <span class="flag">-R</span> 777 <span class="string">phpadmin/data</span>
+<span class="cmd">chmod</span> <span class="flag">-R</span> 777 <span class="string">phpadmin/config</span></pre>
+                </div>
+            </div>
+
+            <!-- Paso 5 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Ajustar la app para Termux</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Editar el <code>.htaccess</code> porque Apache en Termux tiene una estructura diferente:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">nano</span> <span class="string">phpadmin/.htaccess</span></pre>
+                    <p>Verificar que el contenido sea:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>RewriteEngine On
+RewriteBase <span class="string">/phpadmin/</span>
+
+<span class="comment"># Proteger directorios sensibles</span>
+RewriteRule <span class="string">^data/</span> - [F,L]
+RewriteRule <span class="string">^config/</span> - [F,L]
+
+<span class="comment"># API routing</span>
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule <span class="string">^api/(.*)$</span> api/index.php [QSA,L]</pre>
+                </div>
+            </div>
+
+            <!-- Paso 6 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Iniciar el servidor</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="comment"># Iniciar Apache</span>
+<span class="cmd">apachectl start</span></pre>
+
+                    <p>Abrir Chrome en el <strong>mismo celular</strong> y navegar a:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>http://localhost:8080/phpadmin/</pre>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">&#128161;</span>
+                        <div>Para acceder desde <strong>otro dispositivo</strong> en la misma red:
+                            <pre style="margin-top:8px;"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">ifconfig</span> wlan0 | <span class="cmd">grep</span> <span class="string">"inet "</span></pre>
+                            Luego usa: <code>http://192.168.X.X:8080/phpadmin/</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 7 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Script de inicio rapido</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Crear un script para arrancar el servidor con un solo comando:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="comment"># Crear el script</span>
+<span class="cmd">cat</span> > ~/start-qm.sh << <span class="string">'SCRIPT'</span>
+#!/data/data/com.termux/files/usr/bin/bash
+echo "================================"
+echo "  Query Manager - Servidor PHP"
+echo "================================"
+
+<span class="comment"># Iniciar Apache</span>
+apachectl start 2>/dev/null
+
+<span class="comment"># Obtener IP</span>
+IP=$(ifconfig wlan0 2>/dev/null | grep "inet " | awk '{print $2}')
+
+echo ""
+echo "Servidor iniciado correctamente"
+echo ""
+echo "Acceso local:  http://localhost:8080/phpadmin/"
+if [ -n "$IP" ]; then
+    echo "Acceso en red:  http://$IP:8080/phpadmin/"
+fi
+echo ""
+echo "Para detener: apachectl stop"
+echo "================================"
+<span class="string">SCRIPT</span>
+
+<span class="comment"># Dar permisos de ejecucion</span>
+<span class="cmd">chmod</span> <span class="flag">+x</span> ~/start-qm.sh</pre>
+
+                    <div class="alert alert-success">
+                        <span class="alert-icon">&#9889;</span>
+                        <div>Ahora para iniciar el servidor solo ejecuta: <code>~/start-qm.sh</code></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 8 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Inicio automatico al abrir Termux <span class="badge badge-optional">Opcional</span></div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Para que el servidor arranque automaticamente cada vez que abres Termux:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">echo</span> <span class="string">"~/start-qm.sh"</span> >> ~/.bashrc</pre>
+                </div>
+            </div>
+
+            <!-- Paso 9 -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">9</div>
+                    <div class="step-title">Crear acceso directo en Android <span class="badge badge-optional">Opcional</span></div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <ol>
+                        <li>Instalar <strong>Termux:Widget</strong> desde F-Droid.</li>
+                        <li>Crear la carpeta de shortcuts:
+                            <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">mkdir</span> <span class="flag">-p</span> ~/.shortcuts
+<span class="cmd">cp</span> ~/start-qm.sh <span class="string">~/.shortcuts/QueryManager</span></pre>
+                        </li>
+                        <li>En la pantalla de inicio del celular, agregar un <strong>widget de Termux</strong>.</li>
+                        <li>Aparecera <em>"QueryManager"</em> como opcion. Al tocarlo, inicia el servidor automaticamente.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Comandos utiles -->
+            <div class="card">
+                <h2><span class="icon">&#128196;</span> Comandos utiles en Termux</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Comando</th><th>Descripcion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>~/start-qm.sh</code></td><td>Iniciar el servidor</td></tr>
+                            <tr><td><code>apachectl stop</code></td><td>Detener el servidor</td></tr>
+                            <tr><td><code>apachectl restart</code></td><td>Reiniciar el servidor</td></tr>
+                            <tr><td><code>cat $PREFIX/var/log/apache2/error_log</code></td><td>Ver errores de Apache</td></tr>
+                            <tr><td><code>php -m</code></td><td>Ver extensiones PHP instaladas</td></tr>
+                            <tr><td><code>ifconfig wlan0</code></td><td>Ver IP del dispositivo</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SECTION: VPN ==================== -->
+        <div class="section" id="section-vpn">
+
+            <div class="card">
+                <h2><span class="icon">&#128274;</span> VPN domestica gratuita con ZeroTier</h2>
+                <p>Crea una red VPN privada y gratuita para conectar hasta <strong>25 dispositivos</strong> (PC, celulares, tablets) de forma segura, permitiendo acceder a Query Manager desde cualquier lugar del mundo.</p>
+
+                <div class="diagram">                    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+                    &#9474;   ZeroTier Cloud  &#9474;
+                    &#9474;   (controlador)   &#9474;
+                    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                             &#9474; Coordina la red
+            &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+            &#9474;                &#9474;                &#9474;
+    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+    &#9474; PC Oficina    &#9474;  &#9474; Celular 1   &#9474;  &#9474; Tablet 2    &#9474;
+    &#9474; XAMPP + ZT    &#9474;  &#9474; Android     &#9474;  &#9474; Android     &#9474;
+    &#9474; 10.147.20.1   &#9474;  &#9474; 10.147.20.5 &#9474;  &#9474; 10.147.20.8 &#9474;
+    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+
+    Acceso: http://10.147.20.1/phpadmin/
+    Peer-to-peer encriptado desde cualquier red.</div>
+            </div>
+
+            <!-- Por que ZeroTier -->
+            <div class="card">
+                <h2><span class="icon">&#129300;</span> Por que ZeroTier y no Hamachi</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Caracteristica</th><th>Hamachi</th><th>ZeroTier</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Usuarios gratuitos</td><td>5</td><td><strong>25</strong></td></tr>
+                            <tr><td>App Android</td><td>No oficial</td><td><strong>Si, oficial</strong></td></tr>
+                            <tr><td>App iOS</td><td>No</td><td><strong>Si</strong></td></tr>
+                            <tr><td>Velocidad</td><td>Limitada en gratis</td><td><strong>Sin limites</strong></td></tr>
+                            <tr><td>Open source</td><td>No</td><td><strong>Si</strong></td></tr>
+                            <tr><td>Configuracion</td><td>Compleja</td><td><strong>Muy simple</strong></td></tr>
+                            <tr><td>Estabilidad</td><td>Bugs recientes</td><td><strong>Estable</strong></td></tr>
+                            <tr><td>Funciona detras de NAT</td><td>A veces falla</td><td><strong>Siempre</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Paso 1 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="true">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Crear la red en ZeroTier</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body open">
+                    <ol>
+                        <li>Ir a <code>https://my.zerotier.com/</code> y crear una cuenta gratuita.</li>
+                        <li>Hacer clic en <strong>"Create A Network"</strong>.</li>
+                        <li>Se crea una red con un <strong>Network ID</strong> de 16 caracteres (ej: <code>a09acf023389e132</code>). <strong>Anotar este ID.</strong></li>
+                        <li>En la configuracion de la red:
+                            <ul>
+                                <li><strong>Name:</strong> Poner un nombre descriptivo (ej: "QueryManager VPN").</li>
+                                <li><strong>Access Control:</strong> Dejar en <strong>"Private"</strong> (los dispositivos deben ser aprobados manualmente).</li>
+                                <li><strong>IPv4 Auto-Assign:</strong> Asegurarse de que este habilitado (rango por defecto: <code>10.147.20.0/24</code>).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Paso 2 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Instalar ZeroTier en el servidor (PC con XAMPP)</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <h3>Windows</h3>
+                    <ol>
+                        <li>Descargar desde <code>https://www.zerotier.com/download/</code></li>
+                        <li>Instalar el ejecutable.</li>
+                        <li>Aparece un icono en la bandeja del sistema (junto al reloj).</li>
+                        <li>Clic derecho &gt; <strong>"Join New Network"</strong>.</li>
+                        <li>Pegar el <strong>Network ID</strong> del paso 1.</li>
+                        <li>Clic en <strong>"Join"</strong>.</li>
+                    </ol>
+
+                    <h3>Linux (Ubuntu/Debian)</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">curl</span> <span class="flag">-s</span> https://install.zerotier.com | <span class="cmd">sudo bash</span>
+<span class="cmd">sudo zerotier-cli join</span> <span class="string">&lt;TU_NETWORK_ID&gt;</span></pre>
+
+                    <h3>macOS</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button><span class="cmd">brew install</span> <span class="string">zerotier-one</span>
+<span class="cmd">sudo zerotier-cli join</span> <span class="string">&lt;TU_NETWORK_ID&gt;</span></pre>
+                </div>
+            </div>
+
+            <!-- Paso 3 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Instalar ZeroTier en celulares/tablets</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <h3>Android</h3>
+                    <ol>
+                        <li>Abrir <strong>Google Play Store</strong>.</li>
+                        <li>Buscar <strong>"ZeroTier One"</strong> (desarrollador: ZeroTier, Inc.).</li>
+                        <li>Instalar.</li>
+                        <li>Abrir la app &gt; tocar <strong>"+"</strong> &gt; pegar el <strong>Network ID</strong>.</li>
+                        <li>Activar el switch de la red.</li>
+                        <li>Android pedira permiso para crear una VPN. Aceptar.</li>
+                    </ol>
+
+                    <h3>iOS (iPhone/iPad)</h3>
+                    <ol>
+                        <li>Abrir <strong>App Store</strong>.</li>
+                        <li>Buscar <strong>"ZeroTier One"</strong>.</li>
+                        <li>Instalar y configurar igual que Android.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Paso 4 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Autorizar los dispositivos</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <ol>
+                        <li>Volver a <code>https://my.zerotier.com/</code> &gt; tu red.</li>
+                        <li>En la seccion <strong>"Members"</strong> apareceran los dispositivos que se unieron.</li>
+                        <li>Marcar la casilla <strong>"Auth"</strong> de cada dispositivo para autorizarlo.</li>
+                        <li>Cada dispositivo recibira una IP automatica (ej: <code>10.147.20.1</code>, <code>10.147.20.5</code>).</li>
+                        <li><strong>Anotar la IP del servidor</strong> (la PC con XAMPP).</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Paso 5 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Probar la conexion</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <p>Desde el celular (con ZeroTier conectado), abrir Chrome y navegar a:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>http://10.147.20.1/phpadmin/</pre>
+                    <p>(Reemplazar <code>10.147.20.1</code> con la IP ZeroTier de tu PC servidor).</p>
+
+                    <div class="alert alert-success">
+                        <span class="alert-icon">&#127881;</span>
+                        <div>Si funciona, ya tienes acceso seguro desde cualquier lugar del mundo.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 6 VPN -->
+            <div class="step-card">
+                <div class="step-header" onclick="toggleStep(this)" aria-expanded="false">
+                    <div class="step-number">6</div>
+                    <div class="step-title">IPs fijas y gestion de usuarios</div>
+                    <div class="step-toggle">&#9660;</div>
+                </div>
+                <div class="step-body">
+                    <h3>Asignar IPs fijas (recomendado)</h3>
+                    <p>En <code>https://my.zerotier.com/</code> &gt; tu red &gt; Members:</p>
+                    <ol>
+                        <li>Buscar el dispositivo servidor.</li>
+                        <li>En el campo de IP, escribir una IP fija (ej: <code>10.147.20.1</code>).</li>
+                        <li>Repetir para cada dispositivo si se desea.</li>
+                    </ol>
+
+                    <h3>Gestion de usuarios VPN</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Accion</th><th>Como hacerlo</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Agregar dispositivo</td><td>Instalar ZeroTier + unirse con el Network ID</td></tr>
+                                <tr><td>Autorizar</td><td>my.zerotier.com &gt; Members &gt; marcar "Auth"</td></tr>
+                                <tr><td>Revocar acceso</td><td>my.zerotier.com &gt; Members &gt; desmarcar "Auth"</td></tr>
+                                <tr><td>Ver conectados</td><td>my.zerotier.com &gt; Members &gt; columna "Last Seen"</td></tr>
+                                <tr><td>Limite gratuito</td><td><strong>25 dispositivos</strong> por red</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparativa -->
+            <div class="card">
+                <h2><span class="icon">&#128200;</span> Comparativa: Red local vs ZeroTier</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Aspecto</th><th>Red local (WiFi)</th><th>ZeroTier VPN</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Funciona fuera de la oficina</td><td>No</td><td><strong>Si</strong></td></tr>
+                            <tr><td>Funciona con datos moviles</td><td>No</td><td><strong>Si</strong></td></tr>
+                            <tr><td>Velocidad</td><td>Maxima (LAN)</td><td>Casi igual (P2P)</td></tr>
+                            <tr><td>Seguridad</td><td>Solo red interna</td><td>Encriptado 256-bit</td></tr>
+                            <tr><td>Configuracion</td><td>IP puede cambiar</td><td><strong>IP fija siempre</strong></td></tr>
+                            <tr><td>Costo</td><td>$0</td><td><strong>$0 (hasta 25 dispositivos)</strong></td></tr>
+                            <tr><td>Necesita abrir puertos</td><td>No</td><td><strong>No</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SECTION: PWA ==================== -->
+        <div class="section" id="section-pwa">
+
+            <div class="card">
+                <h2><span class="icon">&#128228;</span> Instalar Query Manager como App (PWA)</h2>
+                <p>Query Manager ya incluye soporte PWA. Esto permite instalarlo como una app nativa en cualquier dispositivo.</p>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128241;</span> En Android (Chrome)</h2>
+                <ol>
+                    <li>Abrir la URL de Query Manager en Chrome.</li>
+                    <li>Aparece un banner automatico: <strong>"Agregar Query Manager a pantalla de inicio"</strong>.</li>
+                    <li>Tocar <strong>Instalar</strong>.</li>
+                    <li>Se crea un icono en el escritorio, igual que una app nativa.</li>
+                    <li>Al abrirla: pantalla completa, sin barra de URL.</li>
+                </ol>
+
+                <div class="pwa-tip">
+                    <h4>&#128274; Importante: PWA requiere contexto seguro</h4>
+                    <p>Chrome solo permite instalar PWA en <code>localhost</code> o <code>HTTPS</code>. Si accedes por IP (ej: <code>http://192.168.1.50</code>), el boton de instalar <strong>no aparecera</strong>.</p>
+                    <p style="margin-top:8px;"><strong>Solucion rapida:</strong> En Chrome del celular, abre <code>chrome://flags</code>, busca <em>"Unsafely treat insecure origin as secure"</em>, agrega la URL de tu servidor y activa. Reinicia Chrome.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#127823;</span> En iPhone/iPad (Safari)</h2>
+                <ol>
+                    <li>Abrir la URL en Safari.</li>
+                    <li>Tocar el boton <strong>Compartir</strong> (cuadrado con flecha).</li>
+                    <li>Tocar <strong>"Agregar a pantalla de inicio"</strong>.</li>
+                    <li>Se instala con icono y nombre.</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128187;</span> En PC/Laptop (Chrome/Edge)</h2>
+                <ol>
+                    <li>Abrir la URL de Query Manager.</li>
+                    <li>En la barra de direccion aparece un icono de instalar.</li>
+                    <li>Se instala como ventana independiente (sin pestanas del navegador).</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#9889;</span> Flujo completo con ZeroTier + PWA</h2>
+                <div class="diagram"> 1. Encender ZeroTier en el celular (siempre activo en segundo plano)
+ 2. Tocar el icono de Query Manager en la pantalla de inicio
+ 3. La app se abre en pantalla completa
+ 4. Iniciar sesion y trabajar normalmente
+
+ No necesitas:
+ &#10060; Configurar IP cada vez (ZeroTier mantiene la misma IP siempre)
+ &#10060; Estar en la misma WiFi (funciona desde cualquier red)
+ &#10060; Puerto abierto en el router (ZeroTier perfora NAT)
+ &#10060; Pagar nada (gratis hasta 25 dispositivos)</div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128203;</span> Comparacion: App nativa vs PWA</h2>
+                <div class="comparison">
+                    <div class="comparison-col">
+                        <h4>App nativa del celular</h4>
+                        <ul style="list-style:none;padding:0;">
+                            <li>&#9989; Icono en home</li>
+                            <li>&#9989; Splash screen</li>
+                            <li>&#9989; Pantalla completa</li>
+                            <li>&#9989; Sin barra URL</li>
+                            <li>&#10060; Requiere App Store</li>
+                            <li>&#10060; ~30MB descarga</li>
+                            <li>&#10060; Actualizar manual</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-col winner">
+                        <h4>PWA Query Manager &#11088;</h4>
+                        <ul style="list-style:none;padding:0;">
+                            <li>&#9989; Icono en home</li>
+                            <li>&#9989; Splash screen</li>
+                            <li>&#9989; Pantalla completa</li>
+                            <li>&#9989; Sin barra URL</li>
+                            <li>&#9989; Solo una URL</li>
+                            <li>&#9989; ~500KB cache</li>
+                            <li>&#9989; Auto-actualiza</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SECTION: TROUBLESHOOTING ==================== -->
+        <div class="section" id="section-troubleshooting">
+
+            <div class="card">
+                <h2><span class="icon">&#128295;</span> Problemas comunes en Termux</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Problema</th><th>Solucion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"Permission denied" al acceder a data/</td>
+                                <td><code>chmod -R 777 phpadmin/data phpadmin/config</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Address already in use" al iniciar</td>
+                                <td><code>apachectl stop</code> y luego <code>apachectl start</code></td>
+                            </tr>
+                            <tr>
+                                <td>No carga PHP (descarga el archivo)</td>
+                                <td>Verificar que <code>LoadModule php_module</code> este descomentado en httpd.conf</td>
+                            </tr>
+                            <tr>
+                                <td>No conecta a MySQL/SQL Server</td>
+                                <td>Verificar que el celular este en la misma red que el servidor de BD</td>
+                            </tr>
+                            <tr>
+                                <td>"mod_rewrite not found"</td>
+                                <td>Descomentar <code>LoadModule rewrite_module</code> en httpd.conf</td>
+                            </tr>
+                            <tr>
+                                <td>La app no crea la BD SQLite</td>
+                                <td>Instalar: <code>pkg install php-pdo</code> y reiniciar Apache</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128274;</span> Problemas comunes con ZeroTier</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Problema</th><th>Solucion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>No conecta desde el celular</td>
+                                <td>Verificar que ZeroTier este activo (icono en barra de estado)</td>
+                            </tr>
+                            <tr>
+                                <td>"REQUESTING_CONFIGURATION"</td>
+                                <td>El dispositivo no ha sido autorizado en my.zerotier.com</td>
+                            </tr>
+                            <tr>
+                                <td>Lento</td>
+                                <td>Verificar que ambos dispositivos tengan buena conexion a internet</td>
+                            </tr>
+                            <tr>
+                                <td>No carga la pagina</td>
+                                <td>Verificar que XAMPP/Apache este corriendo en el servidor</td>
+                            </tr>
+                            <tr>
+                                <td>Firewall bloquea</td>
+                                <td>En Windows: permitir Apache en el Firewall de Windows</td>
+                            </tr>
+                            <tr>
+                                <td>IP cambio</td>
+                                <td>Asignar IP fija en la consola de ZeroTier</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">&#128228;</span> Problemas con la PWA</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Problema</th><th>Solucion</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>No aparece boton "Instalar" en celular</td>
+                                <td>Chrome requiere HTTPS o localhost. Usar flag <code>chrome://flags</code> &gt; "Unsafely treat insecure origin as secure" y agregar la URL</td>
+                            </tr>
+                            <tr>
+                                <td>La app muestra "Sin conexion al servidor"</td>
+                                <td>El servidor (XAMPP) debe estar encendido. La PWA cachea solo la interfaz, no los datos</td>
+                            </tr>
+                            <tr>
+                                <td>No se actualiza la app</td>
+                                <td>Cambiar el <code>CACHE_NAME</code> en service-worker.js (ej: de 'qm-v1.0.0' a 'qm-v1.0.1')</td>
+                            </tr>
+                            <tr>
+                                <td>Service Worker no se registra</td>
+                                <td>Abrir DevTools &gt; Application &gt; Service Workers para ver el estado y errores</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Print button -->
+    <button class="print-btn" onclick="window.print()" title="Imprimir guia">&#128424;</button>
+
+    <script>
+        function showSection(name) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('section-' + name).classList.add('active');
+            document.querySelector('[data-section="' + name + '"]').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleStep(header) {
+            const body = header.nextElementSibling;
+            const expanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !expanded);
+            body.classList.toggle('open');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.parentElement;
+            const code = pre.textContent.replace('Copiar', '').replace('Copiado!', '').trim();
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copiar';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

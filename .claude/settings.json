@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./php.exe -r \"var_dump\\(PDO::getAvailableDrivers\\(\\)\\);\")",
+      "Bash(cp data/app.sqlite /f/tmp/test_app.sqlite)",
+      "Bash(./../../php/php.exe -r ' *)"
+    ]
+  }
+}
