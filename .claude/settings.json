@@ -3,7 +3,30 @@
     "allow": [
       "Bash(./php.exe -r \"var_dump\\(PDO::getAvailableDrivers\\(\\)\\);\")",
       "Bash(cp data/app.sqlite /f/tmp/test_app.sqlite)",
-      "Bash(./../../php/php.exe -r ' *)"
+      "Bash(./../../php/php.exe -r ' *)",
+      "Bash(/f/xampp/php/php.exe -l api/Services/QueryExecutionService.php)",
+      "Bash(/f/xampp/php/php.exe -l deploy/api/Services/QueryExecutionService.php)",
+      "Bash(/f/xampp/php/php.exe -l api/Controllers/QueryController.php)",
+      "Bash(/f/xampp/php/php.exe -l deploy/api/Controllers/QueryController.php)",
+      "Bash(node --check assets/js/components/query-editor.js)",
+      "Bash(node --check deploy/assets/js/components/query-editor.js)",
+      "Bash(command -v mysqldump)",
+      "Bash(/f/xampp/mysql/bin/mysqldump.exe --version)",
+      "Bash(command -v pg_dump)",
+      "Bash(command -v sqlcmd)",
+      "Bash(/f/xampp/php/php.exe -r \"echo ini_get\\('disable_functions'\\) ?: 'ninguna';\")",
+      "Bash(/f/xampp/php/php.exe -l api/Services/BackupService.php)",
+      "Bash(/f/xampp/php/php.exe -l api/Controllers/BackupController.php)",
+      "Bash(/f/xampp/php/php.exe -l api/index.php)",
+      "Bash(node --check assets/js/components/backups.js)",
+      "Bash(node --check assets/js/api-client.js)",
+      "Bash(node --check assets/js/app.js)",
+      "Bash(/f/xampp/php/php.exe -r ' *)",
+      "Bash(/f/xampp/php/php.exe -l f:/xampp/htdocs/phpadmin/deploy/api/Services/BackupService.php)",
+      "Bash(/f/xampp/php/php.exe -l f:/xampp/htdocs/phpadmin/deploy/api/Database/SQLiteManager.php)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
     ]
   }
 }

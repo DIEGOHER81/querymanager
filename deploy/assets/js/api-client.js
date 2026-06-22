@@ -73,6 +73,7 @@ const API = {
         // Handle file downloads
         const contentType = response.headers.get('content-type') || '';
         if (contentType.includes('text/csv') || contentType.includes('spreadsheetml') || contentType.includes('vnd.ms-excel') ||
+            contentType.includes('application/sql') || contentType.includes('application/octet-stream') ||
             (contentType.includes('application/json') && response.headers.get('content-disposition'))) {
             if (!response.ok) throw new Error('Error al descargar el archivo');
             const blob = await response.blob();
@@ -149,6 +150,9 @@ const API = {
     exportCsv(data) { return this.request('POST', '/export/csv', data); },
     exportExcel(data) { return this.request('POST', '/export/excel', data); },
     exportJson(data) { return this.request('POST', '/export/json', data); },
+
+    // Backup
+    generateBackup(data) { return this.request('POST', '/backup/generate', data); },
 
     // Audit
     getAuditLogs(params = {}) {

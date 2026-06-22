@@ -1338,18 +1338,41 @@ select.form-control {
 /* Responsive */
 @media (max-width: 900px) {
     .help-panel { width: 100%; }
-    .sidebar { margin-left: -260px; }
+
+    /* La sidebar se superpone al contenido en lugar de empujarlo */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1001;
+        margin-left: -260px;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.25);
+    }
     .sidebar.show-mobile { margin-left: 0; }
+
+    /* Fondo oscuro detrás de la sidebar abierta */
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+    .sidebar-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+    }
 
     .query-layout {
         grid-template-columns: 1fr;
     }
+    /* En móvil la sidebar se apila arriba; el botón BD la oculta con 'sidebar-hidden' */
     .query-sidebar {
-        display: none;
-    }
-    .query-layout.sidebar-visible .query-sidebar {
-        display: block;
         max-height: 300px;
+        position: static;
     }
 
     .content-area { padding: 12px; }

@@ -284,6 +284,13 @@
                     <span>Comparar</span>
                 </div>
 
+                <div class="nav-item" data-panel="backups">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    </svg>
+                    <span>Backups</span>
+                </div>
+
                 <div class="nav-divider"></div>
 
                 <div class="nav-item" data-panel="audit">
@@ -421,6 +428,9 @@
                     <div id="audit-stats"></div>
                     <div id="audit-logs"></div>
                 </div>
+
+                <!-- Panel: Backups -->
+                <div class="panel" id="panel-backups"></div>
 
                 <!-- Panel: Users -->
                 <div class="panel" id="panel-users">
@@ -575,6 +585,7 @@
     <script src="assets/js/components/browser.js?v=<?= time() ?>"></script>
     <script src="assets/js/components/query-editor.js?v=<?= time() ?>"></script>
     <script src="assets/js/components/audit.js?v=<?= time() ?>"></script>
+    <script src="assets/js/components/backups.js?v=<?= time() ?>"></script>
     <script src="assets/js/components/help.js?v=<?= time() ?>"></script>
     <script src="assets/js/components/users.js?v=<?= time() ?>"></script>
     <script src="assets/js/components/multi-query.js?v=<?= time() ?>"></script>

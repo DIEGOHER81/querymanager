@@ -234,6 +234,13 @@ const App = {
     navigate(panel) {
         this.currentPanel = panel;
 
+        // En móvil, cerrar la sidebar overlay al elegir una sección
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar && sidebar.classList.contains('show-mobile')) {
+            sidebar.classList.remove('show-mobile');
+            this._toggleSidebarBackdrop(false);
+        }
+
         // Update nav
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         const activeNav = document.querySelector(`.nav-item[data-panel="${panel}"]`);
@@ -253,6 +260,7 @@ const App = {
             crossjoin: 'Cross-Connection JOIN',
             compare: 'Comparar Esquemas',
             audit: 'Registro de Auditoría',
+            backups: 'Backups de Bases de Datos',
             users: 'Administración de Usuarios'
         };
         document.getElementById('topbar-title').textContent = titles[panel] || '';
@@ -266,6 +274,7 @@ const App = {
             case 'crossjoin': CrossJoinUI.load(); break;
             case 'compare': SchemaCompareUI.load(); break;
             case 'audit': AuditUI.load(); break;
+            case 'backups': BackupsUI.load(); break;
             case 'users': UsersUI.load(); break;
         }
 
@@ -317,7 +326,32 @@ const App = {
     },
 
     toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        // En móvil/vertical la sidebar se muestra como overlay con 'show-mobile';
+        // en escritorio se colapsa empujando el contenido con 'collapsed'.
+        if (window.matchMedia('(max-width: 900px)').matches) {
+            const opened = sidebar.classList.toggle('show-mobile');
+            this._toggleSidebarBackdrop(opened);
+        } else {
+            sidebar.classList.toggle('collapsed');
+        }
+    },
+
+    _toggleSidebarBackdrop(show) {
+        let backdrop = document.getElementById('sidebar-backdrop');
+        if (show) {
+            if (!backdrop) {
+                backdrop = document.createElement('div');
+                backdrop.id = 'sidebar-backdrop';
+                backdrop.className = 'sidebar-backdrop';
+                backdrop.addEventListener('click', () => App.toggleSidebar());
+                document.body.appendChild(backdrop);
+            }
+            backdrop.classList.add('show');
+        } else if (backdrop) {
+            backdrop.classList.remove('show');
+        }
     },
 
     toggleQuerySidebar() {

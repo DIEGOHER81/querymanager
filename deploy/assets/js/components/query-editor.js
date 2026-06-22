@@ -89,6 +89,10 @@ const QueryUI = {
                                 <button class="${this.executionMode === 'json' ? 'active' : ''}" onclick="QueryUI.setExecMode('json')">JSON SP</button>
                             </div>
                         </label>
+                        <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;" title="Si una sentencia falla, continuar con las siguientes en lugar de detenerse (útil al importar dumps con varias sentencias).">
+                            <input type="checkbox" id="continue-on-error" style="cursor:pointer;">
+                            Continuar ante errores
+                        </label>
                         <button class="btn btn-success" id="btn-execute" onclick="QueryUI.execute()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                             Ejecutar
@@ -1123,7 +1127,8 @@ const QueryUI = {
 
         try {
             let resp;
-            const payload = { connection_id: parseInt(connId), sql, database: db || undefined };
+            const continueOnError = !!document.getElementById('continue-on-error')?.checked;
+            const payload = { connection_id: parseInt(connId), sql, database: db || undefined, continue_on_error: continueOnError };
 
             if (this.executionMode === 'direct') {
                 resp = await API.executeQuery(payload, abortCtrl.signal);
@@ -1144,7 +1149,11 @@ const QueryUI = {
             this.setExecutingState(false);
             this.lastResult = { ...resp.data, sql, connection_id: connId, database: db };
             this.renderResults(resp.data);
-            Toast.success(resp.message);
+            if (resp.data && resp.data.statements_failed > 0) {
+                Toast.warning(resp.message);
+            } else {
+                Toast.success(resp.message);
+            }
         } catch (e) {
             this.setExecutingState(false);
 
@@ -1208,12 +1217,32 @@ const QueryUI = {
     renderResults(data) {
         const resultsDiv = document.getElementById('query-results');
 
+        // Panel de errores cuando se ejecutó en modo "Continuar ante errores"
+        let errorsHtml = '';
+        if (data.errors && data.errors.length > 0) {
+            errorsHtml = `
+                <div class="card" style="margin-bottom:16px;border-color:var(--warning);">
+                    <div class="card-header" style="background:rgba(245,158,11,0.08);">
+                        <h3 style="color:var(--warning);">&#9888; ${data.statements_failed} de ${data.statements_total} sentencia(s) fallaron</h3>
+                    </div>
+                    <div style="max-height:240px;overflow:auto;padding:8px 0;">
+                        ${data.errors.map(er => `
+                            <div style="padding:8px 16px;border-bottom:1px solid var(--border);font-size:12px;">
+                                <strong>Sentencia #${er.index}:</strong>
+                                <span style="color:var(--danger);">${this.escHtml(er.message)}</span>
+                            </div>`).join('')}
+                    </div>
+                </div>`;
+        }
+        const failed = data.statements_failed > 0;
+
         if (!data.is_select) {
             resultsDiv.innerHTML = `
+                ${errorsHtml}
                 <div class="card">
                     <div style="text-align:center;padding:20px;">
-                        <div style="font-size:48px;color:var(--success);margin-bottom:8px;">&#10004;</div>
-                        <h3>Consulta ejecutada exitosamente</h3>
+                        <div style="font-size:48px;color:var(--${failed ? 'warning' : 'success'});margin-bottom:8px;">${failed ? '&#9888;' : '&#10004;'}</div>
+                        <h3>${failed ? 'Ejecución completada con errores' : 'Consulta ejecutada exitosamente'}</h3>
                         <p style="color:var(--secondary);margin-top:8px;">${data.message}</p>
                     </div>
                 </div>`;
@@ -1234,6 +1263,7 @@ const QueryUI = {
         const columns = data.columns || (rows.length > 0 ? Object.keys(rows[0]) : []);
 
         resultsDiv.innerHTML = `
+            ${errorsHtml}
             ${jsonPayloadHtml}
             <div class="card">
                 <div class="card-header">

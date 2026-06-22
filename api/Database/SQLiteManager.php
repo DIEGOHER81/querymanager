@@ -184,6 +184,46 @@ class SQLiteManager
                 ALTER TABLE connections_new RENAME TO connections;
 
                 PRAGMA foreign_keys=ON;
+            ",
+            7 => "
+                -- Ampliar los CHECK de audit_logs:
+                --   execution_mode: agregar 'script' (ejecucion multi-sentencia / importacion)
+                --   status: agregar 'partial' (script con 'Continuar ante errores' y fallos)
+                -- SQLite no permite modificar un CHECK existente, asi que se recrea la tabla.
+                PRAGMA foreign_keys=OFF;
+
+                CREATE TABLE audit_logs_new (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    connection_id INTEGER,
+                    connection_name TEXT,
+                    database_name TEXT,
+                    query_text TEXT NOT NULL,
+                    execution_mode TEXT NOT NULL CHECK(execution_mode IN ('direct', 'json_sp', 'script')),
+                    execution_time_ms INTEGER,
+                    row_count INTEGER DEFAULT 0,
+                    status TEXT NOT NULL CHECK(status IN ('success', 'error', 'partial')),
+                    error_message TEXT,
+                    user_ip TEXT,
+                    executed_at TEXT NOT NULL,
+                    is_favorite INTEGER DEFAULT 0,
+                    FOREIGN KEY (connection_id) REFERENCES connections(id) ON DELETE SET NULL
+                );
+
+                INSERT INTO audit_logs_new
+                    SELECT id, connection_id, connection_name, database_name, query_text,
+                           execution_mode, execution_time_ms, row_count, status,
+                           error_message, user_ip, executed_at, is_favorite
+                    FROM audit_logs;
+
+                DROP TABLE audit_logs;
+                ALTER TABLE audit_logs_new RENAME TO audit_logs;
+
+                CREATE INDEX idx_audit_executed_at ON audit_logs(executed_at);
+                CREATE INDEX idx_audit_connection ON audit_logs(connection_id);
+                CREATE INDEX idx_audit_status ON audit_logs(status);
+                CREATE INDEX idx_audit_favorite ON audit_logs(is_favorite);
+
+                PRAGMA foreign_keys=ON;
             "
         ];
     }

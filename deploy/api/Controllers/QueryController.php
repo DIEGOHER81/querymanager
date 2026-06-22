@@ -21,7 +21,8 @@ class QueryController
             $result = QueryExecutionService::execute(
                 (int)$data['connection_id'],
                 trim($data['sql']),
-                $data['database'] ?? null
+                $data['database'] ?? null,
+                !empty($data['continue_on_error'])
             );
             successResponse($result, $result['message']);
         } catch (\RuntimeException $e) {

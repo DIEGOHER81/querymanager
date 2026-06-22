@@ -87,6 +87,9 @@ $protectedRoutes = [
     ['POST', '/export/excel', 'Controllers\ExportController', 'excel'],
     ['POST', '/export/json',  'Controllers\ExportController', 'json'],
 
+    // Backup
+    ['POST', '/backup/generate', 'Controllers\BackupController', 'generate'],
+
     // Audit
     ['GET', '/audit',              'Controllers\AuditController', 'index'],
     ['GET', '/audit/stats',        'Controllers\AuditController', 'stats'],
